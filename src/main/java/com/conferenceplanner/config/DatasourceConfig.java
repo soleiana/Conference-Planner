@@ -8,8 +8,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
-import org.springframework.orm.hibernate3.HibernateTransactionManager;
-import org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean;
+import org.springframework.orm.hibernate4.HibernateTransactionManager;
+import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
@@ -36,9 +36,9 @@ public class DatasourceConfig
     }
 
     @Bean(name = "sessionFactory")
-    public AnnotationSessionFactoryBean sessionFactory()
+    public LocalSessionFactoryBean sessionFactory()
     {
-        AnnotationSessionFactoryBean sessionFactory = new AnnotationSessionFactoryBean();
+        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
         sessionFactory.setPackagesToScan(new String[] { "com.conferenceplanner.core.domain" });
         sessionFactory.setHibernateProperties(hibernateProperties());
