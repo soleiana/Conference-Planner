@@ -1,0 +1,20 @@
+Developer's memo:
+
+MiniBank-1.0-SNAPSHOT is an executable jar file.
+The app can be launched from an IDE by running com.conferenceplanner.rest.Application.java.
+Tests are launched by executing Maven 'test' goal.
+
+Technologies applied:
+- Java
+- Spring
+- Hibernate
+- JUnit
+- MockMvc
+- JSON
+- Mockito
+- Spring Boot
+- HSQLDB
+- Maven
+- Git
+
+Author: Anna Suleymanova

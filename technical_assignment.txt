@@ -1,0 +1,61 @@
+Technical assignment:
+Implement following RESTful web service application using database and at least one of the following development frameworks.
+
+Database:
+- MySQL
+- MongoDB
+- SQLite (SQLite dialect will be attached)
+
+Frameworks (back end):
+- Spring Framework (http://projects.spring.io/spring-framework/)
+- Spring Data JPA (http://projects.spring.io/spring-data-jpa/)
+- Hibernate (http://hibernate.org/orm/)
+
+Frameworks (front end):
+- AngularJS(https://angularjs.org/)
+
+Project builder tool
+- Maven
+
+Database specification:
+1.  CONFERENCE table
+    columns:
+    NAME:           Conference name, max length 150 characters
+    DATE_TIME:      Conference date & time
+
+2.  PARTICIPANT table
+    columns:
+    FULL_NAME:      Person full name
+    BIRTH_DATE:     Date of birth
+
+3. CONFERENCE_ROOM table
+    columns:
+    NAME:           Room name, like “M/S Baltic Queen conference”
+    LOCATION:       M/S Baltic Queen
+    MAX_SEATS:      124
+
+NB!!! This is only approximate structure. Other fields, which are required to fulfill application requirements should be thought out by own self.
+
+RESTful web service specification:
+
+Conference management
+- Create new conference
+- Cancel conference
+- Check conference room availability (based on registered participants and conference room max seats)
+
+Conference participant management
+- Add participant to conference
+- Remove participant from conference
+
+Additional information:
+- For testing RESTful web service use REST-assured (https://code.google.com/p/rest-assured/)
+- For testing User Interface use SeleniumHQ (http://docs.seleniumhq.org/) or Jasmine (http://jasmine.github.io/edge/introduction.html)
+
+Result should be sent to robert.kaev@tallink.ee and yury.repeshov@tallink.ee. It should be zip archive with:
+1. Java source code
+2. Web application configuration files
+3. Database structure in SQL file
+
+
+
+
