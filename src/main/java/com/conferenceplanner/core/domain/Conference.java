@@ -42,6 +42,13 @@ public class Conference {
 
     public Conference() {}
 
+    public Conference(String name, LocalDateTime startDateTime, LocalDateTime endDateTime, boolean cancelled) {
+        this.name = name;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
+        this.cancelled = cancelled;
+    }
+
     public Integer getId() {
         return id;
     }

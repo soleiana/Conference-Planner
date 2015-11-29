@@ -30,6 +30,12 @@ public class Participant {
 
     public Participant() {}
 
+    public Participant(String name, String surname, LocalDate birthDate) {
+        this.name = name;
+        this.surname = surname;
+        this.birthDate = birthDate;
+    }
+
     public Integer getId() {
         return id;
     }

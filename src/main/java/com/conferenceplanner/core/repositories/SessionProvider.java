@@ -1,8 +1,6 @@
 package com.conferenceplanner.core.repositories;
 
-/**
- * Created by Ann on 09/09/14.
- */
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
