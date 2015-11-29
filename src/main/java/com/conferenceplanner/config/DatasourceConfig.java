@@ -6,8 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -30,9 +29,12 @@ public class DatasourceConfig
     @Bean
     public DataSource dataSource()
     {
-        return new EmbeddedDatabaseBuilder()
-                .setType(EmbeddedDatabaseType.HSQL)
-                .build();
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+        dataSource.setUrl("jdbc:mysql://localhost:3306/conference_planner");
+        dataSource.setUsername("root");
+        dataSource.setPassword("password");
+        return dataSource;
     }
 
     @Bean(name = "sessionFactory")
@@ -68,10 +70,6 @@ public class DatasourceConfig
                 setProperty("hibernate.dialect", env.getProperty("hibernate.dialect"));
                 setProperty("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
                 setProperty("hibernate.format_sql", env.getProperty("hibernate.format_sql"));
-                setProperty("database.password", env.getProperty("database.password"));
-                setProperty("database.userName", env.getProperty("database.userName"));
-                setProperty("database.jdbcUrl", env.getProperty("database.jdbcUrl"));
-                setProperty("database.driverClass", env.getProperty("database.driverClass"));
             }
         };
     }
