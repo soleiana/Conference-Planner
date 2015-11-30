@@ -1,6 +1,10 @@
 package com.conferenceplanner.core.domain;
 
+import org.hibernate.annotations.*;
+
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +42,7 @@ public class Conference {
             joinColumns = @JoinColumn(name = "CONFERENCE_ID", referencedColumnName = "ID"),
             inverseJoinColumns = @JoinColumn(name = "PARTICIPANT_ID", referencedColumnName = "ID")
     )
+    @Cascade({org.hibernate.annotations.CascadeType.ALL})
     public List<Participant> participants = new ArrayList<>();
 
     public Conference() {}

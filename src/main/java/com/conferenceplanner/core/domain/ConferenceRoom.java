@@ -1,8 +1,10 @@
 package com.conferenceplanner.core.domain;
 
-import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,8 +28,7 @@ public class ConferenceRoom {
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "CONFERENCE_ROOM_ID")
-    @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE,
-            org.hibernate.annotations.CascadeType.REMOVE})
+    @Cascade({org.hibernate.annotations.CascadeType.ALL})
     private List<Conference> conferences = new ArrayList<>();
 
     public ConferenceRoom() {}
