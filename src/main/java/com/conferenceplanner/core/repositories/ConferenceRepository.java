@@ -31,7 +31,7 @@ public class ConferenceRepository extends SessionProvider {
         LocalDateTime now = LocalDateTime.now();
         Session session = getCurrentSession();
         Criteria criteria = session.createCriteria(Conference.class);
-        criteria.add(Restrictions.ge("startDateTime", now));
+        criteria.add(Restrictions.gt("startDateTime", now));
         criteria.add(Restrictions.eq("cancelled", false));
         return (List<Conference>)criteria.list();
     }
