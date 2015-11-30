@@ -30,18 +30,20 @@ public class ConferenceRepositoryTest extends SpringContextTest {
     private ConferenceRoomRepository conferenceRoomRepository;
 
     private Conference conference;
+    private ConferenceRoom conferenceRoom;
 
     @Before
     @Transactional
     public void setUp() throws Exception {
         databaseCleaner.clear();
         conference = ConferenceFixture.createConference(NAME);
-        setupConference(conference);
     }
 
     @Test
     @Transactional
     public void testCreate() throws Exception {
+        setupConferenceRoom();
+        setupConference(conference);
         conferenceRepository.create(conference);
         assertNotNull(conference.getId());
     }
@@ -49,6 +51,8 @@ public class ConferenceRepositoryTest extends SpringContextTest {
     @Test
     @Transactional
     public void testGetById() throws Exception {
+        setupConferenceRoom();
+        setupConference(conference);
         conferenceRepository.create(conference);
         int id = conference.getId();
         assertEquals(conference, conferenceRepository.getById(id));
@@ -57,6 +61,8 @@ public class ConferenceRepositoryTest extends SpringContextTest {
     @Test
     @Transactional
     public void testUpdate() throws Exception {
+        setupConferenceRoom();
+        setupConference(conference);
         conferenceRepository.create(conference);
         assertFalse(conference.isCancelled());
         conference.setCancelled(true);
@@ -69,6 +75,7 @@ public class ConferenceRepositoryTest extends SpringContextTest {
     @Transactional
     public void testGetAllAvailable() throws Exception {
         List<Conference> conferences = ConferenceFixture.createInputData();
+        setupConferenceRoom();
         setupConferences(conferences);
         persistConferences(conferences);
         List<Conference> actualConferences = conferenceRepository.getAllAvailable();
@@ -80,13 +87,24 @@ public class ConferenceRepositoryTest extends SpringContextTest {
     @Test
     @Transactional
     public void testGetAvailableByConferenceRoom() throws Exception {
+        List<Conference> conferences = ConferenceFixture.createInputData();
+        setupConferenceRoom();
+        setupConferences(conferences);
+        persistConferences(conferences);
+        List<Conference> actualConferences = conferenceRepository.getAvailableByConferenceRoom(conferenceRoom);
+        List<Conference> expectedConferences = ConferenceFixture.createExpectedData();
+        assertEquals(expectedConferences.size(), actualConferences.size());
+        assertEqualData(expectedConferences, actualConferences);
+    }
 
+    private void setupConferenceRoom() {
+        conferenceRoom = ConferenceRoomFixture.createConferenceRoom("University");
+        conferenceRoomRepository.create(conferenceRoom);
     }
 
     private void setupConference(Conference conference) {
-        ConferenceRoom conferenceRoom = ConferenceRoomFixture.createConferenceRoom("University");
-        conferenceRoomRepository.create(conferenceRoom);
         conference.setConferenceRoom(conferenceRoom);
+        conferenceRoom.getConferences().add(conference);
     }
 
     private void setupConferences(List<Conference> conferences) {
