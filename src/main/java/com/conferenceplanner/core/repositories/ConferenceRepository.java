@@ -18,10 +18,6 @@ public class ConferenceRepository extends SessionProvider {
         getCurrentSession().saveOrUpdate(conference);
     }
 
-    public void update(Conference conference) {
-        getCurrentSession().saveOrUpdate(conference);
-    }
-
     public Conference getById(Integer id) {
         Session session = getCurrentSession();
         return (Conference) session.get(Conference.class, id);
@@ -31,16 +27,6 @@ public class ConferenceRepository extends SessionProvider {
         LocalDateTime now = LocalDateTime.now();
         Session session = getCurrentSession();
         Criteria criteria = session.createCriteria(Conference.class);
-        criteria.add(Restrictions.gt("startDateTime", now));
-        criteria.add(Restrictions.eq("cancelled", false));
-        return (List<Conference>)criteria.list();
-    }
-
-    public List<Conference> getAvailableByConferenceRoom(ConferenceRoom conferenceRoom) {
-        LocalDateTime now = LocalDateTime.now();
-        Session session = getCurrentSession();
-        Criteria criteria = session.createCriteria(Conference.class);
-        criteria.add(Restrictions.eq("conferenceRoom", conferenceRoom));
         criteria.add(Restrictions.gt("startDateTime", now));
         criteria.add(Restrictions.eq("cancelled", false));
         return (List<Conference>)criteria.list();

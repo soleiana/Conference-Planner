@@ -25,15 +25,19 @@ public class Participant {
     @Convert(converter = LocalDateConverter.class)
     private LocalDate birthDate;
 
+    @Column(name = "PASSPORT_NR", nullable = false)
+    private String passportNr;
+
     @ManyToMany(mappedBy = "participants")
-    public List<Conference> conferences = new ArrayList<>();
+    private List<Conference> conferences = new ArrayList<>();
 
     public Participant() {}
 
-    public Participant(String name, String surname, LocalDate birthDate) {
+    public Participant(String name, String surname, LocalDate birthDate, String passportNr) {
         this.name = name;
         this.surname = surname;
         this.birthDate = birthDate;
+        this.passportNr = passportNr;
     }
 
     public Integer getId() {
@@ -64,6 +68,14 @@ public class Participant {
         this.birthDate = birthDate;
     }
 
+    public String getPassportNr() {
+        return passportNr;
+    }
+
+    public void setPassportNr(String passportNr) {
+        this.passportNr = passportNr;
+    }
+
     public List<Conference> getConferences() {
         return conferences;
     }
@@ -81,7 +93,9 @@ public class Participant {
 
         if (!name.equals(that.name)) return false;
         if (!surname.equals(that.surname)) return false;
-        return birthDate.equals(that.birthDate);
+        if (!birthDate.equals(that.birthDate)) return false;
+        return passportNr.equals(that.passportNr);
+
     }
 
     @Override
@@ -89,6 +103,7 @@ public class Participant {
         int result = name.hashCode();
         result = 31 * result + surname.hashCode();
         result = 31 * result + birthDate.hashCode();
+        result = 31 * result + passportNr.hashCode();
         return result;
     }
 }

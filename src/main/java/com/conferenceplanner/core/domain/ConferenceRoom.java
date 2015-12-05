@@ -26,10 +26,13 @@ public class ConferenceRoom {
     @Column(name = "MAX_SEATS", nullable = false)
     private int maxSeats;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CONFERENCE_ROOM_ID")
+    @ManyToMany
+    @JoinTable(name = "CONFERENCE_ROOM_CONFERENCE",
+            joinColumns = @JoinColumn(name = "CONFERENCE_ROOM_ID", referencedColumnName = "ID"),
+            inverseJoinColumns = @JoinColumn(name = "CONFERENCE_ID", referencedColumnName = "ID")
+    )
     @Cascade({org.hibernate.annotations.CascadeType.ALL})
-    private List<Conference> conferences = new ArrayList<>();
+    public List<Conference> conferences = new ArrayList<>();
 
     public ConferenceRoom() {}
 

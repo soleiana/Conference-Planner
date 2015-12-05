@@ -33,9 +33,8 @@ public class Conference {
     @Column(name = "CANCELLED", nullable = false)
     private boolean cancelled;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "CONFERENCE_ROOM_ID", nullable = false)
-    private ConferenceRoom conferenceRoom;
+    @ManyToMany(mappedBy = "conferences")
+    private List<ConferenceRoom> conferenceRooms = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(name = "CONFERENCE_PARTICIPANT",
@@ -90,12 +89,12 @@ public class Conference {
         this.cancelled = cancelled;
     }
 
-    public ConferenceRoom getConferenceRoom() {
-        return conferenceRoom;
+    public List<ConferenceRoom> getConferenceRooms() {
+        return conferenceRooms;
     }
 
-    public void setConferenceRoom(ConferenceRoom conferenceRoom) {
-        this.conferenceRoom = conferenceRoom;
+    public void setConferenceRooms(List<ConferenceRoom> conferenceRooms) {
+        this.conferenceRooms = conferenceRooms;
     }
 
     public List<Participant> getParticipants() {
