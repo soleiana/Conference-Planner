@@ -30,10 +30,10 @@ public class DatasourceConfig
     public DataSource dataSource()
     {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/conference_planner");
-        dataSource.setUsername("root");
-        dataSource.setPassword("password");
+        dataSource.setDriverClassName(env.getProperty("database.driverClassName"));
+        dataSource.setUrl(env.getProperty("database.jdbcUrl"));
+        dataSource.setUsername(env.getProperty("database.userName"));
+        dataSource.setPassword(env.getProperty("database.password"));
         return dataSource;
     }
 
