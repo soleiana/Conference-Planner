@@ -9,9 +9,10 @@ public class ConferenceRoomParser {
     private static final String LOCATION_WORD_PATTERN = "[a-z]+";
 
 
-    public static void parse(String locationString, String nameString) {
-       parseLocation(locationString);
-       parseName(locationString, nameString);
+    public static boolean parse(String locationString, String nameString) {
+        parseLocation(locationString);
+        parseName(locationString, nameString);
+        return true;
     }
 
     private static void parseLocation(String locationString) {
@@ -34,7 +35,7 @@ public class ConferenceRoomParser {
         String[] location = locationString.toLowerCase().split("\\s+");
         String[] name = nameString.toLowerCase().split("\\s+");
 
-        if (name.length < MIN_WORDS_IN_LOCATION + 1 || name.length > MAX_WORDS_IN_LOCATION + 1) {
+        if (name.length != location.length + 1) {
             throw new ParserException("Invalid name length");
         }
         for (int i = 0; i < location.length; i++) {

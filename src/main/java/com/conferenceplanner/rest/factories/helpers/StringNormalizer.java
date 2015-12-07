@@ -4,6 +4,11 @@ package com.conferenceplanner.rest.factories.helpers;
 public class StringNormalizer {
 
     public static String createNormalizedConferenceRoomLocation(String locationString) {
+
+        if (locationString == null || locationString.isEmpty()) {
+            throw new IllegalArgumentException("Can not normalize null or empty string!");
+        }
+
         String normalizedString = "";
         String[] words = locationString.toLowerCase().split("\\s+");
 
@@ -17,6 +22,11 @@ public class StringNormalizer {
     }
 
     public static String createNormalizedConferenceRoomName(String nameString) {
+
+        if (nameString == null || nameString.isEmpty()) {
+            throw new IllegalArgumentException("Can not normalize null or empty string!");
+        }
+
         String normalizedString = "";
         String[] words = nameString.toLowerCase().split("\\s+");
 
@@ -26,8 +36,11 @@ public class StringNormalizer {
             normalizedString += " ";
             if (i != words.length - 1) {
                 normalizedString += capitalize(words[i]);
+            } else {
+                normalizedString += words[i];
             }
         }
+
         return normalizedString;
     }
 

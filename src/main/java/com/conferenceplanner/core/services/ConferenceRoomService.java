@@ -33,7 +33,7 @@ public class ConferenceRoomService {
             }
         } catch (Exception ex) {
 
-            new DatabaseException("Persistence level error: " + ex.getCause());
+            throw new DatabaseException("Persistence level error: " + ex.getMessage());
         }
         return false;
     }
@@ -45,7 +45,7 @@ public class ConferenceRoomService {
 
         } catch (Exception ex) {
 
-            new DatabaseException("Persistence level error: " + ex.getCause());
+            throw new DatabaseException("Persistence level error: " + ex.getMessage());
         }
     }
 }
