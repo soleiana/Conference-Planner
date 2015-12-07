@@ -10,16 +10,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 
 @Controller
-@RequestMapping(value = "/participants"
- , consumes =  "application/json", produces = "application/json")
+@RequestMapping(value = "/participants")
 public class ParticipantController {
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST, consumes =  "application/json", produces = "application/json")
     public ResponseEntity<String> addParticipant(@RequestBody Participant participant) {
         return null;
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{id}", produces = "application/json")
     public ResponseEntity<String> removeParticipant(@PathVariable int id) {
         return null;
     }

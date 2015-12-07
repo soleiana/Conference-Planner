@@ -4,44 +4,36 @@ import com.conferenceplanner.rest.domain.Conference;
 import com.conferenceplanner.rest.domain.Participant;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
-@RequestMapping(value = "/conferences"
-        , consumes =  "application/json", produces = "application/json")
+@RequestMapping(value = "/conferences")
 public class ConferenceController {
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST, consumes =  "application/json", produces = "application/json" )
     public ResponseEntity<String> createConference(@RequestBody Conference conference) {
         return null;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{id}")
+    @RequestMapping(method = RequestMethod.GET, value = "/{id}", produces = "application/json")
     public ResponseEntity<Conference> getConference(@PathVariable int id) {
         return null;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<List<Conference>> getUpcomingConferences() {
+
+    @RequestMapping(method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<List<Conference>> getConferences(@RequestParam boolean cancelled, @RequestParam boolean availableOnly) {
         return null;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/available")
-    public ResponseEntity<List<Conference>> getUpcomingAvailableConferences() {
-        return null;
-    }
-
-    @RequestMapping(method = RequestMethod.GET, value = "/{id}/participants")
+    @RequestMapping(method = RequestMethod.GET, value = "/{id}/participants", produces = "application/json")
     public ResponseEntity<List<Participant>> getParticipants(@PathVariable int id) {
         return null;
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
+    @RequestMapping(method = RequestMethod.PUT, value = "/{id}", produces = "application/json")
     public ResponseEntity<String> cancelConference(@PathVariable int id) {
         return null;
     }

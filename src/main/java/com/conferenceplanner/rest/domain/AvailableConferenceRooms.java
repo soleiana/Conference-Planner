@@ -5,18 +5,27 @@ import java.util.List;
 
 public class AvailableConferenceRooms {
 
-    private ConferenceInterval conferenceInterval;
+    private String conferenceStartDateTime;
+    private String conferenceEndDateTime;
     List<ConferenceRoom> availableConferenceRooms = new ArrayList<>();
 
     public AvailableConferenceRooms() {
     }
 
-    public ConferenceInterval getConferenceInterval() {
-        return conferenceInterval;
+    public String getConferenceStartDateTime() {
+        return conferenceStartDateTime;
     }
 
-    public void setConferenceInterval(ConferenceInterval conferenceInterval) {
-        this.conferenceInterval = conferenceInterval;
+    public void setConferenceStartDateTime(String conferenceStartDateTime) {
+        this.conferenceStartDateTime = conferenceStartDateTime;
+    }
+
+    public String getConferenceEndDateTime() {
+        return conferenceEndDateTime;
+    }
+
+    public void setConferenceEndDateTime(String conferenceEndDateTime) {
+        this.conferenceEndDateTime = conferenceEndDateTime;
     }
 
     public List<ConferenceRoom> getAvailableConferenceRooms() {
