@@ -32,7 +32,12 @@ public class ConferenceRoom {
             inverseJoinColumns = @JoinColumn(name = "CONFERENCE_ID", referencedColumnName = "ID")
     )
     @Cascade({org.hibernate.annotations.CascadeType.ALL})
-    public List<Conference> conferences = new ArrayList<>();
+    private List<Conference> conferences = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CONFERENCE_ROOM_ID")
+    @Cascade({org.hibernate.annotations.CascadeType.ALL})
+    private List<ConferenceRoomAvailability> conferenceRoomAvailabilities = new ArrayList<>();
 
     public ConferenceRoom() {}
 
@@ -76,6 +81,14 @@ public class ConferenceRoom {
 
     public void setConferences(List<Conference> conferences) {
         this.conferences = conferences;
+    }
+
+    public List<ConferenceRoomAvailability> getConferenceRoomAvailabilities() {
+        return conferenceRoomAvailabilities;
+    }
+
+    public void setConferenceRoomAvailabilities(List<ConferenceRoomAvailability> conferenceRoomAvailabilities) {
+        this.conferenceRoomAvailabilities = conferenceRoomAvailabilities;
     }
 
     @Override

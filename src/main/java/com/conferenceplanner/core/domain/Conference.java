@@ -36,13 +36,19 @@ public class Conference {
     @ManyToMany(mappedBy = "conferences")
     private List<ConferenceRoom> conferenceRooms = new ArrayList<>();
 
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CONFERENCE_ID")
+    @Cascade({org.hibernate.annotations.CascadeType.ALL})
+    private List<ConferenceRoomAvailability> conferenceRoomAvailabilities = new ArrayList<>();
+
+
     @ManyToMany
     @JoinTable(name = "CONFERENCE_PARTICIPANT",
             joinColumns = @JoinColumn(name = "CONFERENCE_ID", referencedColumnName = "ID"),
             inverseJoinColumns = @JoinColumn(name = "PARTICIPANT_ID", referencedColumnName = "ID")
     )
     @Cascade({org.hibernate.annotations.CascadeType.ALL})
-    public List<Participant> participants = new ArrayList<>();
+    private List<Participant> participants = new ArrayList<>();
 
     public Conference() {}
 
@@ -95,6 +101,14 @@ public class Conference {
 
     public void setConferenceRooms(List<ConferenceRoom> conferenceRooms) {
         this.conferenceRooms = conferenceRooms;
+    }
+
+    public List<ConferenceRoomAvailability> getConferenceRoomAvailabilities() {
+        return conferenceRoomAvailabilities;
+    }
+
+    public void setConferenceRoomAvailabilities(List<ConferenceRoomAvailability> conferenceRoomAvailabilities) {
+        this.conferenceRoomAvailabilities = conferenceRoomAvailabilities;
     }
 
     public List<Participant> getParticipants() {
