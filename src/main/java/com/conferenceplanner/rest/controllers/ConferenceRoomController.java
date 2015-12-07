@@ -21,8 +21,8 @@ public class ConferenceRoomController {
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<AvailableConferenceRooms> getConferenceRooms(@RequestParam String conferenceStartDateTime,
-                                                                       @RequestParam String conferenceEndDateTime) {
+    public ResponseEntity<AvailableConferenceRooms> getAvailableConferenceRooms(@RequestParam String conferenceStartDateTime,
+                                                                                @RequestParam String conferenceEndDateTime) {
         return null;
     }
 
