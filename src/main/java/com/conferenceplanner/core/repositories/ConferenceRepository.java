@@ -1,7 +1,6 @@
 package com.conferenceplanner.core.repositories;
 
 import com.conferenceplanner.core.domain.Conference;
-import com.conferenceplanner.core.domain.ConferenceRoom;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -23,7 +22,7 @@ public class ConferenceRepository extends SessionProvider {
         return (Conference) session.get(Conference.class, id);
     }
 
-    public List<Conference> getAllAvailable(){
+    public List<Conference> getUpcoming(){
         LocalDateTime now = LocalDateTime.now();
         Session session = getCurrentSession();
         Criteria criteria = session.createCriteria(Conference.class);

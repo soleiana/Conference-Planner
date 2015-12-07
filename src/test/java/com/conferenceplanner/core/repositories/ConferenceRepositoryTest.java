@@ -3,8 +3,6 @@ package com.conferenceplanner.core.repositories;
 import com.conferenceplanner.SpringContextTest;
 import com.conferenceplanner.core.domain.Conference;
 import com.conferenceplanner.core.domain.ConferenceFixture;
-import com.conferenceplanner.core.domain.ConferenceRoom;
-import com.conferenceplanner.core.domain.ConferenceRoomFixture;
 import com.conferenceplanner.core.repositories.tools.DatabaseCleaner;
 import org.junit.Before;
 import org.junit.Test;
@@ -52,10 +50,10 @@ public class ConferenceRepositoryTest extends SpringContextTest {
 
     @Test
     @Transactional
-    public void testGetAllAvailable() throws Exception {
+    public void testGetUpcoming() throws Exception {
         List<Conference> conferences = ConferenceFixture.createInputData();
         persistConferences(conferences);
-        List<Conference> actualConferences = conferenceRepository.getAllAvailable();
+        List<Conference> actualConferences = conferenceRepository.getUpcoming();
         List<Conference> expectedConferences = ConferenceFixture.createExpectedData();
         assertEquals(expectedConferences.size(), actualConferences.size());
         assertEqualData(expectedConferences, actualConferences);
