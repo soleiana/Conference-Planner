@@ -2,18 +2,18 @@ package com.conferenceplanner.rest.domain;
 
 public class ConferenceRoom {
 
-    private int id;
+    private Integer id;
     private String name;
     private String location;
-    private int max_seats;
+    private Integer maxSeats;
 
     public ConferenceRoom() {}
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -33,11 +33,11 @@ public class ConferenceRoom {
         this.location = location;
     }
 
-    public int getMax_seats() {
-        return max_seats;
+    public Integer getMaxSeats() {
+        return maxSeats;
     }
 
-    public void setMax_seats(int max_seats) {
-        this.max_seats = max_seats;
+    public void setMaxSeats(Integer maxSeats) {
+        this.maxSeats = maxSeats;
     }
 }
