@@ -1,6 +1,6 @@
 package com.conferenceplanner.rest.domain;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 public class Conference {
@@ -9,7 +9,8 @@ public class Conference {
     private String name;
     private String startDateTime;
     private String endDateTime;
-    private List<Integer> conferenceRooms = new ArrayList<>();
+    private List<Integer> conferenceRoomIds;
+    private int freeSeats;
 
     public Conference() {}
 
@@ -45,11 +46,20 @@ public class Conference {
         this.endDateTime = endDateTime;
     }
 
-    public List<Integer> getConferenceRooms() {
-        return conferenceRooms;
+    public List<Integer> getConferenceRoomIds() {
+        return conferenceRoomIds;
     }
 
-    public void setConferenceRooms(List<Integer> conferenceRooms) {
-        this.conferenceRooms = conferenceRooms;
+    public void setConferenceRoomIds(List<Integer> conferenceRoomIds) {
+        this.conferenceRoomIds = conferenceRoomIds;
     }
+
+    public int getFreeSeats() {
+        return freeSeats;
+    }
+
+    public void setFreeSeats(int freeSeats) {
+        this.freeSeats = freeSeats;
+    }
+
 }

@@ -21,13 +21,18 @@ public class ConferenceController {
         return null;
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
-    public ResponseEntity<String> cancelConference(@PathVariable int id) {
+    @RequestMapping(method = RequestMethod.GET, value = "/{id}")
+    public ResponseEntity<Conference> getConference(@PathVariable int id) {
         return null;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{fromDate}")
-    public ResponseEntity<List<Conference>> getAvailableConferences(@PathVariable String fromDate) {
+    @RequestMapping(method = RequestMethod.GET)
+    public ResponseEntity<List<Conference>> getUpcomingConferences() {
+        return null;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/available")
+    public ResponseEntity<List<Conference>> getUpcomingAvailableConferences() {
         return null;
     }
 
@@ -35,4 +40,10 @@ public class ConferenceController {
     public ResponseEntity<List<Participant>> getParticipants(@PathVariable int id) {
         return null;
     }
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
+    public ResponseEntity<String> cancelConference(@PathVariable int id) {
+        return null;
+    }
+
 }

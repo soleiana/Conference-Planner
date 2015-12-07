@@ -7,7 +7,7 @@ public class Participant {
     private String surname;
     private String birthDate;
     private String passportNr;
-    private int conference;
+    private int conferenceId;
 
     public Participant() {}
 
@@ -51,11 +51,11 @@ public class Participant {
         this.passportNr = passportNr;
     }
 
-    public int getConference() {
-        return conference;
+    public int getConferenceId() {
+        return conferenceId;
     }
 
-    public void setConference(int conference) {
-        this.conference = conference;
+    public void setConferenceId(int conferenceId) {
+        this.conferenceId = conferenceId;
     }
 }
