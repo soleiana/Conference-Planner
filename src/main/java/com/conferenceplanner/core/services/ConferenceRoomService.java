@@ -15,7 +15,7 @@ public class ConferenceRoomService {
     @Autowired
     private ConferenceRoomRepository conferenceRoomRepository;
 
-    
+
     @Transactional
     public boolean checkIfExists(ConferenceRoom conferenceRoom) {
         try {
