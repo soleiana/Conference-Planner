@@ -1,11 +1,11 @@
 package com.conferenceplanner.rest.domain;
 
-public class ConferenceRoomAvailabilityEntry {
+public class ConferenceRoomAvailabilityItem {
 
     private Conference conference;
     private int availableSeats;
 
-    public ConferenceRoomAvailabilityEntry() {}
+    public ConferenceRoomAvailabilityItem() {}
 
     public Conference getConference() {
         return conference;

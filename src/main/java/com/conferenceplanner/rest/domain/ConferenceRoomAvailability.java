@@ -6,7 +6,7 @@ import java.util.List;
 public class ConferenceRoomAvailability {
 
     private ConferenceRoom conferenceRoom;
-    private List<ConferenceRoomAvailabilityEntry> conferenceRoomAvailabilityEntries = new ArrayList<>();
+    private List<ConferenceRoomAvailabilityItem> conferenceRoomAvailabilityItems = new ArrayList<>();
 
     public ConferenceRoomAvailability() {}
 
@@ -18,11 +18,11 @@ public class ConferenceRoomAvailability {
         this.conferenceRoom = conferenceRoom;
     }
 
-    public List<ConferenceRoomAvailabilityEntry> getConferenceRoomAvailabilityEntries() {
-        return conferenceRoomAvailabilityEntries;
+    public List<ConferenceRoomAvailabilityItem> getConferenceRoomAvailabilityItems() {
+        return conferenceRoomAvailabilityItems;
     }
 
-    public void setConferenceRoomAvailabilityEntries(List<ConferenceRoomAvailabilityEntry> conferenceRoomAvailabilityEntries) {
-        this.conferenceRoomAvailabilityEntries = conferenceRoomAvailabilityEntries;
+    public void setConferenceRoomAvailabilityItems(List<ConferenceRoomAvailabilityItem> conferenceRoomAvailabilityItems) {
+        this.conferenceRoomAvailabilityItems = conferenceRoomAvailabilityItems;
     }
 }
