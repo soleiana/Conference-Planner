@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class ParticipantController {
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<String> createParticipant(@RequestBody Participant participant) {
+    public ResponseEntity<String> addParticipant(@RequestBody Participant participant) {
         return null;
     }
 
