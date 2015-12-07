@@ -15,11 +15,7 @@ public class ConferenceRoomController {
         return null;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{id}", produces = "application/json")
-    public ResponseEntity<ConferenceRoom> getConferenceRoom(@PathVariable int id) {
-        return null;
-    }
-
+    
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<AvailableConferenceRooms> getAvailableConferenceRooms(@RequestParam String conferenceStartDateTime,
                                                                                 @RequestParam String conferenceEndDateTime) {
