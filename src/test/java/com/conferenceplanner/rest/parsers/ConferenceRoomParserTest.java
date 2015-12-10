@@ -1,5 +1,6 @@
 package com.conferenceplanner.rest.parsers;
 
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -26,15 +27,6 @@ public class ConferenceRoomParserTest {
         expectedException.expect(ParserException.class);
         expectedException.expectMessage("Invalid location length");
         String locationString = "aaa  aaa  aaa  aaa  aaa  aaa";
-        ConferenceRoomParser.parse(locationString, nameString);
-    }
-
-    @Test
-    public void test_throws_ParserException_if_invalid_first_word_format() {
-        String nameString = "";
-        expectedException.expect(ParserException.class);
-        expectedException.expectMessage("Invalid location format");
-        String locationString = "aaa  aaa  aaa  aaa  aaa";
         ConferenceRoomParser.parse(locationString, nameString);
     }
 
@@ -89,6 +81,11 @@ public class ConferenceRoomParserTest {
         String locationString = "a/a  aaa  aaa";
         boolean result = ConferenceRoomParser.parse(locationString, nameString);
         assertTrue(result);
+
+        nameString = "aaa aaa  conference";
+        locationString = "  aaa   aaa";
+        result = ConferenceRoomParser.parse(locationString, nameString);
+        assertTrue(result);
     }
 
     @Test
@@ -96,6 +93,11 @@ public class ConferenceRoomParserTest {
         String nameString = "A/A AAA AAA  CONFERENCE";
         String locationString = "A/A  AAA  AAA";
         boolean result = ConferenceRoomParser.parse(locationString, nameString);
+        assertTrue(result);
+
+        nameString = "AAA AAA  CONFERENCE";
+        locationString = "  AAA  AAA";
+        result = ConferenceRoomParser.parse(locationString, nameString);
         assertTrue(result);
     }
 

@@ -10,7 +10,7 @@ public class StringNormalizer {
         }
 
         String normalizedString = "";
-        String[] words = locationString.toLowerCase().split("\\s+");
+        String[] words = locationString.toLowerCase().trim().split("\\s+");
 
         normalizedString += words[0].toUpperCase();
 
@@ -28,7 +28,7 @@ public class StringNormalizer {
         }
 
         String normalizedString = "";
-        String[] words = nameString.toLowerCase().split("\\s+");
+        String[] words = nameString.toLowerCase().trim().split("\\s+");
 
         normalizedString += words[0].toUpperCase();
 

@@ -27,6 +27,8 @@ public class ConferenceRoomValidator {
             throw new ValidationException("Invalid max seats");
         }
         try {
+           // String locationStringToParse = locationString.toLowerCase().trim();
+          //  String nameStringToParse = nameString.toLowerCase().trim();
             ConferenceRoomParser.parse(locationString, nameString);
 
         } catch (ParserException ex) {

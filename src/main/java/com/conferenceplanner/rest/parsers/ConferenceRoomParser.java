@@ -1,13 +1,14 @@
 package com.conferenceplanner.rest.parsers;
 
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class ConferenceRoomParser {
 
     private static final int MIN_WORDS_IN_LOCATION = 2;
     private static final int MAX_WORDS_IN_LOCATION = 5;
-    private static final String LOCATION_FIRST_WORD_PATTERN = "[a-z]/[a-z]";
-    private static final String LOCATION_WORD_PATTERN = "[a-z]+";
-
+    private static final String LOCATION_PATTERN = "([a-z]/[a-z]\\s+)*([a-z]+\\s+)+([a-z]+)*";
 
     public static boolean parse(String locationString, String nameString) {
         parseLocation(locationString);
@@ -16,24 +17,26 @@ public class ConferenceRoomParser {
     }
 
     private static void parseLocation(String locationString) {
-        String[] location = locationString.toLowerCase().split("\\s+");
+
+        String locationStringToParse = locationString.toLowerCase().trim();
+
+        String[] location = locationStringToParse.split("\\s+");
 
         if (location.length < MIN_WORDS_IN_LOCATION || location.length > MAX_WORDS_IN_LOCATION) {
             throw new ParserException("Invalid location length");
         }
-        if (!location[0].matches(LOCATION_FIRST_WORD_PATTERN)) {
-            throw new ParserException("Invalid location format");
-        }
 
-        for (int i = 1; i < location.length; i++) {
-            if (!location[i].matches(LOCATION_WORD_PATTERN))
-                throw new ParserException("Invalid location format");
+        Pattern pattern = Pattern.compile(LOCATION_PATTERN);
+        Matcher matcher = pattern.matcher(locationStringToParse);
+
+        if (!matcher.matches()) {
+            throw new ParserException("Invalid location format");
         }
     }
 
     private static void parseName(String locationString, String nameString) {
-        String[] location = locationString.toLowerCase().split("\\s+");
-        String[] name = nameString.toLowerCase().split("\\s+");
+        String[] location = locationString.toLowerCase().trim().split("\\s+");
+        String[] name = nameString.toLowerCase().trim().split("\\s+");
 
         if (name.length != location.length + 1) {
             throw new ParserException("Invalid name length");
