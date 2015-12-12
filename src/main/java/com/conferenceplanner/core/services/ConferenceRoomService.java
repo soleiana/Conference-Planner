@@ -5,6 +5,7 @@ import com.conferenceplanner.core.domain.ConferenceRoom;
 import com.conferenceplanner.core.repositories.ConferenceRoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
