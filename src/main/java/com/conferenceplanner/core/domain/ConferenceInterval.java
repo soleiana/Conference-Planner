@@ -22,6 +22,11 @@ public class ConferenceInterval {
         return false;
     }
 
+    public static LocalDateTime getActualStartDateTime(LocalDateTime startDateTime){
+        LocalDateTime actualDateTime = startDateTime.minusMinutes(MIN_INTERVAL_BETWEEN_CONFERENCES_IN_MINUTES);
+        return actualDateTime;
+    }
+
     public static LocalDateTime getActualEndDateTime(LocalDateTime endDateTime){
         LocalDateTime actualDateTime = endDateTime.plusMinutes(MIN_INTERVAL_BETWEEN_CONFERENCES_IN_MINUTES);
         return actualDateTime;

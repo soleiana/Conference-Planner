@@ -36,17 +36,18 @@ public class ConferenceRoomAvailabilityChecker {
         LocalDateTime scheduledStart = scheduledConference.getStartDateTime();
         LocalDateTime scheduledEnd = scheduledConference.getEndDateTime();
 
-        LocalDateTime actualScheduledEnd = ConferenceInterval.getActualEndDateTime(scheduledEnd);
-        ConferenceInterval scheduledInterval = new ConferenceInterval(scheduledStart, actualScheduledEnd);
+        LocalDateTime actualStartDateTime = ConferenceInterval.getActualStartDateTime(scheduledStart);
+        LocalDateTime actualEndDateTime = ConferenceInterval.getActualEndDateTime(scheduledEnd);
+        ConferenceInterval scheduledInterval = new ConferenceInterval(actualStartDateTime, actualEndDateTime);
         ConferenceInterval plannedInterval = new ConferenceInterval(plannedStart, plannedEnd);
 
-        if (plannedInterval.contains(scheduledStart)
-                || plannedInterval.contains(actualScheduledEnd)
+        if (plannedInterval.contains(actualStartDateTime)
+                || plannedInterval.contains(actualEndDateTime)
                 || scheduledInterval.contains(plannedStart)
                 || scheduledInterval.contains(plannedEnd)) {
 
-            return false;
+            return true;
         }
-    return true;
+    return false;
     }
 }
