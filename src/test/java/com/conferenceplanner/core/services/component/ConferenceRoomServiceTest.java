@@ -29,7 +29,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     }
 
     @Test
-    public void test_checkIfExists_returns_success_if_conference_room_exists() {
+    public void test_checkIfExists_is_true_if_conference_room_exists() {
         ConferenceRoom room1 = new ConferenceRoom("name1", "location1", 7);
 
         conferenceRoomRepository.create(room1);
@@ -42,7 +42,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     }
 
     @Test
-    public void test_checkIfExists_fails_if_conference_room_does_not_exist() {
+    public void test_checkIfExists_is_false_if_conference_room_does_not_exist() {
         ConferenceRoom room1 = new ConferenceRoom("name1", "location1", 7);
 
         conferenceRoomRepository.create(room1);
@@ -55,7 +55,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     }
 
     @Test
-    public void test_checkIfExists_fails_if_no_conference_room_exists() {
+    public void test_checkIfExists_is_false_if_no_conference_room_exists() {
 
         ConferenceRoom room = new ConferenceRoom("name1", "location1", 7);
         boolean result = conferenceRoomService.checkIfExists(room);

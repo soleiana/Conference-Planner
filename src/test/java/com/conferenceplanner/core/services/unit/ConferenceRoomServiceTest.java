@@ -37,7 +37,7 @@ public class ConferenceRoomServiceTest {
     }
 
     @Test
-    public void test_checkIfExists_fails_if_no_conference_room_exists()  {
+    public void test_checkIfExists_is_false_if_no_conference_room_exists()  {
         ConferenceRoom room = new ConferenceRoom("name3", "location1", 7);
         when(conferenceRoomRepository.getAll()).thenReturn(null);
 
@@ -46,7 +46,7 @@ public class ConferenceRoomServiceTest {
     }
 
     @Test
-    public void test_checkIfExists_fails_if_conference_room_does_not_exist()  {
+    public void test_checkIfExists_is_false_if_conference_room_does_not_exist()  {
         ConferenceRoom room = new ConferenceRoom("name3", "location1", 7);
         when(conferenceRoomRepository.getAll()).thenReturn(getConferenceRoomList());
 
@@ -55,7 +55,7 @@ public class ConferenceRoomServiceTest {
     }
 
     @Test
-    public void test_checkIfExists_returns_success_if_conference_room_exists()  {
+    public void test_checkIfExists_is_true_if_conference_room_exists()  {
         ConferenceRoom room = new ConferenceRoom("name1", "location1", 7);
         when(conferenceRoomRepository.getAll()).thenReturn(getConferenceRoomList());
 
