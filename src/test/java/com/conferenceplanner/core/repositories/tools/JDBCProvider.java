@@ -42,17 +42,17 @@ public class JDBCProvider {
         }
     }
 
-    protected Connection getConnection() throws DBException {
+    protected Connection getConnection() throws TestDatabaseException {
         try{
             return DriverManager.getConnection(dbUrl, userName, password);
         } catch (SQLException e) {
             System.out.println("Exception while getting connection to database");
             e.printStackTrace();
-            throw new DBException(e);
+            throw new TestDatabaseException(e);
         }
     }
 
-    protected void closeConnection(Connection connection) throws DBException {
+    protected void closeConnection(Connection connection) throws TestDatabaseException {
         try {
             if(connection != null) {
                 connection.close();
@@ -60,7 +60,7 @@ public class JDBCProvider {
         } catch (SQLException e) {
             System.out.println("Exception while closing connection to database");
             e.printStackTrace();
-            throw new DBException(e);
+            throw new TestDatabaseException(e);
         }
     }
 }

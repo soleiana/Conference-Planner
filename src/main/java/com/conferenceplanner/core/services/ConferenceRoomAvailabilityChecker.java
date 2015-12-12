@@ -10,7 +10,7 @@ import java.util.List;
 
 
 @Component
-public class RoomAvailabilityChecker {
+public class ConferenceRoomAvailabilityChecker {
 
     public boolean isAvailable(ConferenceRoom conferenceRoom, Conference plannedConference) {
 
@@ -22,7 +22,6 @@ public class RoomAvailabilityChecker {
             if (conference.isCancelled()){
                 continue;
             }
-
             if (overlap(conference, plannedConference)) {
                 return false;
             }

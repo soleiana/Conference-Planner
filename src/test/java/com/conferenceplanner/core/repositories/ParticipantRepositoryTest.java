@@ -2,7 +2,7 @@ package com.conferenceplanner.core.repositories;
 
 import com.conferenceplanner.SpringContextTest;
 import com.conferenceplanner.core.domain.Participant;
-import com.conferenceplanner.core.domain.ParticipantFixture;
+import com.conferenceplanner.core.repositories.fixtures.ParticipantFixture;
 import com.conferenceplanner.core.repositories.tools.DatabaseCleaner;
 import org.junit.Before;
 import org.junit.Test;

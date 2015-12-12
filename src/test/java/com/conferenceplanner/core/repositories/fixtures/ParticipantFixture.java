@@ -1,4 +1,6 @@
-package com.conferenceplanner.core.domain;
+package com.conferenceplanner.core.repositories.fixtures;
+
+import com.conferenceplanner.core.domain.Participant;
 
 import java.time.LocalDate;
 

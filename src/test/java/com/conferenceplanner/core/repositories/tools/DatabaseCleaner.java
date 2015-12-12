@@ -1,7 +1,5 @@
 package com.conferenceplanner.core.repositories.tools;
 
-import com.conferenceplanner.core.repositories.SessionProvider;
-import org.hibernate.Query;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
@@ -12,7 +10,7 @@ import java.util.List;
 @Component
 public class DatabaseCleaner extends JDBCProvider {
 
-    public void clear() throws DBException {
+    public void clear() throws TestDatabaseException {
         Connection connection = null;
         try {
             connection = getConnection();
@@ -34,13 +32,13 @@ public class DatabaseCleaner extends JDBCProvider {
             } catch (SQLException e) {
                 System.out.println("Deleted All Rows In  Table Error. ");
                 e.printStackTrace();
-                throw new DBException(e);
+                throw new TestDatabaseException(e);
             }
             connection.close();
         } catch (Throwable e) {
             System.out.println("Exception while deleting data from DB.");
             e.printStackTrace();
-            throw new DBException(e);
+            throw new TestDatabaseException(e);
         } finally {
             closeConnection(connection);
         }
