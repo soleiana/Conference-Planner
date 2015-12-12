@@ -5,11 +5,20 @@ import java.util.List;
 
 public class AvailableConferenceRooms {
 
+    private String errorMessage;
     private String conferenceStartDateTime;
     private String conferenceEndDateTime;
     List<ConferenceRoom> availableConferenceRooms = new ArrayList<>();
 
     public AvailableConferenceRooms() {
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 
     public String getConferenceStartDateTime() {

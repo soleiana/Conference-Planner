@@ -39,7 +39,8 @@ public class ConferenceRoomServiceTest {
     @Test
     public void test_checkIfExists_is_false_if_no_conference_room_exists()  {
         ConferenceRoom room = new ConferenceRoom("name3", "location1", 7);
-        when(conferenceRoomRepository.getAll()).thenReturn(null);
+        List<ConferenceRoom> emptyList = new ArrayList<>();
+        when(conferenceRoomRepository.getAll()).thenReturn(emptyList);
 
         boolean result = conferenceRoomService.checkIfExists(room);
         assertFalse(result);

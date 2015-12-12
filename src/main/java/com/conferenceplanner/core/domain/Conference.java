@@ -52,6 +52,11 @@ public class Conference {
 
     public Conference() {}
 
+    public Conference(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
+    }
+
     public Conference(String name, LocalDateTime startDateTime, LocalDateTime endDateTime, boolean cancelled) {
         this.name = name;
         this.startDateTime = startDateTime;

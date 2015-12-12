@@ -2,16 +2,21 @@ package com.conferenceplanner.rest.controllers;
 
 import com.conferenceplanner.core.services.ConferenceRoomService;
 import com.conferenceplanner.rest.domain.*;
+import com.conferenceplanner.rest.domain.ConferenceInterval;
 import com.conferenceplanner.rest.domain.ConferenceRoom;
 import com.conferenceplanner.rest.domain.ConferenceRoomAvailability;
+import com.conferenceplanner.rest.factories.ConferenceFactory;
 import com.conferenceplanner.rest.factories.ConferenceRoomFactory;
 import com.conferenceplanner.rest.validators.ConferenceRoomValidator;
+import com.conferenceplanner.rest.validators.ConferenceValidator;
 import com.conferenceplanner.rest.validators.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @Controller
@@ -22,10 +27,17 @@ public class ConferenceRoomController {
     private ConferenceRoomValidator conferenceRoomValidator;
 
     @Autowired
+    private ConferenceValidator conferenceValidator;
+
+    @Autowired
     private ConferenceRoomFactory conferenceRoomFactory;
 
     @Autowired
+    private ConferenceFactory conferenceFactory;
+
+    @Autowired
     private ConferenceRoomService conferenceRoomService;
+
 
     @RequestMapping(method = RequestMethod.POST, consumes =  "application/json", produces = "application/json")
     public ResponseEntity<String> createConferenceRoom(@RequestBody ConferenceRoom conferenceRoom) {
@@ -48,22 +60,51 @@ public class ConferenceRoomController {
         }
 
         return  new ResponseEntity<>("Conference room created.", HttpStatus.CREATED);
-
-        //TODO: validate input params
-        //TODO: return 'Invalid input format', bad request
-        //TODO: get all conference rooms
-        //TODO: check if conference room exists
-        //TODO: return string 'Conference room already exists!'
-        //TODO: create conference room
-        //TODO: handle database exception: return 'Error creating conference room', internal server error
-        //TODO: return 'Conference room created', created
     }
 
 
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<AvailableConferenceRooms> getAvailableConferenceRooms(@RequestParam String conferenceStartDateTime,
                                                                                 @RequestParam String conferenceEndDateTime) {
-        return null;
+        AvailableConferenceRooms availableConferenceRooms = new AvailableConferenceRooms();
+
+        try {
+            ConferenceInterval interval = conferenceValidator.validate(conferenceStartDateTime, conferenceEndDateTime);
+
+            com.conferenceplanner.core.domain.Conference coreDomainConference =
+                    conferenceFactory.create(interval);
+
+            List<com.conferenceplanner.core.domain.ConferenceRoom> coreDomainConferenceRooms =
+                    conferenceRoomService.getAvailable(coreDomainConference);
+
+            if (coreDomainConferenceRooms.isEmpty()) {
+                availableConferenceRooms.setErrorMessage("No conference rooms found for selected conference interval!");
+                return new ResponseEntity<>(availableConferenceRooms, HttpStatus.NOT_FOUND);
+            }
+
+            List<ConferenceRoom> conferenceRooms = conferenceRoomFactory.create(coreDomainConferenceRooms);
+            availableConferenceRooms.setAvailableConferenceRooms(conferenceRooms);
+            availableConferenceRooms.setConferenceStartDateTime(interval.getStartDateTime().toString());
+            availableConferenceRooms.setConferenceEndDateTime(interval.getEndDateTime().toString());
+
+        } catch(ValidationException ex) {
+            availableConferenceRooms.setErrorMessage(ex.getMessage());
+            return new ResponseEntity<>(availableConferenceRooms, HttpStatus.BAD_REQUEST);
+
+        } catch (RuntimeException ex) {
+            availableConferenceRooms.setErrorMessage(ex.getMessage());
+            return new ResponseEntity<>(availableConferenceRooms, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return  new ResponseEntity<>(availableConferenceRooms, HttpStatus.OK);
+
+        //TODO: validate input params
+        //TODO: return 'Invalid input format', bad request
+        //TODO: get all conference rooms without conferences in the interval
+        //TODO: [conferenceStartDateTime - INTERVAL_BETWEEN_CONFERENCES, conferenceEndDateTime + INTERVAL_BETWEEN_CONFERENCES]
+        //TODO: handle database exception: return internal server error
+        //TODO: if now conference rooms found return NOT_FOUND
+        //TODO: else return OK and the list of conference rooms
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}/conference-room-availability", produces = "application/json")
