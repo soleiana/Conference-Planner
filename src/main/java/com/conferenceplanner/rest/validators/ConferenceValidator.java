@@ -7,12 +7,13 @@ import com.conferenceplanner.rest.parsers.ParserException;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 @Component
 public class ConferenceValidator {
 
-    private static final int MIN_TIME_BEFORE_CONFERENCE_START_IN_DAYS = 1;
+    private static final int MIN_TIME_BEFORE_CONFERENCE_START_IN_DAYS = 2;
     private static final int MIN_CONFERENCE_DURATION_IN_HOURS = 2;
     private static final int MAX_CONFERENCE_DURATION_IN_DAYS = 7;
 
@@ -35,6 +36,8 @@ public class ConferenceValidator {
     }
 
     private void validate(ConferenceInterval interval) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(ConferenceParser.DATE_TIME_FORMAT_PATTERN);
+
         LocalDateTime startDateTime = interval.getStartDateTime();
         LocalDateTime endDateTime = interval.getEndDateTime();
         LocalDateTime now = LocalDateTime.now();
@@ -42,11 +45,12 @@ public class ConferenceValidator {
         LocalDateTime minStartDateTime = now.plusDays(MIN_TIME_BEFORE_CONFERENCE_START_IN_DAYS);
 
         if (startDateTime.isBefore(minStartDateTime)) {
-            throw new ValidationException(String.format("Conference must start after %s", minStartDateTime));
+            throw new ValidationException(String.format("Conference must start after %s", minStartDateTime.format(formatter)));
         }
 
         if (endDateTime.isBefore(startDateTime)) {
-            throw new ValidationException(String.format("Conference end dateTime %s is before start dateTime %s", endDateTime, startDateTime));
+            throw new ValidationException(String.format("Conference end dateTime %s is before start dateTime %s",
+                    endDateTime.format(formatter), startDateTime.format(formatter)));
         }
 
         long hours = startDateTime.until(endDateTime, ChronoUnit.HOURS);

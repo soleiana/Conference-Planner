@@ -9,13 +9,13 @@ import java.time.format.DateTimeParseException;
 
 public class ConferenceParser {
 
-    private static final String DATE_TIME_FORMAT_PATTERN = "dd/MM/yyyy HH:mm";
+    public static final String DATE_TIME_FORMAT_PATTERN = "dd/MM/yyyy HH:mm";
 
     public static ConferenceInterval parse(String startDateTimeString, String endDateTimeString) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT_PATTERN);
         try {
-            LocalDateTime startDateTime = LocalDateTime.parse(startDateTimeString, formatter);
-            LocalDateTime endDateTime = LocalDateTime.parse(endDateTimeString, formatter);
+            LocalDateTime startDateTime = LocalDateTime.parse(startDateTimeString.trim(), formatter);
+            LocalDateTime endDateTime = LocalDateTime.parse(endDateTimeString.trim(), formatter);
             return new ConferenceInterval(startDateTime, endDateTime);
 
         } catch (DateTimeParseException ex) {

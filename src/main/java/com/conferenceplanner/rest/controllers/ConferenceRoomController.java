@@ -84,8 +84,9 @@ public class ConferenceRoomController {
 
             List<ConferenceRoom> conferenceRooms = conferenceRoomFactory.create(coreDomainConferenceRooms);
             availableConferenceRooms.setAvailableConferenceRooms(conferenceRooms);
-            availableConferenceRooms.setConferenceStartDateTime(interval.getStartDateTime().toString());
-            availableConferenceRooms.setConferenceEndDateTime(interval.getEndDateTime().toString());
+
+            availableConferenceRooms.setConferenceStartDateTime(interval.getFormattedStartDateTime());
+            availableConferenceRooms.setConferenceEndDateTime(interval.getFormattedEndDateTime());
 
         } catch(ValidationException ex) {
             availableConferenceRooms.setErrorMessage(ex.getMessage());
