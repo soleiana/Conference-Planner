@@ -75,7 +75,7 @@ public class ConferenceRoomController {
                     conferenceFactory.create(interval);
 
             List<com.conferenceplanner.core.domain.ConferenceRoom> coreDomainConferenceRooms =
-                    conferenceRoomService.getAvailable(coreDomainConference);
+                    conferenceRoomService.getAvailableConferenceRooms(coreDomainConference);
 
             if (coreDomainConferenceRooms.isEmpty()) {
                 availableConferenceRooms.setErrorMessage("No conference rooms found for selected conference interval!");

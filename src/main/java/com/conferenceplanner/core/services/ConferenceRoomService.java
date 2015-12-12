@@ -51,16 +51,22 @@ public class ConferenceRoomService {
     }
 
     @Transactional
-    public List<ConferenceRoom> getAvailable(Conference plannedConference) {
+    public List<ConferenceRoom> getAvailableConferenceRooms(Conference plannedConference) {
 
         List<ConferenceRoom> availableRooms = new ArrayList<>();
-        List<ConferenceRoom> allRooms = conferenceRoomRepository.getAll();
+        try {
+            List<ConferenceRoom> allRooms = conferenceRoomRepository.getAll();
 
-        for (ConferenceRoom room: allRooms) {
-            if (conferenceRoomAvailabilityChecker.isAvailable(room, plannedConference)) {
+            for (ConferenceRoom room: allRooms) {
+                if (conferenceRoomAvailabilityChecker.isAvailable(room, plannedConference)) {
                     availableRooms.add(room);
+                }
             }
+        } catch (Exception ex) {
+
+            throw new DatabaseException("Persistence level error: " + ex.getMessage());
         }
+
         return availableRooms;
     }
 }
