@@ -69,7 +69,30 @@ public class ConferenceController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/{available}", produces = "application/json")
     public ResponseEntity<Conferences> getAvailableConferences(@PathVariable String available) {
-        return null;
+        Conferences conferences = new Conferences();
+
+        try {
+            List<com.conferenceplanner.core.domain.Conference> coreDomainConferences =
+                    conferenceService.getAvailableConferences();
+
+            if (coreDomainConferences.isEmpty()) {
+                conferences.setErrorMessage("No conferences available for registration!");
+                return new ResponseEntity<>(conferences, HttpStatus.NOT_FOUND);
+            }
+
+        } catch (RuntimeException ex) {
+            conferences.setErrorMessage(ex.getMessage());
+            return new ResponseEntity<>(conferences, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return  new ResponseEntity<>(conferences, HttpStatus.OK);
+
+        //TODO: get all upcoming conferences
+        //TODO: get conference room availability items for each upcoming conference
+        //TODO: find conference room availability if available seats > 0
+        //TODO: add the conference to the list
+        //TODO: if the list is empty, return NOT_FOUND, "No conferences available for registration!"
+        //TODO: handle database exception: return internal server error
+        //TODO: return conference list, OK
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}/participants", produces = "application/json")
