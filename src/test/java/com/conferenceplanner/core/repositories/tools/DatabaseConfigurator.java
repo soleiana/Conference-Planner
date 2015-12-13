@@ -21,6 +21,11 @@ public class DatabaseConfigurator {
         databaseController.setupRelationship(conferenceRooms, conferences);
     }
 
+    public void configure(List<Conference> conferences) {
+        databaseController.persistConferences(conferences);
+    }
+
+
     public void configureWithConferenceRoomAvailability(List<ConferenceRoom> conferenceRooms, List<Conference> conferences) {
         databaseController.persistConferences(conferences);
         databaseController.persistConferenceRooms(conferenceRooms);

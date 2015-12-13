@@ -129,7 +129,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
         conferences.get(0).setCancelled(true);
         databaseConfigurator.configureWithConferenceRoomAvailability(Arrays.asList(room),conferences);
         List<ConferenceRoomAvailabilityItem> availabilityItems = conferenceRoomService.getConferenceRoomAvailabilityItems(room);
-        assertEquals(conferences.size() - 1, availabilityItems.size());
+        assertEquals(conferences.size()-1, availabilityItems.size());
     }
 
     @Test
