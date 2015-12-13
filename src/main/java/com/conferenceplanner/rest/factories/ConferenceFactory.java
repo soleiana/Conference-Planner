@@ -16,4 +16,16 @@ public class ConferenceFactory {
         return new Conference(startDateTime, endDateTime);
     }
 
+    public com.conferenceplanner.rest.domain.Conference create(Conference conference) {
+        com.conferenceplanner.rest.domain.Conference restDomainConference = new com.conferenceplanner.rest.domain.Conference();
+
+        String startDateTime = ConferenceInterval.getFormattedStartDateTime(conference.getStartDateTime());
+        String endDateTime = ConferenceInterval.getFormattedEndDateTime(conference.getEndDateTime());
+
+        restDomainConference.setName(conference.getName());
+        restDomainConference.setStartDateTime(startDateTime);
+        restDomainConference.setEndDateTime(endDateTime);
+
+        return restDomainConference;
+    }
 }

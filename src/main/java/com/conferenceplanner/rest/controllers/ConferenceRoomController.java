@@ -6,6 +6,7 @@ import com.conferenceplanner.rest.domain.ConferenceInterval;
 import com.conferenceplanner.rest.domain.ConferenceRoom;
 import com.conferenceplanner.rest.domain.ConferenceRoomAvailability;
 import com.conferenceplanner.rest.factories.ConferenceFactory;
+import com.conferenceplanner.rest.factories.ConferenceRoomAvailabilityFactory;
 import com.conferenceplanner.rest.factories.ConferenceRoomFactory;
 import com.conferenceplanner.rest.validators.ConferenceRoomValidator;
 import com.conferenceplanner.rest.validators.ConferenceValidator;
@@ -31,6 +32,9 @@ public class ConferenceRoomController {
 
     @Autowired
     private ConferenceRoomFactory conferenceRoomFactory;
+
+    @Autowired
+    private ConferenceRoomAvailabilityFactory conferenceRoomAvailabilityFactory;
 
     @Autowired
     private ConferenceFactory conferenceFactory;
@@ -116,7 +120,15 @@ public class ConferenceRoomController {
                 return new ResponseEntity<>(conferenceRoomAvailability, HttpStatus.NOT_FOUND);
             }
 
+            List<com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem> coreDomainConferenceRoomAvailabilityItems =
+                    conferenceRoomService.getConferenceRoomAvailabilityItems(coreDomainConferenceRoom);
 
+            if (coreDomainConferenceRoomAvailabilityItems.isEmpty()) {
+                conferenceRoomAvailability.setErrorMessage("No upcoming conferences in this conference room!");
+                return new ResponseEntity<>(conferenceRoomAvailability, HttpStatus.NOT_FOUND);
+            }
+
+            conferenceRoomAvailability = conferenceRoomAvailabilityFactory.create(coreDomainConferenceRoomAvailabilityItems, coreDomainConferenceRoom);
 
         } catch(ValidationException ex) {
             conferenceRoomAvailability.setErrorMessage(ex.getMessage());
@@ -126,11 +138,9 @@ public class ConferenceRoomController {
             conferenceRoomAvailability.setErrorMessage(ex.getMessage());
             return new ResponseEntity<>(conferenceRoomAvailability, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
         return  new ResponseEntity<>(conferenceRoomAvailability, HttpStatus.OK);
 
-
-        //TODO:
+        //TODO: validate id
         //TODO: get conference room with specified id
         //TODO: if conference room not found, return NOT_FOUND, "No conference room found for selected id!"
         //TODO: get conference room availabilities for conference room

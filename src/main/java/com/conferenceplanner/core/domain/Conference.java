@@ -64,6 +64,15 @@ public class Conference {
         this.cancelled = cancelled;
     }
 
+    public boolean isUpcoming() {
+        LocalDateTime now = LocalDateTime.now();
+
+        if (startDateTime.isBefore(now) || cancelled) {
+            return false;
+        }
+        return true;
+    }
+
     public Integer getId() {
         return id;
     }

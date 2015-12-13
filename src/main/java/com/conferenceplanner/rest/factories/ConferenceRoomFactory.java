@@ -26,12 +26,12 @@ public class ConferenceRoomFactory {
         return rooms;
     }
 
-    private com.conferenceplanner.rest.domain.ConferenceRoom create(ConferenceRoom conferenceRoom) {
-        com.conferenceplanner.rest.domain.ConferenceRoom room = new com.conferenceplanner.rest.domain.ConferenceRoom();
-        room.setId(conferenceRoom.getId());
-        room.setLocation(conferenceRoom.getLocation());
-        room.setName(conferenceRoom.getName());
-        room.setMaxSeats(conferenceRoom.getMaxSeats());
-        return room;
+    public com.conferenceplanner.rest.domain.ConferenceRoom create(ConferenceRoom conferenceRoom) {
+        com.conferenceplanner.rest.domain.ConferenceRoom restDomainConferenceRoom = new com.conferenceplanner.rest.domain.ConferenceRoom();
+        restDomainConferenceRoom.setId(conferenceRoom.getId());
+        restDomainConferenceRoom.setLocation(conferenceRoom.getLocation());
+        restDomainConferenceRoom.setName(conferenceRoom.getName());
+        restDomainConferenceRoom.setMaxSeats(conferenceRoom.getMaxSeats());
+        return restDomainConferenceRoom;
     }
 }

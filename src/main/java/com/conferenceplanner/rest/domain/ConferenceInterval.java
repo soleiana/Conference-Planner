@@ -8,7 +8,7 @@ import java.time.format.DateTimeFormatter;
 
 public class ConferenceInterval {
 
-    private final DateTimeFormatter dateTimeFormatter =
+    private static final DateTimeFormatter dateTimeFormatter =
             DateTimeFormatter.ofPattern(ConferenceParser.DATE_TIME_FORMAT_PATTERN);
 
     private LocalDateTime startDateTime;
@@ -32,6 +32,14 @@ public class ConferenceInterval {
     }
 
     public String getFormattedEndDateTime() {
+        return endDateTime.format(dateTimeFormatter);
+    }
+
+    public static String getFormattedStartDateTime(LocalDateTime startDateTime) {
+        return startDateTime.format(dateTimeFormatter);
+    }
+
+    public static String getFormattedEndDateTime(LocalDateTime endDateTime) {
         return endDateTime.format(dateTimeFormatter);
     }
 }

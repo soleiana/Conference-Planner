@@ -21,6 +21,9 @@ public class ConferenceRoomService {
     @Autowired
     private ConferenceRoomChecker conferenceRoomChecker;
 
+    @Autowired
+    private ConferenceRoomAvailabilityItemChecker conferenceRoomAvailabilityItemChecker;
+
 
     @Transactional
     public boolean checkIfExists(ConferenceRoom conferenceRoom) {
@@ -34,7 +37,6 @@ public class ConferenceRoomService {
                 }
             }
         } catch (Exception ex) {
-
             throw new DatabaseException("Persistence level error: " + ex.getMessage());
         }
         return false;
@@ -46,7 +48,6 @@ public class ConferenceRoomService {
             conferenceRoomRepository.create(conferenceRoom);
 
         } catch (Exception ex) {
-
             throw new DatabaseException("Persistence level error: " + ex.getMessage());
         }
     }
@@ -76,7 +77,6 @@ public class ConferenceRoomService {
                 }
             }
         } catch (Exception ex) {
-
             throw new DatabaseException("Persistence level error: " + ex.getMessage());
         }
 
@@ -84,12 +84,21 @@ public class ConferenceRoomService {
     }
 
     @Transactional
-    public List<ConferenceRoomAvailabilityItem> getConferenceRoomAvailabilities(ConferenceRoom conferenceRoom) {
+    public List<ConferenceRoomAvailabilityItem> getConferenceRoomAvailabilityItems(ConferenceRoom conferenceRoom) {
 
-        List<ConferenceRoomAvailabilityItem> availabilityItems = new ArrayList<>();
+        List<ConferenceRoomAvailabilityItem> actualAvailabilityItems = new ArrayList<>();
+        try {
+            List<ConferenceRoomAvailabilityItem> allAvailabilityItems = conferenceRoom.getConferenceRoomAvailabilityItems();
+            for(ConferenceRoomAvailabilityItem availabilityItem: allAvailabilityItems) {
 
-        List<ConferenceRoomAvailabilityItem> allAvailabilityItems = conferenceRoom.getConferenceRoomAvailabilityItems();
+                if (conferenceRoomAvailabilityItemChecker.isActual(availabilityItem)) {
+                    actualAvailabilityItems.add(availabilityItem);
+                }
+            }
+        }  catch (Exception ex) {
+            throw new DatabaseException("Persistence level error: " + ex.getMessage());
+        }
 
-        return availabilityItems;
+        return actualAvailabilityItems;
     }
 }
