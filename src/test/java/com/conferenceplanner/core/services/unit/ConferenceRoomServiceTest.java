@@ -2,11 +2,14 @@ package com.conferenceplanner.core.services.unit;
 
 import com.conferenceplanner.core.domain.Conference;
 import com.conferenceplanner.core.domain.ConferenceRoom;
+import com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem;
 import com.conferenceplanner.core.repositories.ConferenceRoomRepository;
+import com.conferenceplanner.core.services.ConferenceRoomAvailabilityItemChecker;
 import com.conferenceplanner.core.services.ConferenceRoomChecker;
 import com.conferenceplanner.core.services.ConferenceRoomService;
 import com.conferenceplanner.core.services.DatabaseException;
 import com.conferenceplanner.core.services.fixtures.ConferenceFixture;
+import com.conferenceplanner.core.services.fixtures.ConferenceRoomAvailabilityItemFixture;
 import com.conferenceplanner.core.services.fixtures.ConferenceRoomFixture;
 import org.junit.Before;
 import org.junit.Rule;
@@ -33,6 +36,9 @@ public class ConferenceRoomServiceTest {
 
     @Mock
     private ConferenceRoomChecker conferenceRoomChecker;
+
+    @Mock
+    private ConferenceRoomAvailabilityItemChecker conferenceRoomAvailabilityItemChecker;
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -113,6 +119,30 @@ public class ConferenceRoomServiceTest {
         List<ConferenceRoom> availableRooms = conferenceRoomService.getAvailableConferenceRooms(plannedConference);
         assertEquals(1, availableRooms.size());
         assertEquals(rooms.get(1), availableRooms.get(0));
+    }
+
+    @Test
+    public void test_getConferenceRoomAvailabilityItems_throws_DatabaseException()  {
+        ConferenceRoom conferenceRoom = mock(ConferenceRoom.class);
+        doThrow(new RuntimeException("Database connection failed")).when(conferenceRoom).getConferenceRoomAvailabilityItems();
+        expectedException.expect(DatabaseException.class);
+        expectedException.expectMessage("Database connection failed");
+        conferenceRoomService.getConferenceRoomAvailabilityItems(conferenceRoom);
+    }
+
+    @Test
+    public void test_getConferenceRoomAvailabilityItems()  {
+        ConferenceRoom conferenceRoom = ConferenceRoomFixture.createConferenceRoom();
+        List<ConferenceRoomAvailabilityItem> availabilityItems = ConferenceRoomAvailabilityItemFixture.createConferenceRoomAvailabilityItems();
+        conferenceRoom.setConferenceRoomAvailabilityItems(availabilityItems);
+        when(conferenceRoomAvailabilityItemChecker.isActual(availabilityItems.get(0))).thenReturn(false);
+        when(conferenceRoomAvailabilityItemChecker.isActual(availabilityItems.get(1))).thenReturn(true);
+        when(conferenceRoomAvailabilityItemChecker.isActual(availabilityItems.get(2))).thenReturn(true);
+
+        List<ConferenceRoomAvailabilityItem> actualAvailabilityItems = conferenceRoomService.getConferenceRoomAvailabilityItems(conferenceRoom);
+        assertEquals(2, actualAvailabilityItems.size());
+        assertEquals(availabilityItems.get(1), actualAvailabilityItems.get(0));
+        assertEquals(availabilityItems.get(2), actualAvailabilityItems.get(1));
     }
 
 }

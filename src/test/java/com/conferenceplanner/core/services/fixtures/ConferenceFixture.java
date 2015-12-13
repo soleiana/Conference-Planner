@@ -10,9 +10,23 @@ public class ConferenceFixture {
 
     private static final LocalDateTime PLANNED_START = LocalDateTime.now().plusHours(4);
     private static final LocalDateTime PLANNED_END = PLANNED_START.plusHours(6);
+    private static final LocalDateTime START_IN_PAST = LocalDateTime.now().minusHours(1);
 
     public static Conference createConference() {
         return new Conference(PLANNED_START, PLANNED_END);
+    }
+
+    public static Conference createOngoingConference() {
+        LocalDateTime endDateTime = START_IN_PAST.plusHours(5);
+        return new Conference("name", START_IN_PAST, endDateTime, false);
+    }
+
+    public static Conference createCancelledConference() {
+        return new Conference("name", PLANNED_START, PLANNED_END, true);
+    }
+
+    public static Conference createUpcomingConference() {
+        return new Conference("name", PLANNED_START, PLANNED_END, false);
     }
 
     public static List<Conference> createCancelledConferences() {
