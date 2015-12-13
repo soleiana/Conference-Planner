@@ -12,15 +12,15 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 
-public class ConferenceRoomAvailabilityCheckerTest {
+public class ConferenceRoomCheckerTest {
 
-    private ConferenceRoomAvailabilityChecker checker;
+    private ConferenceRoomChecker checker;
     private ConferenceRoom conferenceRoom;
     private Conference plannedConference;
 
     @Before
     public void setUp() throws Exception {
-        checker = new ConferenceRoomAvailabilityChecker();
+        checker = new ConferenceRoomChecker();
         conferenceRoom = ConferenceRoomFixture.createConferenceRoom();
         plannedConference = ConferenceFixture.createConference();
     }

@@ -3,7 +3,7 @@ package com.conferenceplanner.core.services.unit;
 import com.conferenceplanner.core.domain.Conference;
 import com.conferenceplanner.core.domain.ConferenceRoom;
 import com.conferenceplanner.core.repositories.ConferenceRoomRepository;
-import com.conferenceplanner.core.services.ConferenceRoomAvailabilityChecker;
+import com.conferenceplanner.core.services.ConferenceRoomChecker;
 import com.conferenceplanner.core.services.ConferenceRoomService;
 import com.conferenceplanner.core.services.DatabaseException;
 import com.conferenceplanner.core.services.fixtures.ConferenceFixture;
@@ -32,7 +32,7 @@ public class ConferenceRoomServiceTest {
     private ConferenceRoomRepository conferenceRoomRepository;
 
     @Mock
-    private ConferenceRoomAvailabilityChecker conferenceRoomAvailabilityChecker;
+    private ConferenceRoomChecker conferenceRoomChecker;
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -107,8 +107,8 @@ public class ConferenceRoomServiceTest {
         Conference plannedConference = ConferenceFixture.createConference();
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms();
         when(conferenceRoomRepository.getAll()).thenReturn(rooms);
-        when(conferenceRoomAvailabilityChecker.isAvailable(rooms.get(0),plannedConference)).thenReturn(false);
-        when(conferenceRoomAvailabilityChecker.isAvailable(rooms.get(1),plannedConference)).thenReturn(true);
+        when(conferenceRoomChecker.isAvailable(rooms.get(0),plannedConference)).thenReturn(false);
+        when(conferenceRoomChecker.isAvailable(rooms.get(1),plannedConference)).thenReturn(true);
 
         List<ConferenceRoom> availableRooms = conferenceRoomService.getAvailableConferenceRooms(plannedConference);
         assertEquals(1, availableRooms.size());

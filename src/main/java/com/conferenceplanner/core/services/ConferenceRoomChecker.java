@@ -10,7 +10,7 @@ import java.util.List;
 
 
 @Component
-public class ConferenceRoomAvailabilityChecker {
+public class ConferenceRoomChecker {
 
     public boolean isAvailable(ConferenceRoom conferenceRoom, Conference plannedConference) {
 

@@ -19,7 +19,7 @@ public class ConferenceRoomService {
     private ConferenceRoomRepository conferenceRoomRepository;
 
     @Autowired
-    private ConferenceRoomAvailabilityChecker conferenceRoomAvailabilityChecker;
+    private ConferenceRoomChecker conferenceRoomChecker;
 
 
     @Transactional
@@ -71,7 +71,7 @@ public class ConferenceRoomService {
             List<ConferenceRoom> allRooms = conferenceRoomRepository.getAll();
 
             for (ConferenceRoom room: allRooms) {
-                if (conferenceRoomAvailabilityChecker.isAvailable(room, plannedConference)) {
+                if (conferenceRoomChecker.isAvailable(room, plannedConference)) {
                     availableRooms.add(room);
                 }
             }
@@ -86,10 +86,10 @@ public class ConferenceRoomService {
     @Transactional
     public List<ConferenceRoomAvailabilityItem> getConferenceRoomAvailabilities(ConferenceRoom conferenceRoom) {
 
-        List<ConferenceRoomAvailabilityItem> availabilities = new ArrayList<>();
+        List<ConferenceRoomAvailabilityItem> availabilityItems = new ArrayList<>();
 
-        List<ConferenceRoomAvailabilityItem> allAvailabilities = conferenceRoom.getConferenceRoomAvailabilityItems();
+        List<ConferenceRoomAvailabilityItem> allAvailabilityItems = conferenceRoom.getConferenceRoomAvailabilityItems();
 
-        return availabilities;
+        return availabilityItems;
     }
 }
