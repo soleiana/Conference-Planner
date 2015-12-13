@@ -140,17 +140,5 @@ public class ConferenceRoomController {
         }
         return  new ResponseEntity<>(conferenceRoomAvailability, HttpStatus.OK);
 
-        //TODO: validate id
-        //TODO: get conference room with specified id
-        //TODO: if conference room not found, return NOT_FOUND, "No conference room found for selected id!"
-        //TODO: get conference room availabilities for conference room
-        //TODO: if no conference room availabilities found, return NOT_FOUND, "No conferences scheduled in this conference room"
-        //TODO: get conference for each conference room availability
-        //TODO: check if conference is upcoming (startDateTime after now, not cancelled)
-        //TODO: add specified conference room  availability to the list
-        //TODO: if the list is empty, return NOT_FOUND, "No conferences scheduled in this conference room"
-        //TODO: build ConferenceRoomAvailabilityItem rest model based on this list, conference room and conference
-        //TODO: handle database exception: return internal server error
-        //TODO: return OK and ConferenceRoomAvailabilityItem
     }
 }

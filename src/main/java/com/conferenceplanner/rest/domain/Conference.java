@@ -5,20 +5,20 @@ import java.util.List;
 
 public class Conference {
 
-    private int id;
+    private Integer id;
     private String name;
     private String startDateTime;
     private String endDateTime;
     private List<Integer> conferenceRoomIds;
-    private int freeSeats;
+    private Integer freeSeats;
 
     public Conference() {}
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -54,11 +54,11 @@ public class Conference {
         this.conferenceRoomIds = conferenceRoomIds;
     }
 
-    public int getFreeSeats() {
+    public Integer getFreeSeats() {
         return freeSeats;
     }
 
-    public void setFreeSeats(int freeSeats) {
+    public void setFreeSeats(Integer freeSeats) {
         this.freeSeats = freeSeats;
     }
 

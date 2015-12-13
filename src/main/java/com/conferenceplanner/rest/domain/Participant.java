@@ -2,20 +2,20 @@ package com.conferenceplanner.rest.domain;
 
 public class Participant {
 
-    private int id;
+    private Integer id;
     private String name;
     private String surname;
     private String birthDate;
     private String passportNr;
-    private int conferenceId;
+    private Integer conferenceId;
 
     public Participant() {}
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -51,11 +51,11 @@ public class Participant {
         this.passportNr = passportNr;
     }
 
-    public int getConferenceId() {
+    public Integer getConferenceId() {
         return conferenceId;
     }
 
-    public void setConferenceId(int conferenceId) {
+    public void setConferenceId(Integer conferenceId) {
         this.conferenceId = conferenceId;
     }
 }
