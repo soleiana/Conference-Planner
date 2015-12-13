@@ -42,6 +42,18 @@ public class ConferenceFixture {
         return conferences;
     }
 
+    public static List<Conference> createUpcomingConferences() {
+        List<Conference> conferences = new ArrayList<>();
+        LocalDateTime start = LocalDateTime.now().plusHours(1);
+        for (Integer i = 1; i <= 3; i++) {
+            LocalDateTime end = start.plusHours(1);
+            Conference conference = new Conference("name" + i.toString(), start, end, false);
+            conferences.add(conference);
+            start = end.plusHours(1);
+        }
+        return conferences;
+    }
+
     public static List<Conference> createNonOverlappingConferences() {
         List<Conference> conferences = new ArrayList<>();
 
