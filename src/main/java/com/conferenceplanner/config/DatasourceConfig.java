@@ -14,9 +14,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 import java.util.Properties;
 
-/**
- * Created by Ann on 07/09/14.
- */
+
 @Configuration
 @EnableTransactionManagement
 @PropertySource({ "classpath:datasource.properties" })
