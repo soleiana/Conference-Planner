@@ -5,10 +5,19 @@ import java.util.List;
 
 public class ConferenceRoomAvailability {
 
+    private String errorMessage;
     private ConferenceRoom conferenceRoom;
     private List<ConferenceRoomAvailabilityItem> conferenceRoomAvailabilityItems = new ArrayList<>();
 
     public ConferenceRoomAvailability() {}
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
 
     public ConferenceRoom getConferenceRoom() {
         return conferenceRoom;

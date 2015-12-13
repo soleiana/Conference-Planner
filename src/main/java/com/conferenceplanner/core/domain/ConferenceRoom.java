@@ -37,7 +37,7 @@ public class ConferenceRoom {
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "CONFERENCE_ROOM_ID")
     @Cascade({org.hibernate.annotations.CascadeType.ALL})
-    private List<ConferenceRoomAvailability> conferenceRoomAvailabilities = new ArrayList<>();
+    private List<ConferenceRoomAvailabilityItem> conferenceRoomAvailabilityItems = new ArrayList<>();
 
     public ConferenceRoom() {}
 
@@ -83,12 +83,12 @@ public class ConferenceRoom {
         this.conferences = conferences;
     }
 
-    public List<ConferenceRoomAvailability> getConferenceRoomAvailabilities() {
-        return conferenceRoomAvailabilities;
+    public List<ConferenceRoomAvailabilityItem> getConferenceRoomAvailabilityItems() {
+        return conferenceRoomAvailabilityItems;
     }
 
-    public void setConferenceRoomAvailabilities(List<ConferenceRoomAvailability> conferenceRoomAvailabilities) {
-        this.conferenceRoomAvailabilities = conferenceRoomAvailabilities;
+    public void setConferenceRoomAvailabilityItems(List<ConferenceRoomAvailabilityItem> conferenceRoomAvailabilityItems) {
+        this.conferenceRoomAvailabilityItems = conferenceRoomAvailabilityItems;
     }
 
     @Override

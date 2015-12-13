@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "CONFERENCE_ROOM_CONFERENCE")
-public class ConferenceRoomAvailability {
+public class ConferenceRoomAvailabilityItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,13 +22,13 @@ public class ConferenceRoomAvailability {
     @JoinColumn(name = "CONFERENCE_ID", nullable = false)
     private Conference conference;
 
-    public ConferenceRoomAvailability() {}
+    public ConferenceRoomAvailabilityItem() {}
 
     public Integer getId() {
         return id;
     }
 
-    public ConferenceRoomAvailability(int availableSeats) {
+    public ConferenceRoomAvailabilityItem(int availableSeats) {
         this.availableSeats = availableSeats;
     }
 
@@ -57,7 +57,7 @@ public class ConferenceRoomAvailability {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ConferenceRoomAvailability that = (ConferenceRoomAvailability) o;
+        ConferenceRoomAvailabilityItem that = (ConferenceRoomAvailabilityItem) o;
 
         return availableSeats == that.availableSeats;
     }

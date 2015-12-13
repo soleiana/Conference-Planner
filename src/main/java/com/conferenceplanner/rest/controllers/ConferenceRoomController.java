@@ -98,18 +98,49 @@ public class ConferenceRoomController {
         }
 
         return  new ResponseEntity<>(availableConferenceRooms, HttpStatus.OK);
-
-        //TODO: validate input params
-        //TODO: return 'Invalid input format', bad request
-        //TODO: get all conference rooms without conferences in the interval
-        //TODO: [conferenceStartDateTime - INTERVAL_BETWEEN_CONFERENCES, conferenceEndDateTime + INTERVAL_BETWEEN_CONFERENCES]
-        //TODO: handle database exception: return internal server error
-        //TODO: if now conference rooms found return NOT_FOUND
-        //TODO: else return OK and the list of conference rooms
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}/conference-room-availability", produces = "application/json")
-    public ResponseEntity<ConferenceRoomAvailability> getConferenceRoomAvailability(@PathVariable int id) {
-        return null;
+    public ResponseEntity<ConferenceRoomAvailability> getConferenceRoomAvailability(@PathVariable Integer id) {
+
+        ConferenceRoomAvailability conferenceRoomAvailability = new ConferenceRoomAvailability();
+
+        try {
+            conferenceRoomValidator.validate(id);
+
+            com.conferenceplanner.core.domain.ConferenceRoom coreDomainConferenceRoom =
+                    conferenceRoomService.getConferenceRoom(id);
+
+            if (coreDomainConferenceRoom == null) {
+                conferenceRoomAvailability.setErrorMessage("No conference room found for selected id!");
+                return new ResponseEntity<>(conferenceRoomAvailability, HttpStatus.NOT_FOUND);
+            }
+
+
+
+        } catch(ValidationException ex) {
+            conferenceRoomAvailability.setErrorMessage(ex.getMessage());
+            return new ResponseEntity<>(conferenceRoomAvailability, HttpStatus.BAD_REQUEST);
+
+        } catch (RuntimeException ex) {
+            conferenceRoomAvailability.setErrorMessage(ex.getMessage());
+            return new ResponseEntity<>(conferenceRoomAvailability, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return  new ResponseEntity<>(conferenceRoomAvailability, HttpStatus.OK);
+
+
+        //TODO:
+        //TODO: get conference room with specified id
+        //TODO: if conference room not found, return NOT_FOUND, "No conference room found for selected id!"
+        //TODO: get conference room availabilities for conference room
+        //TODO: if no conference room availabilities found, return NOT_FOUND, "No conferences scheduled in this conference room"
+        //TODO: get conference for each conference room availability
+        //TODO: check if conference is upcoming (startDateTime after now, not cancelled)
+        //TODO: add specified conference room  availability to the list
+        //TODO: if the list is empty, return NOT_FOUND, "No conferences scheduled in this conference room"
+        //TODO: build ConferenceRoomAvailabilityItem rest model based on this list, conference room and conference
+        //TODO: handle database exception: return internal server error
+        //TODO: return OK and ConferenceRoomAvailabilityItem
     }
 }
