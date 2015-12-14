@@ -24,7 +24,8 @@ public class ConferenceCheckerTest {
 
     @Test
     public void test_isAvailable_if_no_conference_room_has_available_seats() {
-        List<ConferenceRoomAvailabilityItem> availabilityItems = ConferenceRoomAvailabilityItemFixture.createFullyOccupiedConferenceRooms();
+        List<ConferenceRoomAvailabilityItem> availabilityItems =
+                ConferenceRoomAvailabilityItemFixture.createFullyOccupiedConferenceRooms(3);
         conference.setConferenceRoomAvailabilityItems(availabilityItems);
         boolean result = checker.isAvailable(conference);
         assertFalse(result);
@@ -32,7 +33,8 @@ public class ConferenceCheckerTest {
 
     @Test
     public void test_isAvailable_if_one_conference_room_has_available_seats() {
-        List<ConferenceRoomAvailabilityItem> availabilityItems = ConferenceRoomAvailabilityItemFixture.createPartiallyOccupiedConferenceRooms();
+        List<ConferenceRoomAvailabilityItem> availabilityItems =
+                ConferenceRoomAvailabilityItemFixture.createPartiallyOccupiedConferenceRooms(3);
         conference.setConferenceRoomAvailabilityItems(availabilityItems);
         boolean result = checker.isAvailable(conference);
         assertTrue(result);
@@ -40,7 +42,8 @@ public class ConferenceCheckerTest {
 
     @Test
     public void test_isAvailable_if_all_conference_rooms_have_available_seats() {
-        List<ConferenceRoomAvailabilityItem> availabilityItems = ConferenceRoomAvailabilityItemFixture.createConferenceRoomsWithAvailableSeats();
+        List<ConferenceRoomAvailabilityItem> availabilityItems =
+                ConferenceRoomAvailabilityItemFixture.createConferenceRoomsWithAvailableSeats(3);
         conference.setConferenceRoomAvailabilityItems(availabilityItems);
         boolean result = checker.isAvailable(conference);
         assertTrue(result);

@@ -7,25 +7,37 @@ import java.util.List;
 
 public class ConferenceRoomAvailabilityItemFixture {
 
-    public static List<ConferenceRoomAvailabilityItem> createConferenceRoomsWithAvailableSeats(){
+    public static List<ConferenceRoomAvailabilityItem> createConferenceRoomsWithAvailableSeats(int numberOfRooms){
+        if (numberOfRooms <= 0) {
+            throw new IllegalArgumentException("Number of rooms should be greater than 0");
+        }
+
         List<ConferenceRoomAvailabilityItem> availabilityItems = new ArrayList<>();
-        for (int i = 1; i <= 3; i++) {
+        for (int i = 1; i <= numberOfRooms; i++) {
             availabilityItems.add(new ConferenceRoomAvailabilityItem(i*100));
         }
         return availabilityItems;
     }
 
-    public static List<ConferenceRoomAvailabilityItem> createFullyOccupiedConferenceRooms(){
+    public static List<ConferenceRoomAvailabilityItem> createFullyOccupiedConferenceRooms(int numberOfRooms){
+        if (numberOfRooms <= 0) {
+            throw new IllegalArgumentException("Number of rooms should be greater than 0");
+        }
+
         List<ConferenceRoomAvailabilityItem> availabilityItems = new ArrayList<>();
-        for (int i = 1; i <= 3; i++) {
+        for (int i = 1; i <= numberOfRooms; i++) {
             availabilityItems.add(new ConferenceRoomAvailabilityItem(0));
         }
         return availabilityItems;
     }
 
-    public static List<ConferenceRoomAvailabilityItem> createPartiallyOccupiedConferenceRooms(){
+    public static List<ConferenceRoomAvailabilityItem> createPartiallyOccupiedConferenceRooms(int numberOfRooms){
+        if (numberOfRooms <= 0) {
+            throw new IllegalArgumentException("Number of rooms should be greater than 0");
+        }
+
         List<ConferenceRoomAvailabilityItem> availabilityItems = new ArrayList<>();
-        for (int i = 1; i <= 3; i++) {
+        for (int i = 1; i <= numberOfRooms; i++) {
             if (i == 1) {
                 availabilityItems.add(new ConferenceRoomAvailabilityItem(0));
             }
