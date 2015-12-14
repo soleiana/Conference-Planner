@@ -2,11 +2,15 @@ package com.conferenceplanner.core.services.component;
 
 import com.conferenceplanner.SpringContextTest;
 import com.conferenceplanner.core.domain.Conference;
+import com.conferenceplanner.core.domain.ConferenceRoom;
+import com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem;
 import com.conferenceplanner.core.repositories.tools.DatabaseCleaner;
 import com.conferenceplanner.core.repositories.tools.DatabaseConfigurator;
 import com.conferenceplanner.core.services.ConferenceService;
 import com.conferenceplanner.core.services.component.helpers.ConferenceServiceTestHelper;
 import com.conferenceplanner.core.services.fixtures.ConferenceFixture;
+import com.conferenceplanner.core.services.fixtures.ConferenceRoomAvailabilityItemFixture;
+import com.conferenceplanner.core.services.fixtures.ConferenceRoomFixture;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +47,7 @@ public class ConferenceServiceTest extends SpringContextTest {
         databaseConfigurator.configure(conferences);
         List<Conference> upcomingConferences = conferenceService.getUpcomingConferences();
         assertEquals(conferences.size(), upcomingConferences.size());
-        conferenceServiceTestHelper.assertResult(upcomingConferences);
+        conferenceServiceTestHelper.assertGetUpcomingConferencesResult(upcomingConferences);
     }
 
     @Test
@@ -61,7 +65,7 @@ public class ConferenceServiceTest extends SpringContextTest {
         databaseConfigurator.configure(conferences);
         List<Conference> upcomingConferences = conferenceService.getUpcomingConferences();
         assertEquals(conferences.size()-1, upcomingConferences.size());
-        conferenceServiceTestHelper.assertResult(upcomingConferences);
+        conferenceServiceTestHelper.assertGetUpcomingConferencesResult(upcomingConferences);
     }
 
     @Test
@@ -71,6 +75,45 @@ public class ConferenceServiceTest extends SpringContextTest {
         databaseConfigurator.configure(conferences);
         List<Conference> upcomingConferences = conferenceService.getUpcomingConferences();
         assertEquals(conferences.size()-1, upcomingConferences.size());
-        conferenceServiceTestHelper.assertResult(upcomingConferences);
+        conferenceServiceTestHelper.assertGetUpcomingConferencesResult(upcomingConferences);
+    }
+
+    @Test
+    public void test_getAvailableConferences_if_no_conference_room_has_available_seats() {
+        List<Conference> conferences = ConferenceFixture.createUpcomingConferences();
+        List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(2);
+
+        List<ConferenceRoomAvailabilityItem> availabilityItems =
+                ConferenceRoomAvailabilityItemFixture.createFullyOccupiedConferenceRooms(rooms.size());
+        databaseConfigurator.configure(rooms, conferences, availabilityItems);
+        List<Conference> availableConferences = conferenceService.getAvailableConferences();
+        assertTrue(availableConferences.isEmpty());
+    }
+
+    @Test
+    public void test_getAvailableConferences_if_one_conference_room_has_available_seats() {
+        List<Conference> conferences = ConferenceFixture.createUpcomingConferences();
+        List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(2);
+
+        List<ConferenceRoomAvailabilityItem> availabilityItems =
+                ConferenceRoomAvailabilityItemFixture.createPartiallyOccupiedConferenceRooms(rooms.size());
+        databaseConfigurator.configure(rooms, conferences, availabilityItems);
+        List<Conference> availableConferences = conferenceService.getAvailableConferences();
+        assertEquals(conferences.size(), availableConferences.size());
+        conferenceServiceTestHelper.assertGetAvailableConferencesResult(availableConferences);
+    }
+
+    @Test
+    public void test_getAvailableConferences_if_all_conference_rooms_have_available_seats() {
+        List<Conference> conferences = ConferenceFixture.createUpcomingConferences();
+        List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(2);
+
+        List<ConferenceRoomAvailabilityItem> availabilityItems =
+                ConferenceRoomAvailabilityItemFixture.createConferenceRoomsWithAvailableSeats(rooms.size());
+        databaseConfigurator.configure(rooms, conferences, availabilityItems);
+        List<Conference> availableConferences = conferenceService.getAvailableConferences();
+        assertEquals(conferences.size(), availableConferences.size());
+        conferenceServiceTestHelper.assertGetAvailableConferencesResult(availableConferences);
+
     }
 }

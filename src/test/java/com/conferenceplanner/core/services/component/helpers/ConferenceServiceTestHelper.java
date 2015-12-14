@@ -1,6 +1,8 @@
 package com.conferenceplanner.core.services.component.helpers;
 
 import com.conferenceplanner.core.domain.Conference;
+import com.conferenceplanner.core.services.ConferenceChecker;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -12,6 +14,9 @@ import static org.junit.Assert.assertTrue;
 @Component
 public class ConferenceServiceTestHelper {
 
+    @Autowired
+    private ConferenceChecker conferenceChecker;
+
     private LocalDateTime now;
 
 
@@ -19,10 +24,16 @@ public class ConferenceServiceTestHelper {
         this.now = now;
     }
 
-    public void assertResult(List<Conference> conferences) {
+    public void assertGetUpcomingConferencesResult(List<Conference> conferences) {
         for (Conference conference: conferences) {
             assertFalse(conference.isCancelled());
             assertTrue(conference.getStartDateTime().isAfter(now));
+        }
+    }
+
+    public void assertGetAvailableConferencesResult(List<Conference> conferences) {
+        for (Conference conference: conferences) {
+            assertTrue(conferenceChecker.isAvailable(conference));
         }
     }
 }

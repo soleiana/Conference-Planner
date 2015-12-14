@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Stack;
 
 @Component
 public class DatabaseController {
@@ -48,10 +49,29 @@ public class DatabaseController {
     }
 
     @Transactional
+    public void setupRelationship(List<ConferenceRoom> conferenceRooms, List<Conference> conferences,
+                                  List<ConferenceRoomAvailabilityItem> availabilityItems) {
+
+        if (conferenceRooms.size() != availabilityItems.size()) {
+            throw new IllegalArgumentException("Number of rooms should be equal to number of availability items!");
+        }
+
+        for(Conference conference: conferences) {
+            Stack<ConferenceRoomAvailabilityItem> availabilityItemStack = new Stack<>();
+            availabilityItemStack.addAll(availabilityItems);
+
+            for (ConferenceRoom room: conferenceRooms) {
+                ConferenceRoomAvailabilityItem availabilityItem = availabilityItemStack.pop();
+                setupRelationship(room, conference, availabilityItem);
+            }
+        }
+    }
+
+    @Transactional
     public void setupRelationshipWithAvailability(List<ConferenceRoom> conferenceRooms, List<Conference> conferences) {
         for(ConferenceRoom room: conferenceRooms) {
             for (Conference conference: conferences)
-                setupRelationshipWithAvailability(room, conference);
+                setupRelationship(room, conference, new ConferenceRoomAvailabilityItem(room.getMaxSeats()));
         }
     }
 
@@ -59,12 +79,13 @@ public class DatabaseController {
         conferenceRoom.getConferences().add(conference);
     }
 
-    private void setupRelationshipWithAvailability(ConferenceRoom conferenceRoom, Conference conference) {
-        ConferenceRoomAvailabilityItem conferenceRoomAvailabilityItem = new ConferenceRoomAvailabilityItem(conferenceRoom.getMaxSeats());
-        conferenceRoom.getConferenceRoomAvailabilityItems().add(conferenceRoomAvailabilityItem);
-        conference.getConferenceRoomAvailabilityItems().add(conferenceRoomAvailabilityItem);
-        conferenceRoomAvailabilityItem.setConferenceRoom(conferenceRoom);
-        conferenceRoomAvailabilityItem.setConference(conference);
-        conferenceRoomAvailabilityItemRepository.create(conferenceRoomAvailabilityItem);
+    private void setupRelationship(ConferenceRoom conferenceRoom, Conference conference,
+                                   ConferenceRoomAvailabilityItem availabilityItem) {
+
+        conferenceRoom.getConferenceRoomAvailabilityItems().add(availabilityItem);
+        conference.getConferenceRoomAvailabilityItems().add(availabilityItem);
+        availabilityItem.setConferenceRoom(conferenceRoom);
+        availabilityItem.setConference(conference);
+        conferenceRoomAvailabilityItemRepository.create(availabilityItem);
     }
 }

@@ -31,4 +31,12 @@ public class ConferenceRoomFixture {
         rooms.add(createAnotherConferenceRoom(5));
         return rooms;
     }
+
+    public static List<ConferenceRoom> createConferenceRooms(int numberOfRooms) {
+        List<ConferenceRoom> rooms = new ArrayList<>();
+        for (Integer i = 1; i <= numberOfRooms; i++) {
+            rooms.add(new ConferenceRoom("name" + i.toString(), "location", 100));
+        }
+        return rooms;
+    }
 }

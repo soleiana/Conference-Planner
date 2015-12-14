@@ -26,13 +26,13 @@ public class ConferenceRoomServiceTestHelper {
         this.now = now;
     }
 
-    public void assertResult(List<ConferenceRoom> conferenceRooms, Conference plannedConference) {
+    public void assertGetAvailableConferenceRoomsResult(List<ConferenceRoom> conferenceRooms, Conference plannedConference) {
         for (ConferenceRoom room: conferenceRooms) {
             assertTrue(conferenceRoomChecker.isAvailable(room, plannedConference));
         }
     }
 
-    public void assertResult(List<ConferenceRoomAvailabilityItem> availabilityItems) {
+    public void assertGetConferenceRoomAvailabilityItemsResult(List<ConferenceRoomAvailabilityItem> availabilityItems) {
         for (ConferenceRoomAvailabilityItem item: availabilityItems) {
             assertFalse(item.getConference().isCancelled());
             assertTrue(item.getConference().getStartDateTime().isAfter(now));
