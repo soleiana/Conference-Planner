@@ -8,8 +8,8 @@ import java.util.List;
 public class ConferenceRoomAvailabilityItemFixture {
 
     public static List<ConferenceRoomAvailabilityItem> createConferenceRoomsWithAvailableSeats(int numberOfRooms){
-        if (numberOfRooms <= 0) {
-            throw new IllegalArgumentException("Number of rooms should be greater than 0");
+        if (numberOfRooms <= 1) {
+            throw new IllegalArgumentException("Number of rooms should be greater than 1");
         }
 
         List<ConferenceRoomAvailabilityItem> availabilityItems = new ArrayList<>();
@@ -20,8 +20,8 @@ public class ConferenceRoomAvailabilityItemFixture {
     }
 
     public static List<ConferenceRoomAvailabilityItem> createFullyOccupiedConferenceRooms(int numberOfRooms){
-        if (numberOfRooms <= 0) {
-            throw new IllegalArgumentException("Number of rooms should be greater than 0");
+        if (numberOfRooms <= 1) {
+            throw new IllegalArgumentException("Number of rooms should be greater than 1");
         }
 
         List<ConferenceRoomAvailabilityItem> availabilityItems = new ArrayList<>();
@@ -32,8 +32,8 @@ public class ConferenceRoomAvailabilityItemFixture {
     }
 
     public static List<ConferenceRoomAvailabilityItem> createPartiallyOccupiedConferenceRooms(int numberOfRooms){
-        if (numberOfRooms <= 0) {
-            throw new IllegalArgumentException("Number of rooms should be greater than 0");
+        if (numberOfRooms <= 1) {
+            throw new IllegalArgumentException("Number of rooms should be greater than 1");
         }
 
         List<ConferenceRoomAvailabilityItem> availabilityItems = new ArrayList<>();
