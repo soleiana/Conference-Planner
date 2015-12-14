@@ -23,7 +23,7 @@ public class ConferenceCheckerTest {
     }
 
     @Test
-    public void test_isAvailable_if_no_conference_room_has_available_seats() {
+    public void test_isAvailable_is_false_if_no_conference_room_has_available_seats() {
         List<ConferenceRoomAvailabilityItem> availabilityItems =
                 ConferenceRoomAvailabilityItemFixture.createFullyOccupiedConferenceRooms(3);
         conference.setConferenceRoomAvailabilityItems(availabilityItems);
@@ -32,7 +32,7 @@ public class ConferenceCheckerTest {
     }
 
     @Test
-    public void test_isAvailable_if_one_conference_room_has_available_seats() {
+    public void test_isAvailable_is_true_if_one_conference_room_has_available_seats() {
         List<ConferenceRoomAvailabilityItem> availabilityItems =
                 ConferenceRoomAvailabilityItemFixture.createPartiallyOccupiedConferenceRooms(3);
         conference.setConferenceRoomAvailabilityItems(availabilityItems);
@@ -41,7 +41,7 @@ public class ConferenceCheckerTest {
     }
 
     @Test
-    public void test_isAvailable_if_all_conference_rooms_have_available_seats() {
+    public void test_isAvailable_is_true_if_all_conference_rooms_have_available_seats() {
         List<ConferenceRoomAvailabilityItem> availabilityItems =
                 ConferenceRoomAvailabilityItemFixture.createConferenceRoomsWithAvailableSeats(3);
         conference.setConferenceRoomAvailabilityItems(availabilityItems);
