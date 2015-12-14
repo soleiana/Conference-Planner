@@ -7,6 +7,7 @@ import com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem;
 import com.conferenceplanner.core.repositories.ConferenceRoomRepository;
 import com.conferenceplanner.core.repositories.tools.DatabaseCleaner;
 import com.conferenceplanner.core.repositories.tools.DatabaseConfigurator;
+import com.conferenceplanner.core.services.ConferenceRoomChecker;
 import com.conferenceplanner.core.services.ConferenceRoomService;
 import com.conferenceplanner.core.services.fixtures.ConferenceFixture;
 import com.conferenceplanner.core.services.fixtures.ConferenceRoomFixture;
@@ -15,6 +16,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -35,9 +37,16 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     @Autowired
     private ConferenceRoomService conferenceRoomService;
 
+    @Autowired
+    private ConferenceRoomChecker conferenceRoomChecker;
+
+    private LocalDateTime now;
+
+
     @Before
     public void setUp() throws Exception {
         databaseCleaner.clear();
+        now = LocalDateTime.now();
     }
 
     @Test
@@ -75,6 +84,17 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     }
 
     @Test
+    public void test_getAvailableConferenceRooms_if_no_conference() {
+        Conference plannedConference = ConferenceFixture.createConference();
+        List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms();
+        List<Conference> conferences = new ArrayList<>();
+        databaseConfigurator.configure(rooms, conferences);
+        List<ConferenceRoom> availableRooms = conferenceRoomService.getAvailableConferenceRooms(plannedConference);
+        assertEquals(rooms.size(), availableRooms.size());
+        assertResult(availableRooms, plannedConference);
+    }
+
+    @Test
     public void test_getAvailableConferenceRooms_if_overlapping_conference() {
         Conference plannedConference = ConferenceFixture.createConference();
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms();
@@ -92,6 +112,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
         databaseConfigurator.configure(rooms, conferences);
         List<ConferenceRoom> availableRooms = conferenceRoomService.getAvailableConferenceRooms(plannedConference);
         assertEquals(rooms.size(), availableRooms.size());
+        assertResult(availableRooms, plannedConference);
     }
 
     @Test
@@ -102,6 +123,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
         databaseConfigurator.configure(rooms, conferences);
         List<ConferenceRoom> availableRooms = conferenceRoomService.getAvailableConferenceRooms(plannedConference);
         assertEquals(rooms.size(), availableRooms.size());
+        assertResult(availableRooms, plannedConference);
     }
 
     @Test
@@ -111,6 +133,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
         databaseConfigurator.configureWithConferenceRoomAvailability(Arrays.asList(room),conferences);
         List<ConferenceRoomAvailabilityItem> availabilityItems = conferenceRoomService.getConferenceRoomAvailabilityItems(room);
         assertEquals(conferences.size(), availabilityItems.size());
+        assertResult(availabilityItems);
     }
 
     @Test
@@ -119,7 +142,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
         List<Conference> conferences = ConferenceFixture.createCancelledConferences();
         databaseConfigurator.configureWithConferenceRoomAvailability(Arrays.asList(room),conferences);
         List<ConferenceRoomAvailabilityItem> availabilityItems = conferenceRoomService.getConferenceRoomAvailabilityItems(room);
-        assertEquals(0, availabilityItems.size());
+        assertTrue(availabilityItems.isEmpty());
     }
 
     @Test
@@ -130,6 +153,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
         databaseConfigurator.configureWithConferenceRoomAvailability(Arrays.asList(room),conferences);
         List<ConferenceRoomAvailabilityItem> availabilityItems = conferenceRoomService.getConferenceRoomAvailabilityItems(room);
         assertEquals(conferences.size()-1, availabilityItems.size());
+        assertResult(availabilityItems);
     }
 
     @Test
@@ -140,5 +164,19 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
         databaseConfigurator.configureWithConferenceRoomAvailability(Arrays.asList(room),conferences);
         List<ConferenceRoomAvailabilityItem> availabilityItems = conferenceRoomService.getConferenceRoomAvailabilityItems(room);
         assertEquals(conferences.size()-1, availabilityItems.size());
+        assertResult(availabilityItems);
+    }
+
+    private void assertResult(List<ConferenceRoom> conferenceRooms, Conference plannedConference) {
+        for (ConferenceRoom room: conferenceRooms) {
+            assertTrue(conferenceRoomChecker.isAvailable(room, plannedConference));
+        }
+    }
+
+    private void assertResult(List<ConferenceRoomAvailabilityItem> availabilityItems) {
+        for (ConferenceRoomAvailabilityItem item: availabilityItems) {
+            assertFalse(item.getConference().isCancelled());
+            assertTrue(item.getConference().getStartDateTime().isAfter(now));
+        }
     }
 }

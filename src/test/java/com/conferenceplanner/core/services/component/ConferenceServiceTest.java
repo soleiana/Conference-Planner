@@ -26,10 +26,13 @@ public class ConferenceServiceTest extends SpringContextTest {
     @Autowired
     private ConferenceService conferenceService;
 
+    private LocalDateTime now;
+
 
     @Before
     public void setUp() throws Exception {
         databaseCleaner.clear();
+        now = LocalDateTime.now();
     }
 
     @Test
@@ -38,6 +41,7 @@ public class ConferenceServiceTest extends SpringContextTest {
         databaseConfigurator.configure(conferences);
         List<Conference> upcomingConferences = conferenceService.getUpcomingConferences();
         assertEquals(conferences.size(), upcomingConferences.size());
+        assertResult(upcomingConferences);
     }
 
     @Test
@@ -45,7 +49,7 @@ public class ConferenceServiceTest extends SpringContextTest {
         List<Conference> conferences = ConferenceFixture.createCancelledConferences();
         databaseConfigurator.configure(conferences);
         List<Conference> upcomingConferences = conferenceService.getUpcomingConferences();
-        assertEquals(0, upcomingConferences.size());
+        assertTrue(upcomingConferences.isEmpty());
     }
 
     @Test
@@ -55,6 +59,7 @@ public class ConferenceServiceTest extends SpringContextTest {
         databaseConfigurator.configure(conferences);
         List<Conference> upcomingConferences = conferenceService.getUpcomingConferences();
         assertEquals(conferences.size()-1, upcomingConferences.size());
+        assertResult(upcomingConferences);
     }
 
     @Test
@@ -64,6 +69,14 @@ public class ConferenceServiceTest extends SpringContextTest {
         databaseConfigurator.configure(conferences);
         List<Conference> upcomingConferences = conferenceService.getUpcomingConferences();
         assertEquals(conferences.size()-1, upcomingConferences.size());
+        assertResult(upcomingConferences);
+    }
+
+    private void assertResult(List<Conference> conferences) {
+        for (Conference conference: conferences) {
+            assertFalse(conference.isCancelled());
+            assertTrue(conference.getStartDateTime().isAfter(now));
+        }
     }
 
 }
