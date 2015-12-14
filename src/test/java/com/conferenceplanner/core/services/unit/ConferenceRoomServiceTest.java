@@ -132,7 +132,7 @@ public class ConferenceRoomServiceTest {
     @Test
     public void test_getConferenceRoomAvailabilityItems()  {
         ConferenceRoom conferenceRoom = ConferenceRoomFixture.createConferenceRoom();
-        List<ConferenceRoomAvailabilityItem> availabilityItems = ConferenceRoomAvailabilityItemFixture.createConferenceRoomAvailabilityItems();
+        List<ConferenceRoomAvailabilityItem> availabilityItems = ConferenceRoomAvailabilityItemFixture.createConferenceRoomsWithAvailableSeats();
         assertEquals(3, availabilityItems.size());
         conferenceRoom.setConferenceRoomAvailabilityItems(availabilityItems);
         when(conferenceRoomAvailabilityItemChecker.isActual(availabilityItems.get(0))).thenReturn(false);

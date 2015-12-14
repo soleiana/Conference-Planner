@@ -1,0 +1,49 @@
+package com.conferenceplanner.core.services;
+
+import com.conferenceplanner.core.domain.Conference;
+import com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem;
+import com.conferenceplanner.core.services.fixtures.ConferenceFixture;
+import com.conferenceplanner.core.services.fixtures.ConferenceRoomAvailabilityItemFixture;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.List;
+
+import static org.junit.Assert.*;
+
+public class ConferenceCheckerTest {
+
+    private ConferenceChecker checker;
+    private Conference conference;
+
+    @Before
+    public void setup() {
+        checker = new ConferenceChecker();
+        conference = ConferenceFixture.createConference();
+    }
+
+    @Test
+    public void test_isAvailable_if_no_conference_room_has_available_seats() {
+        List<ConferenceRoomAvailabilityItem> availabilityItems = ConferenceRoomAvailabilityItemFixture.createFullyOccupiedConferenceRooms();
+        conference.setConferenceRoomAvailabilityItems(availabilityItems);
+        boolean result = checker.isAvailable(conference);
+        assertFalse(result);
+    }
+
+    @Test
+    public void test_isAvailable_if_one_conference_room_has_available_seats() {
+        List<ConferenceRoomAvailabilityItem> availabilityItems = ConferenceRoomAvailabilityItemFixture.createPartiallyOccupiedConferenceRooms();
+        conference.setConferenceRoomAvailabilityItems(availabilityItems);
+        boolean result = checker.isAvailable(conference);
+        assertTrue(result);
+    }
+
+    @Test
+    public void test_isAvailable_if_all_conference_rooms_have_available_seats() {
+        List<ConferenceRoomAvailabilityItem> availabilityItems = ConferenceRoomAvailabilityItemFixture.createConferenceRoomsWithAvailableSeats();
+        conference.setConferenceRoomAvailabilityItems(availabilityItems);
+        boolean result = checker.isAvailable(conference);
+        assertTrue(result);
+    }
+
+}
