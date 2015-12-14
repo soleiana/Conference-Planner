@@ -1,0 +1,42 @@
+package com.conferenceplanner.core.services.component.helpers;
+
+import com.conferenceplanner.core.domain.Conference;
+import com.conferenceplanner.core.domain.ConferenceRoom;
+import com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem;
+import com.conferenceplanner.core.services.ConferenceRoomChecker;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+@Component
+public class ConferenceRoomServiceTestHelper {
+
+    @Autowired
+    private ConferenceRoomChecker conferenceRoomChecker;
+
+    private LocalDateTime now;
+
+
+    public void setNow(LocalDateTime now) {
+        this.now = now;
+    }
+
+    public void assertResult(List<ConferenceRoom> conferenceRooms, Conference plannedConference) {
+        for (ConferenceRoom room: conferenceRooms) {
+            assertTrue(conferenceRoomChecker.isAvailable(room, plannedConference));
+        }
+    }
+
+    public void assertResult(List<ConferenceRoomAvailabilityItem> availabilityItems) {
+        for (ConferenceRoomAvailabilityItem item: availabilityItems) {
+            assertFalse(item.getConference().isCancelled());
+            assertTrue(item.getConference().getStartDateTime().isAfter(now));
+        }
+    }
+
+}

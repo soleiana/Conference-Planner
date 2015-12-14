@@ -4,10 +4,7 @@ import com.conferenceplanner.core.domain.Conference;
 import com.conferenceplanner.core.domain.ConferenceRoom;
 import com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem;
 import com.conferenceplanner.core.repositories.ConferenceRoomRepository;
-import com.conferenceplanner.core.services.ConferenceRoomAvailabilityItemChecker;
-import com.conferenceplanner.core.services.ConferenceRoomChecker;
-import com.conferenceplanner.core.services.ConferenceRoomService;
-import com.conferenceplanner.core.services.DatabaseException;
+import com.conferenceplanner.core.services.*;
 import com.conferenceplanner.core.services.fixtures.ConferenceFixture;
 import com.conferenceplanner.core.services.fixtures.ConferenceRoomAvailabilityItemFixture;
 import com.conferenceplanner.core.services.fixtures.ConferenceRoomFixture;
@@ -39,6 +36,7 @@ public class ConferenceRoomServiceTest {
 
     @Mock
     private ConferenceRoomAvailabilityItemChecker conferenceRoomAvailabilityItemChecker;
+
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -112,6 +110,7 @@ public class ConferenceRoomServiceTest {
     public void test_getAvailableConferenceRooms()  {
         Conference plannedConference = ConferenceFixture.createConference();
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms();
+        assertEquals(2, rooms.size());
         when(conferenceRoomRepository.getAll()).thenReturn(rooms);
         when(conferenceRoomChecker.isAvailable(rooms.get(0),plannedConference)).thenReturn(false);
         when(conferenceRoomChecker.isAvailable(rooms.get(1),plannedConference)).thenReturn(true);
@@ -134,6 +133,7 @@ public class ConferenceRoomServiceTest {
     public void test_getConferenceRoomAvailabilityItems()  {
         ConferenceRoom conferenceRoom = ConferenceRoomFixture.createConferenceRoom();
         List<ConferenceRoomAvailabilityItem> availabilityItems = ConferenceRoomAvailabilityItemFixture.createConferenceRoomAvailabilityItems();
+        assertEquals(3, availabilityItems.size());
         conferenceRoom.setConferenceRoomAvailabilityItems(availabilityItems);
         when(conferenceRoomAvailabilityItemChecker.isActual(availabilityItems.get(0))).thenReturn(false);
         when(conferenceRoomAvailabilityItemChecker.isActual(availabilityItems.get(1))).thenReturn(true);

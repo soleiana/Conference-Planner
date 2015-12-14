@@ -5,6 +5,7 @@ import com.conferenceplanner.core.domain.Conference;
 import com.conferenceplanner.core.repositories.tools.DatabaseCleaner;
 import com.conferenceplanner.core.repositories.tools.DatabaseConfigurator;
 import com.conferenceplanner.core.services.ConferenceService;
+import com.conferenceplanner.core.services.component.helpers.ConferenceServiceTestHelper;
 import com.conferenceplanner.core.services.fixtures.ConferenceFixture;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,13 +27,14 @@ public class ConferenceServiceTest extends SpringContextTest {
     @Autowired
     private ConferenceService conferenceService;
 
-    private LocalDateTime now;
+    @Autowired
+    private ConferenceServiceTestHelper conferenceServiceTestHelper;
 
 
     @Before
     public void setUp() throws Exception {
         databaseCleaner.clear();
-        now = LocalDateTime.now();
+        conferenceServiceTestHelper.setNow(LocalDateTime.now());
     }
 
     @Test
@@ -41,7 +43,7 @@ public class ConferenceServiceTest extends SpringContextTest {
         databaseConfigurator.configure(conferences);
         List<Conference> upcomingConferences = conferenceService.getUpcomingConferences();
         assertEquals(conferences.size(), upcomingConferences.size());
-        assertResult(upcomingConferences);
+        conferenceServiceTestHelper.assertResult(upcomingConferences);
     }
 
     @Test
@@ -59,7 +61,7 @@ public class ConferenceServiceTest extends SpringContextTest {
         databaseConfigurator.configure(conferences);
         List<Conference> upcomingConferences = conferenceService.getUpcomingConferences();
         assertEquals(conferences.size()-1, upcomingConferences.size());
-        assertResult(upcomingConferences);
+        conferenceServiceTestHelper.assertResult(upcomingConferences);
     }
 
     @Test
@@ -69,14 +71,6 @@ public class ConferenceServiceTest extends SpringContextTest {
         databaseConfigurator.configure(conferences);
         List<Conference> upcomingConferences = conferenceService.getUpcomingConferences();
         assertEquals(conferences.size()-1, upcomingConferences.size());
-        assertResult(upcomingConferences);
+        conferenceServiceTestHelper.assertResult(upcomingConferences);
     }
-
-    private void assertResult(List<Conference> conferences) {
-        for (Conference conference: conferences) {
-            assertFalse(conference.isCancelled());
-            assertTrue(conference.getStartDateTime().isAfter(now));
-        }
-    }
-
 }
