@@ -110,7 +110,7 @@ public class ConferenceRoomController {
         ConferenceRoomAvailability conferenceRoomAvailability = new ConferenceRoomAvailability();
 
         try {
-            conferenceRoomValidator.validate(id);
+            conferenceRoomValidator.validateId(id);
 
             com.conferenceplanner.core.domain.ConferenceRoom coreDomainConferenceRoom =
                     conferenceRoomService.getConferenceRoom(id);

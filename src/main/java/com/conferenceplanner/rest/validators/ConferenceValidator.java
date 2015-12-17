@@ -35,6 +35,13 @@ public class ConferenceValidator {
         return interval;
     }
 
+    public boolean validateId(Integer conferenceId) {
+        if (conferenceId == null) {
+            throw new ValidationException("Conference id is null");
+        }
+        return true;
+    }
+
     private void validate(ConferenceInterval interval) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(ConferenceParser.DATE_TIME_FORMAT_PATTERN);
 

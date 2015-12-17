@@ -17,6 +17,8 @@ import org.mockito.MockitoAnnotations;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
@@ -76,6 +78,48 @@ public class ConferenceServiceTest {
         List<Conference> conferences = conferenceService.getAvailableConferences();
         assertEquals(1, conferences.size());
         assertEquals(upcomingConferences.get(1), conferences.get(0));
+    }
+
+    @Test
+    public void test_getConference_throws_DatabaseException() {
+        final int id = 1;
+        doThrow(new RuntimeException("Database connection failed")).when(conferenceRepository).getById(id);
+        expectedException.expect(DatabaseException.class);
+        expectedException.expectMessage("Database connection failed");
+        conferenceService.getConference(id);
+    }
+
+    @Test
+    public void test_getConference() {
+        final int id = 1;
+        Conference conference = ConferenceFixture.createUpcomingConference();
+        when(conferenceRepository.getById(id)).thenReturn(conference);
+        Conference actualConference = conferenceService.getConference(id);
+        assertEquals(conference, actualConference);
+    }
+
+    @Test
+    public void test_checkIfCancelled_is_false_if_conference_is_not_cancelled() {
+        Conference conference = ConferenceFixture.createUpcomingConference();
+        assertFalse(conference.isCancelled());
+        boolean result = conferenceService.checkIfCancelled(conference);
+        assertFalse(result);
+    }
+
+    @Test
+    public void test_checkIfCancelled_is_true_if_conference_is_cancelled() {
+        Conference conference = ConferenceFixture.createUpcomingConference();
+        conference.setCancelled(true);
+        boolean result = conferenceService.checkIfCancelled(conference);
+        assertTrue(result);
+    }
+
+    @Test
+    public void test_cancelConference() {
+        Conference conference = ConferenceFixture.createUpcomingConference();
+        assertFalse(conference.isCancelled());
+        conferenceService.cancelConference(conference);
+        assertTrue(conference.isCancelled());
     }
 
 }

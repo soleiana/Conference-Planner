@@ -5,6 +5,8 @@ import com.conferenceplanner.core.services.ConferenceService;
 import com.conferenceplanner.rest.domain.*;
 import com.conferenceplanner.rest.domain.Conference;
 import com.conferenceplanner.rest.domain.Participant;
+import com.conferenceplanner.rest.validators.ConferenceValidator;
+import com.conferenceplanner.rest.validators.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +22,14 @@ public class ConferenceController {
     @Autowired
     private ConferenceService conferenceService;
 
+    @Autowired
+    private ConferenceValidator conferenceValidator;
+
     @RequestMapping(method = RequestMethod.POST, consumes =  "application/json", produces = "application/json" )
     public ResponseEntity<String> createConference(@RequestBody Conference conference) {
         return null;
 
-        //TODO: validate Conference (name, startDateTime, endDateTime, conference room ids)
+        //TODO: validateId Conference (name, startDateTime, endDateTime, conference room ids)
         //TODO: check if a conference with a specified name, start and end dateTime exists
         //TODO: if conference exists, return CONFLICT, "Conference already exists!"
         //TODO: get conference rooms by id (request body)
@@ -85,14 +90,6 @@ public class ConferenceController {
             return new ResponseEntity<>(conferences, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return  new ResponseEntity<>(conferences, HttpStatus.OK);
-
-        //TODO: get all upcoming conferences
-        //TODO: get conference room availability items for each upcoming conference
-        //TODO: find conference room availability if available seats > 0
-        //TODO: add the conference to the list
-        //TODO: if the list is empty, return NOT_FOUND, "No conferences available for registration!"
-        //TODO: handle database exception: return internal server error
-        //TODO: return conference list, OK
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}/participants", produces = "application/json")
@@ -102,7 +99,29 @@ public class ConferenceController {
 
     @RequestMapping(method = RequestMethod.PUT, value = "/{id}", produces = "application/json")
     public ResponseEntity<String> cancelConference(@PathVariable Integer id) {
-        return null;
+
+        try {
+            conferenceValidator.validateId(id);
+            com.conferenceplanner.core.domain.Conference coreDomainConference =
+                    conferenceService.getConference(id);
+
+            if (coreDomainConference == null) {
+                return new ResponseEntity<>("No conference found for selected id!", HttpStatus.NOT_FOUND);
+            }
+            if (conferenceService.checkIfCancelled(coreDomainConference)) {
+                return new ResponseEntity<>("Conference already cancelled", HttpStatus.CONFLICT);
+            }
+            conferenceService.cancelConference(coreDomainConference);
+
+        } catch (ValidationException ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+
+        } catch (RuntimeException ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return  new ResponseEntity<>("Conference cancelled.", HttpStatus.OK);
+
     }
 
 }

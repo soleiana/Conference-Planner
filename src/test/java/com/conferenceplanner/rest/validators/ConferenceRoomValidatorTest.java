@@ -18,7 +18,7 @@ public class ConferenceRoomValidatorTest extends SpringContextTest {
     private ConferenceRoomValidator validator;
 
     @Test
-    public void test_validator_throws_ValidationException_if_null_parameter() {
+    public void test_validator_throws_ValidationException_if_null_conference_room_location() {
         ConferenceRoom conferenceRoom = new ConferenceRoom();
         conferenceRoom.setName("name");
         conferenceRoom.setMaxSeats(20);
@@ -30,7 +30,15 @@ public class ConferenceRoomValidatorTest extends SpringContextTest {
     }
 
     @Test
-    public void test_validator_throws_ValidationException_if_empty_parameter() {
+    public void test_validator_throws_ValidationException_if_null_conference_room_id() {
+
+        expectedException.expect(ValidationException.class);
+        expectedException.expectMessage("Conference room id is null");
+        validator.validateId(null);
+    }
+
+    @Test
+    public void test_validator_throws_ValidationException_if_empty_conference_room_location() {
         ConferenceRoom conferenceRoom = new ConferenceRoom();
         conferenceRoom.setName("name");
         conferenceRoom.setLocation("");
@@ -78,13 +86,19 @@ public class ConferenceRoomValidatorTest extends SpringContextTest {
     }
 
     @Test
-    public void test_validate() {
+    public void test_validate_conference_room_parameters() {
         ConferenceRoom conferenceRoom = new ConferenceRoom();
         conferenceRoom.setName("A/A aaa aaa  conference");
         conferenceRoom.setLocation("A/A  aaa  aaa");
         conferenceRoom.setMaxSeats(5);
 
         boolean result = validator.validate(conferenceRoom);
+        assertTrue(result);
+    }
+
+    @Test
+    public void test_validate_conference_room_id() {
+        boolean result = validator.validateId(1);
         assertTrue(result);
     }
 }

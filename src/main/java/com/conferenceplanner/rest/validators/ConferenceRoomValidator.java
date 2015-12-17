@@ -35,7 +35,7 @@ public class ConferenceRoomValidator {
         return true;
     }
 
-    public boolean validate(Integer conferenceRoomId) {
+    public boolean validateId(Integer conferenceRoomId) {
         if (conferenceRoomId == null) {
             throw new ValidationException("Conference room id is null");
         }

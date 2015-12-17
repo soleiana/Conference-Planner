@@ -82,7 +82,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     }
 
     @Test
-    public void test_getAvailableConferenceRooms_if_no_conference() {
+    public void test_getAvailableConferenceRooms_if_no_conference_is_registered() {
         Conference plannedConference = ConferenceFixture.createConference();
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms();
         List<Conference> conferences = new ArrayList<>();
@@ -93,7 +93,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     }
 
     @Test
-    public void test_getAvailableConferenceRooms_if_overlapping_conference() {
+    public void test_getAvailableConferenceRooms_if_planned_conference_is_overlapping() {
         Conference plannedConference = ConferenceFixture.createConference();
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms();
         List<Conference> conferences = ConferenceFixture.createMixedConferences();
@@ -103,7 +103,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     }
 
     @Test
-    public void test_getAvailableConferenceRooms_if_cancelled_conferences() {
+    public void test_getAvailableConferenceRooms_if_only_cancelled_conferences_are_registered() {
         Conference plannedConference = ConferenceFixture.createConference();
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms();
         List<Conference> conferences = ConferenceFixture.createCancelledConferences();
@@ -114,7 +114,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     }
 
     @Test
-    public void test_getAvailableConferenceRooms_if_nonOverlapping_conferences() {
+    public void test_getAvailableConferenceRooms_if_planned_conference_is_not_overlapping() {
         Conference plannedConference = ConferenceFixture.createConference();
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms();
         List<Conference> conferences = ConferenceFixture.createNonOverlappingConferences();
@@ -125,7 +125,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     }
 
     @Test
-    public void test_getConferenceRoomAvailabilityItems_if_upcoming_conferences() {
+    public void test_getConferenceRoomAvailabilityItems_if_upcoming_conferences_are_registered() {
         ConferenceRoom room = ConferenceRoomFixture.createConferenceRoom();
         List<Conference> conferences = ConferenceFixture.createUpcomingConferences();
         databaseConfigurator.configureWithConferenceRoomAvailability(Arrays.asList(room),conferences);
@@ -135,7 +135,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     }
 
     @Test
-    public void test_getConferenceRoomAvailabilityItems_if_cancelled_conferences() {
+    public void test_getConferenceRoomAvailabilityItems_if_only_cancelled_conferences_are_registered() {
         ConferenceRoom room = ConferenceRoomFixture.createConferenceRoom();
         List<Conference> conferences = ConferenceFixture.createCancelledConferences();
         databaseConfigurator.configureWithConferenceRoomAvailability(Arrays.asList(room),conferences);
@@ -144,7 +144,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     }
 
     @Test
-    public void test_getConferenceRoomAvailabilityItems_if_cancelled_conference() {
+    public void test_getConferenceRoomAvailabilityItems_if_one_cancelled_conference_and_upcoming_conferences_are_registered() {
         ConferenceRoom room = ConferenceRoomFixture.createConferenceRoom();
         List<Conference> conferences = ConferenceFixture.createUpcomingConferences();
         conferences.get(0).setCancelled(true);
@@ -155,7 +155,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     }
 
     @Test
-    public void test_getConferenceRoomAvailabilityItems_if_conference_in_past() {
+    public void test_getConferenceRoomAvailabilityItems_if_one_conference_in_past_and_upcoming_conferences_are_registered() {
         ConferenceRoom room = ConferenceRoomFixture.createConferenceRoom();
         List<Conference> conferences = ConferenceFixture.createUpcomingConferences();
         conferences.get(0).setStartDateTime(LocalDateTime.now().minusMinutes(1));

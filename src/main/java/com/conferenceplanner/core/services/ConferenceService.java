@@ -50,4 +50,29 @@ public class ConferenceService {
         return availableConferences;
     }
 
+    @Transactional
+    public Conference getConference(int conferenceId) {
+        Conference conference;
+        try {
+            conference = conferenceRepository.getById(conferenceId);
+            if (conference == null) {
+                return null;
+            }
+
+        } catch (Exception ex) {
+            throw new DatabaseException("Persistence level error: " + ex.getMessage());
+        }
+        return conference;
+    }
+
+    @Transactional
+    public boolean checkIfCancelled(Conference conference) {
+      return conference.isCancelled();
+    }
+
+    @Transactional
+    public void cancelConference(Conference conference) {
+        conference.setCancelled(true);
+    }
+
 }

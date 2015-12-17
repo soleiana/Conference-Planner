@@ -23,7 +23,7 @@ public class ConferenceValidatorTest extends SpringContextTest {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     @Test
-    public void test_validator_throws_ValidationException_if_null_parameter() {
+    public void test_validator_throws_ValidationException_if_null_conference_start_date_time() {
         String startDateTimeString = null;
         String endDateTimeString = "12/12/2015 12:20";
         expectedException.expect(ValidationException.class);
@@ -32,12 +32,19 @@ public class ConferenceValidatorTest extends SpringContextTest {
     }
 
     @Test
-    public void test_validator_throws_ValidationException_if_empty_parameter() {
+    public void test_validator_throws_ValidationException_if_empty_conference_start_date_time() {
         String startDateTimeString = "";
         String endDateTimeString = "12/12/2015 12:20";
         expectedException.expect(ValidationException.class);
         expectedException.expectMessage("One ore more parameters are null or empty");
         validator.validate(startDateTimeString, endDateTimeString);
+    }
+
+    @Test
+    public void test_validator_throws_ValidationException_if_null_conference_id() {
+        expectedException.expect(ValidationException.class);
+        expectedException.expectMessage("Conference id is null");
+        validator.validateId(null);
     }
 
     @Test
@@ -65,7 +72,7 @@ public class ConferenceValidatorTest extends SpringContextTest {
     }
 
     @Test
-    public void test_validator_throws_ValidationException_if_conference_end_before_start() {
+    public void test_validator_throws_ValidationException_if_conference_end_is_before_start() {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime startDateTime = now.plusDays(3);
         String startDateTimeString = startDateTime.format(formatter);
@@ -109,7 +116,7 @@ public class ConferenceValidatorTest extends SpringContextTest {
     }
 
     @Test
-    public void test_validate() {
+    public void test_validate_conference_parameters() {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime startDateTime = now.plusDays(3);
         String startDateTimeString = startDateTime.format(formatter);
@@ -120,6 +127,12 @@ public class ConferenceValidatorTest extends SpringContextTest {
         ConferenceInterval interval = validator.validate(startDateTimeString, endDateTimeString);
         assertEquals(startDateTimeString, interval.getStartDateTime().format(formatter));
         assertEquals(endDateTimeString, interval.getEndDateTime().format(formatter));
+    }
+
+    @Test
+    public void test_validate_conference_id() {
+        boolean result = validator.validateId(1);
+        assertTrue(result);
     }
 
 }
