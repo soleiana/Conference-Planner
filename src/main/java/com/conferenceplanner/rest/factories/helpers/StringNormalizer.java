@@ -44,6 +44,13 @@ public class StringNormalizer {
         return normalizedString;
     }
 
+    public static String createNormalizedConferenceName(String nameString) {
+        if (nameString == null || nameString.isEmpty()) {
+            throw new IllegalArgumentException("Can not normalize null or empty string!");
+        }
+        return nameString.trim().replaceAll("\\s+", " ");
+    }
+
     private static String capitalize(String str) {
         String capitalizedString;
 

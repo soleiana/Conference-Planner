@@ -47,14 +47,12 @@ public class ConferenceRoomController {
     public ResponseEntity<String> createConferenceRoom(@RequestBody ConferenceRoom conferenceRoom) {
         try {
             conferenceRoomValidator.validate(conferenceRoom);
+            com.conferenceplanner.core.domain.ConferenceRoom coreDomainConferenceRoom = conferenceRoomFactory.create(conferenceRoom);
 
-            com.conferenceplanner.core.domain.ConferenceRoom coreDomainConferenceRoom =
-                conferenceRoomFactory.create(conferenceRoom);
-
-            if (conferenceRoomService.checkIfExists(coreDomainConferenceRoom)) {
+            if (conferenceRoomService.checkIfConferenceRoomExists(coreDomainConferenceRoom)) {
                 return new ResponseEntity<>("Conference room already exists!", HttpStatus.CONFLICT);
             }
-            conferenceRoomService.create(coreDomainConferenceRoom);
+            conferenceRoomService.createConferenceRoom(coreDomainConferenceRoom);
 
         } catch(ValidationException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
@@ -63,7 +61,7 @@ public class ConferenceRoomController {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return  new ResponseEntity<>("Conference room created.", HttpStatus.CREATED);
+        return new ResponseEntity<>("Conference room created.", HttpStatus.CREATED);
     }
 
 
@@ -74,12 +72,9 @@ public class ConferenceRoomController {
 
         try {
             ConferenceInterval interval = conferenceValidator.validate(conferenceStartDateTime, conferenceEndDateTime);
+            com.conferenceplanner.core.domain.Conference coreDomainConference = conferenceFactory.create(interval);
 
-            com.conferenceplanner.core.domain.Conference coreDomainConference =
-                    conferenceFactory.create(interval);
-
-            List<com.conferenceplanner.core.domain.ConferenceRoom> coreDomainConferenceRooms =
-                    conferenceRoomService.getAvailableConferenceRooms(coreDomainConference);
+            List<com.conferenceplanner.core.domain.ConferenceRoom> coreDomainConferenceRooms = conferenceRoomService.getAvailableConferenceRooms(coreDomainConference);
 
             if (coreDomainConferenceRooms.isEmpty()) {
                 availableConferenceRooms.setErrorMessage("No conference rooms found for selected conference interval!");
@@ -89,8 +84,8 @@ public class ConferenceRoomController {
             List<ConferenceRoom> conferenceRooms = conferenceRoomFactory.create(coreDomainConferenceRooms);
             availableConferenceRooms.setAvailableConferenceRooms(conferenceRooms);
 
-            availableConferenceRooms.setConferenceStartDateTime(interval.getFormattedStartDateTime());
-            availableConferenceRooms.setConferenceEndDateTime(interval.getFormattedEndDateTime());
+            availableConferenceRooms.setConferenceStartDateTime(interval.getFormattedStartDateTimeString());
+            availableConferenceRooms.setConferenceEndDateTime(interval.getFormattedEndDateTimeString());
 
         } catch(ValidationException ex) {
             availableConferenceRooms.setErrorMessage(ex.getMessage());
@@ -101,7 +96,7 @@ public class ConferenceRoomController {
             return new ResponseEntity<>(availableConferenceRooms, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return  new ResponseEntity<>(availableConferenceRooms, HttpStatus.OK);
+        return new ResponseEntity<>(availableConferenceRooms, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}/conference-room-availability", produces = "application/json")
@@ -111,9 +106,7 @@ public class ConferenceRoomController {
 
         try {
             conferenceRoomValidator.validateId(id);
-
-            com.conferenceplanner.core.domain.ConferenceRoom coreDomainConferenceRoom =
-                    conferenceRoomService.getConferenceRoom(id);
+            com.conferenceplanner.core.domain.ConferenceRoom coreDomainConferenceRoom = conferenceRoomService.getConferenceRoom(id);
 
             if (coreDomainConferenceRoom == null) {
                 conferenceRoomAvailability.setErrorMessage("No conference room found for selected id!");
@@ -138,7 +131,7 @@ public class ConferenceRoomController {
             conferenceRoomAvailability.setErrorMessage(ex.getMessage());
             return new ResponseEntity<>(conferenceRoomAvailability, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return  new ResponseEntity<>(conferenceRoomAvailability, HttpStatus.OK);
+        return new ResponseEntity<>(conferenceRoomAvailability, HttpStatus.OK);
 
     }
 }

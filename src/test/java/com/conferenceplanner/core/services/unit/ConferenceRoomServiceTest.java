@@ -52,7 +52,7 @@ public class ConferenceRoomServiceTest {
         ConferenceRoom room = ConferenceRoomFixture.createConferenceRoom();
         List<ConferenceRoom> emptyList = new ArrayList<>();
         when(conferenceRoomRepository.getAll()).thenReturn(emptyList);
-        boolean result = conferenceRoomService.checkIfExists(room);
+        boolean result = conferenceRoomService.checkIfConferenceRoomExists(room);
         assertFalse(result);
     }
 
@@ -60,7 +60,7 @@ public class ConferenceRoomServiceTest {
     public void test_checkIfExists_is_false_if_conference_room_does_not_exist()  {
         ConferenceRoom room = ConferenceRoomFixture.createConferenceRoom();
         when(conferenceRoomRepository.getAll()).thenReturn(ConferenceRoomFixture.createConferenceRooms());
-        boolean result = conferenceRoomService.checkIfExists(room);
+        boolean result = conferenceRoomService.checkIfConferenceRoomExists(room);
         assertFalse(result);
     }
 
@@ -68,7 +68,7 @@ public class ConferenceRoomServiceTest {
     public void test_checkIfExists_is_true_if_conference_room_exists()  {
         ConferenceRoom room = ConferenceRoomFixture.createConferenceRoom(7);
         when(conferenceRoomRepository.getAll()).thenReturn(ConferenceRoomFixture.createConferenceRooms());
-        boolean result = conferenceRoomService.checkIfExists(room);
+        boolean result = conferenceRoomService.checkIfConferenceRoomExists(room);
         assertTrue(result);
     }
 
@@ -78,13 +78,13 @@ public class ConferenceRoomServiceTest {
         doThrow(new RuntimeException("Database connection failed")).when(conferenceRoomRepository).getAll();
         expectedException.expect(DatabaseException.class);
         expectedException.expectMessage("Database connection failed");
-        conferenceRoomService.checkIfExists(room);
+        conferenceRoomService.checkIfConferenceRoomExists(room);
     }
 
     @Test
     public void test_create() {
         ConferenceRoom room = ConferenceRoomFixture.createConferenceRoom();
-        conferenceRoomService.create(room);
+        conferenceRoomService.createConferenceRoom(room);
         verify(conferenceRoomRepository, times(1)).create(room);
     }
 
@@ -94,7 +94,7 @@ public class ConferenceRoomServiceTest {
         doThrow(new RuntimeException("Database connection failed")).when(conferenceRoomRepository).create(room);
         expectedException.expect(DatabaseException.class);
         expectedException.expectMessage("Database connection failed");
-        conferenceRoomService.create(room);
+        conferenceRoomService.createConferenceRoom(room);
     }
 
     @Test

@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Component
@@ -26,7 +27,7 @@ public class ConferenceRoomService {
 
 
     @Transactional
-    public boolean checkIfExists(ConferenceRoom conferenceRoom) {
+    public boolean checkIfConferenceRoomExists(ConferenceRoom conferenceRoom) {
         try {
             List<ConferenceRoom> conferenceRooms = conferenceRoomRepository.getAll();
 
@@ -43,7 +44,7 @@ public class ConferenceRoomService {
     }
 
     @Transactional
-    public void create(ConferenceRoom conferenceRoom) {
+    public void createConferenceRoom(ConferenceRoom conferenceRoom) {
         try {
             conferenceRoomRepository.create(conferenceRoom);
 
@@ -84,6 +85,18 @@ public class ConferenceRoomService {
     }
 
     @Transactional
+    public boolean checkIfConferenceRoomsAvailable(List<Integer> conferenceRoomIds, Conference plannedConference) {
+        List<ConferenceRoom> availableRooms = getAvailableConferenceRooms(plannedConference);
+
+        List<Integer> availableRoomIds = availableRooms.stream()
+                .mapToInt(ConferenceRoom::getId)
+                .boxed()
+                .collect(Collectors.toList());
+
+        return availableRoomIds.containsAll(conferenceRoomIds);
+    }
+
+    @Transactional
     public List<ConferenceRoomAvailabilityItem> getConferenceRoomAvailabilityItems(ConferenceRoom conferenceRoom) {
 
         List<ConferenceRoomAvailabilityItem> actualAvailabilityItems = new ArrayList<>();
@@ -100,5 +113,19 @@ public class ConferenceRoomService {
         }
 
         return actualAvailabilityItems;
+    }
+
+    @Transactional
+    public void registerConference(Conference conference, List<Integer> conferenceRoomIds) {
+
+        for (int roomId: conferenceRoomIds) {
+            ConferenceRoom room = conferenceRoomRepository.getById(roomId);
+            ConferenceRoomAvailabilityItem availabilityItem = new ConferenceRoomAvailabilityItem(room.getMaxSeats());
+            availabilityItem.setConference(conference);
+            availabilityItem.setConferenceRoom(room);
+            room.getConferenceRoomAvailabilityItems().add(availabilityItem);
+            conference.getConferenceRoomAvailabilityItems().add(availabilityItem);
+            room.getConferences().add(conference);
+        }
     }
 }

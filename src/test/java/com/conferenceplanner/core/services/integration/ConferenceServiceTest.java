@@ -139,7 +139,7 @@ public class ConferenceServiceTest extends SpringContextTest {
         databaseConfigurator.configure(Arrays.asList(conference));
         int id = conference.getId();
         Conference conferenceToCheck = conferenceService.getConference(id);
-        boolean result = conferenceService.checkIfCancelled(conferenceToCheck);
+        boolean result = conferenceService.checkIfConferenceIsCancelled(conferenceToCheck);
         assertTrue(result);
     }
 
@@ -149,7 +149,7 @@ public class ConferenceServiceTest extends SpringContextTest {
         databaseConfigurator.configure(Arrays.asList(conference));
         int id = conference.getId();
         Conference conferenceToCheck = conferenceService.getConference(id);
-        boolean result = conferenceService.checkIfCancelled(conferenceToCheck);
+        boolean result = conferenceService.checkIfConferenceIsCancelled(conferenceToCheck);
         assertFalse(result);
     }
 

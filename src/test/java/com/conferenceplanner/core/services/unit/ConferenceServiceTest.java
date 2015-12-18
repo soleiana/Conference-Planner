@@ -102,7 +102,7 @@ public class ConferenceServiceTest {
     public void test_checkIfCancelled_is_false_if_conference_is_not_cancelled() {
         Conference conference = ConferenceFixture.createUpcomingConference();
         assertFalse(conference.isCancelled());
-        boolean result = conferenceService.checkIfCancelled(conference);
+        boolean result = conferenceService.checkIfConferenceIsCancelled(conference);
         assertFalse(result);
     }
 
@@ -110,7 +110,7 @@ public class ConferenceServiceTest {
     public void test_checkIfCancelled_is_true_if_conference_is_cancelled() {
         Conference conference = ConferenceFixture.createUpcomingConference();
         conference.setCancelled(true);
-        boolean result = conferenceService.checkIfCancelled(conference);
+        boolean result = conferenceService.checkIfConferenceIsCancelled(conference);
         assertTrue(result);
     }
 

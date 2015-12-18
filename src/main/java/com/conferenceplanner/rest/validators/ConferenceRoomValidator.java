@@ -5,6 +5,8 @@ import com.conferenceplanner.rest.parsers.ParserException;
 import com.conferenceplanner.rest.parsers.ConferenceRoomParser;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class ConferenceRoomValidator {
 
@@ -39,6 +41,11 @@ public class ConferenceRoomValidator {
         if (conferenceRoomId == null) {
             throw new ValidationException("Conference room id is null");
         }
+        return true;
+    }
+
+    public boolean validateIds(List<Integer> conferenceRoomIds) {
+        conferenceRoomIds.forEach(id -> validateId(id));
         return true;
     }
 

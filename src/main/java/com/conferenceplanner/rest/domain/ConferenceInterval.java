@@ -27,19 +27,16 @@ public class ConferenceInterval {
         return endDateTime;
     }
 
-    public String getFormattedStartDateTime() {
+    public String getFormattedStartDateTimeString() {
         return startDateTime.format(dateTimeFormatter);
     }
 
-    public String getFormattedEndDateTime() {
+    public String getFormattedEndDateTimeString() {
         return endDateTime.format(dateTimeFormatter);
     }
 
-    public static String getFormattedStartDateTime(LocalDateTime startDateTime) {
-        return startDateTime.format(dateTimeFormatter);
+    public static String getFormattedDateTimeString(LocalDateTime dateTime) {
+        return dateTime.format(dateTimeFormatter);
     }
 
-    public static String getFormattedEndDateTime(LocalDateTime endDateTime) {
-        return endDateTime.format(dateTimeFormatter);
-    }
 }
