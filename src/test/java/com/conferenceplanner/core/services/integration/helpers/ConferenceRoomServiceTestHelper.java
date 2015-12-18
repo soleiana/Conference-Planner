@@ -1,4 +1,4 @@
-package com.conferenceplanner.core.services.component.helpers;
+package com.conferenceplanner.core.services.integration.helpers;
 
 import com.conferenceplanner.core.domain.Conference;
 import com.conferenceplanner.core.domain.ConferenceRoom;

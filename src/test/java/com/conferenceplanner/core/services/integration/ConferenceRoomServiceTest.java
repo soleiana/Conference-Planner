@@ -1,4 +1,4 @@
-package com.conferenceplanner.core.services.component;
+package com.conferenceplanner.core.services.integration;
 
 import com.conferenceplanner.SpringContextTest;
 import com.conferenceplanner.core.domain.Conference;
@@ -8,7 +8,7 @@ import com.conferenceplanner.core.repositories.ConferenceRoomRepository;
 import com.conferenceplanner.core.repositories.tools.DatabaseCleaner;
 import com.conferenceplanner.core.repositories.tools.DatabaseConfigurator;
 import com.conferenceplanner.core.services.ConferenceRoomService;
-import com.conferenceplanner.core.services.component.helpers.ConferenceRoomServiceTestHelper;
+import com.conferenceplanner.core.services.integration.helpers.ConferenceRoomServiceTestHelper;
 import com.conferenceplanner.core.services.fixtures.ConferenceFixture;
 import com.conferenceplanner.core.services.fixtures.ConferenceRoomFixture;
 import org.junit.Before;
@@ -93,7 +93,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     }
 
     @Test
-    public void test_getAvailableConferenceRooms_if_planned_conference_is_overlapping() {
+    public void test_getAvailableConferenceRooms_if_planned_conference_overlaps_with_scheduled_conference() {
         Conference plannedConference = ConferenceFixture.createConference();
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms();
         List<Conference> conferences = ConferenceFixture.createMixedConferences();
@@ -114,7 +114,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     }
 
     @Test
-    public void test_getAvailableConferenceRooms_if_planned_conference_is_not_overlapping() {
+    public void test_getAvailableConferenceRooms_if_planned_conference_does_not_overlap_with_scheduled_conferences() {
         Conference plannedConference = ConferenceFixture.createConference();
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms();
         List<Conference> conferences = ConferenceFixture.createNonOverlappingConferences();

@@ -1,4 +1,4 @@
-package com.conferenceplanner.core.services.component;
+package com.conferenceplanner.core.services.integration;
 
 import com.conferenceplanner.SpringContextTest;
 import com.conferenceplanner.core.domain.Conference;
@@ -7,7 +7,7 @@ import com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem;
 import com.conferenceplanner.core.repositories.tools.DatabaseCleaner;
 import com.conferenceplanner.core.repositories.tools.DatabaseConfigurator;
 import com.conferenceplanner.core.services.ConferenceService;
-import com.conferenceplanner.core.services.component.helpers.ConferenceServiceTestHelper;
+import com.conferenceplanner.core.services.integration.helpers.ConferenceServiceTestHelper;
 import com.conferenceplanner.core.services.fixtures.ConferenceFixture;
 import com.conferenceplanner.core.services.fixtures.ConferenceRoomAvailabilityItemFixture;
 import com.conferenceplanner.core.services.fixtures.ConferenceRoomFixture;
