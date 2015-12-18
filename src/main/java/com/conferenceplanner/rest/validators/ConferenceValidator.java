@@ -19,34 +19,22 @@ public class ConferenceValidator {
     private static final int MIN_TIME_BEFORE_CONFERENCE_START_IN_DAYS = 2;
     private static final int MIN_CONFERENCE_DURATION_IN_HOURS = 2;
     private static final int MAX_CONFERENCE_DURATION_IN_DAYS = 7;
+    private static final int MIN_SYMBOLS_IN_CONFERENCE_NAME = 2;
+    private static final int MAX_SYMBOLS_IN_CONFERENCE_NAME =150;
+
 
     @Autowired
     private ConferenceRoomValidator conferenceRoomValidator;
 
     public boolean validate(Conference conference) {
-
         String nameString = conference.getName();
         String startDateTimeString = conference.getStartDateTime();
         String endDateTimeString = conference.getEndDateTime();
         List<Integer> conferenceRoomIds = conference.getConferenceRoomIds();
 
-        if (nameString == null || nameString.isEmpty()
-                || startDateTimeString == null || startDateTimeString.isEmpty()
-                || endDateTimeString == null || endDateTimeString.isEmpty()
-                || conferenceRoomIds == null || conferenceRoomIds.isEmpty()) {
-            throw new ValidationException("One ore more parameters are null or empty");
-        }
-
         conferenceRoomValidator.validateIds(conferenceRoomIds);
-
-        try {
-            ConferenceParser.parse(nameString);
-            ConferenceInterval interval = ConferenceParser.parse(startDateTimeString, endDateTimeString);
-            validate(interval);
-
-        } catch (ParserException ex) {
-            throw new ValidationException(ex.getMessage());
-        }
+        validate(startDateTimeString, endDateTimeString);
+        validate(nameString);
         return true;
     }
 
@@ -55,7 +43,7 @@ public class ConferenceValidator {
 
         if (startDateTimeString == null || startDateTimeString.isEmpty()
                 || endDateTimeString == null || endDateTimeString.isEmpty()) {
-            throw new ValidationException("One ore more parameters are null or empty");
+            throw new ValidationException("Start date time or end date time are are null or empty");
         }
 
         try {
@@ -104,6 +92,17 @@ public class ConferenceValidator {
         if (days > MAX_CONFERENCE_DURATION_IN_DAYS) {
             throw new ValidationException(String.format("Conference duration is %s days, more than max of %s day(s)", days, MAX_CONFERENCE_DURATION_IN_DAYS));
         }
-
     }
+
+    private void validate(String nameString) {
+        if (nameString == null || nameString.isEmpty()) {
+            throw new ValidationException("Name is null or empty");
+        }
+
+        int length = nameString.trim().replaceAll("\\s+", " ").length();
+        if (length < MIN_SYMBOLS_IN_CONFERENCE_NAME || length > MAX_SYMBOLS_IN_CONFERENCE_NAME) {
+                throw new ValidationException("Invalid name length");
+        }
+    }
+
 }

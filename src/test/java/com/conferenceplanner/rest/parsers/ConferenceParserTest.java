@@ -2,7 +2,9 @@ package com.conferenceplanner.rest.parsers;
 
 
 import com.conferenceplanner.rest.domain.ConferenceInterval;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -11,6 +13,9 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class ConferenceParserTest {
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
     @Test
     public void test_throws_ParserException_if_invalid_start_date_time_format() {
@@ -41,7 +46,7 @@ public class ConferenceParserTest {
     }
 
     @Test
-    public void test_parse() {
+    public void test_parse_conference_interval() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         String startDateTimeString = " 12/12/2015 12:20 ";
         for (String dateTimeString : geValidDateTimeStrings()) {

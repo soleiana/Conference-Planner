@@ -45,7 +45,9 @@ public class ConferenceRoomValidator {
     }
 
     public boolean validateIds(List<Integer> conferenceRoomIds) {
-        conferenceRoomIds.forEach(id -> validateId(id));
+        if (conferenceRoomIds == null || conferenceRoomIds.isEmpty()) {
+            throw new ValidationException("Conference room id list is null or empty");
+        }
         return true;
     }
 

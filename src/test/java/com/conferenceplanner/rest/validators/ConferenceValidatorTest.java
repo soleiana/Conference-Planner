@@ -1,6 +1,7 @@
 package com.conferenceplanner.rest.validators;
 
 import com.conferenceplanner.SpringContextTest;
+import com.conferenceplanner.rest.domain.Conference;
 import com.conferenceplanner.rest.domain.ConferenceInterval;
 import org.junit.Rule;
 import org.junit.Test;
@@ -9,10 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
 public class ConferenceValidatorTest extends SpringContextTest {
+
+    private static final int MIN_SYMBOLS_IN_CONFERENCE_NAME = 2;
+    private static final int MAX_SYMBOLS_IN_CONFERENCE_NAME = 150;
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -27,7 +33,7 @@ public class ConferenceValidatorTest extends SpringContextTest {
         String startDateTimeString = null;
         String endDateTimeString = "12/12/2015 12:20";
         expectedException.expect(ValidationException.class);
-        expectedException.expectMessage("One ore more parameters are null or empty");
+        expectedException.expectMessage("Start date time or end date time are are null or empty");
         validator.validate(startDateTimeString, endDateTimeString);
     }
 
@@ -36,7 +42,7 @@ public class ConferenceValidatorTest extends SpringContextTest {
         String startDateTimeString = "";
         String endDateTimeString = "12/12/2015 12:20";
         expectedException.expect(ValidationException.class);
-        expectedException.expectMessage("One ore more parameters are null or empty");
+        expectedException.expectMessage("Start date time or end date time are are null or empty");
         validator.validate(startDateTimeString, endDateTimeString);
     }
 
@@ -116,7 +122,7 @@ public class ConferenceValidatorTest extends SpringContextTest {
     }
 
     @Test
-    public void test_validate_conference_parameters() {
+    public void test_validate_conference_interval() {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime startDateTime = now.plusDays(3);
         String startDateTimeString = startDateTime.format(formatter);
@@ -130,9 +136,114 @@ public class ConferenceValidatorTest extends SpringContextTest {
     }
 
     @Test
-    public void test_validate_conference_id() {
+    public void test_validateId_throws_ValidationException() {
+        expectedException.expect(ValidationException.class);
+        expectedException.expectMessage("Conference id is null");
+        validator.validateId(null);
+    }
+
+    @Test
+    public void test_validateId() {
         boolean result = validator.validateId(1);
         assertTrue(result);
     }
 
+    @Test
+    public void test_validator_throws_ValidationException_if_empty_conference_conference_room_id_list() {
+        Conference conference = createConference("name");
+        conference.setConferenceRoomIds(new ArrayList<>());
+        expectedException.expect(ValidationException.class);
+        expectedException.expectMessage("Conference room id list is null or empty");
+        validator.validate(conference);
+    }
+
+    @Test
+    public void test_validator_throws_ValidationException_if_null_conference_conference_room_id_list() {
+        Conference conference = createConference("name");
+        conference.setConferenceRoomIds(null);
+        expectedException.expect(ValidationException.class);
+        expectedException.expectMessage("Conference room id list is null or empty");
+        validator.validate(conference);
+    }
+
+    @Test
+    public void test_validator_throws_ValidationException_if_too_short_conference_name() {
+        for (String nameString : getTooShortNames()) {
+            try {
+                validator.validate(createConference(nameString));
+            } catch (ValidationException ex) {
+                assertEquals("Invalid name length", ex.getMessage());
+                continue;
+            }
+            fail();
+        }
+    }
+
+    @Test
+    public void test_throws_ParserException_if_too_long_name() {
+        expectedException.expect(ValidationException.class);
+        expectedException.expectMessage("Invalid name length");
+        validator.validate(createConference(getTooLongName()));
+    }
+
+    @Test
+    public void test_validate_conference() {
+        for (String nameString : getValidNames()) {
+            boolean result = validator.validate(createConference(nameString));
+            assertTrue(result);
+        }
+    }
+
+    private Conference createConference(String name) {
+        Conference conference = new Conference();
+
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime startDateTime = now.plusDays(3);
+        String startDateTimeString = startDateTime.format(formatter);
+        LocalDateTime endDateTime = startDateTime.plusDays(6);
+        String endDateTimeString = endDateTime.format(formatter);
+
+        conference.setStartDateTime(startDateTimeString);
+        conference.setEndDateTime(endDateTimeString);
+        conference.setName(name);
+
+        List<Integer> conferenceRoomIds = new ArrayList<>();
+        conferenceRoomIds.add(1);
+        conference.setConferenceRoomIds(conferenceRoomIds);
+        return conference;
+    }
+
+    private List<String> getTooShortNames() {
+        List<String> strings = new ArrayList<>();
+        strings.add("  ");
+        strings.add("a");
+        strings.add("0");
+        strings.add(" a ");
+        strings.add(" % ");
+        return strings;
+    }
+
+    private String getTooLongName() {
+        String tooLongName = "";
+        for (int i = 0; i <= MAX_SYMBOLS_IN_CONFERENCE_NAME; i++) {
+            tooLongName += "a";
+        }
+        return tooLongName;
+    }
+
+    private List<String> getValidNames() {
+        List<String> names = new ArrayList<>();
+        names.add(getValidName(MIN_SYMBOLS_IN_CONFERENCE_NAME));
+        names.add(getValidName(MAX_SYMBOLS_IN_CONFERENCE_NAME));
+        names.add(getValidName(MAX_SYMBOLS_IN_CONFERENCE_NAME-1));
+        return names;
+    }
+
+    private String getValidName(int symbolsInName) {
+        String name = "";
+        for (int i = 0; i < symbolsInName; i++) {
+            name += "a";
+        }
+        return " " + name + " ";
+    }
 }

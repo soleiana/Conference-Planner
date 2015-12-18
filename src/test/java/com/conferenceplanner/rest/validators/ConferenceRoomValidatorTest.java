@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.springframework.beans.factory.annotation.Autowired;
 
+
 import static org.junit.Assert.*;
 
 public class ConferenceRoomValidatorTest extends SpringContextTest {
@@ -97,8 +98,17 @@ public class ConferenceRoomValidatorTest extends SpringContextTest {
     }
 
     @Test
-    public void test_validate_conference_room_id() {
+    public void test_validateId() {
         boolean result = validator.validateId(1);
         assertTrue(result);
     }
+
+    @Test
+    public void test_validateId_throws_ValidationException() {
+        expectedException.expect(ValidationException.class);
+        expectedException.expectMessage("Conference room id is null");
+        validator.validateId(null);
+
+    }
+
 }
