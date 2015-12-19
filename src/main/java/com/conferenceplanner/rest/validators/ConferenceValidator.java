@@ -26,7 +26,7 @@ public class ConferenceValidator {
     @Autowired
     private ConferenceRoomValidator conferenceRoomValidator;
 
-    public boolean validate(Conference conference) {
+    public void validate(Conference conference) {
         String nameString = conference.getName();
         String startDateTimeString = conference.getStartDateTime();
         String endDateTimeString = conference.getEndDateTime();
@@ -35,7 +35,6 @@ public class ConferenceValidator {
         conferenceRoomValidator.validateIds(conferenceRoomIds);
         validate(startDateTimeString, endDateTimeString);
         validate(nameString);
-        return true;
     }
 
     public ConferenceInterval validate(String startDateTimeString, String endDateTimeString) {
@@ -56,11 +55,10 @@ public class ConferenceValidator {
         return interval;
     }
 
-    public boolean validateId(Integer conferenceId) {
+    public void validateId(Integer conferenceId) {
         if (conferenceId == null) {
             throw new ValidationException("Conference id is null");
         }
-        return true;
     }
 
     private void validate(ConferenceInterval interval) {

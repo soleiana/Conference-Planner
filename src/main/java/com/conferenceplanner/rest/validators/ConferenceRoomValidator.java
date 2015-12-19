@@ -13,7 +13,7 @@ public class ConferenceRoomValidator {
     private static final int MIN_SEATS_IN_CONFERENCE_ROOM = 5;
     private static final int MAX_SEATS_IN_CONFERENCE_ROOM = 2000;
 
-    public boolean validate(ConferenceRoom conferenceRoom) {
+    public void validate(ConferenceRoom conferenceRoom) {
 
         String nameString = conferenceRoom.getName();
         String locationString = conferenceRoom.getLocation();
@@ -34,21 +34,18 @@ public class ConferenceRoomValidator {
         } catch (ParserException ex) {
             throw new ValidationException(ex.getMessage());
         }
-        return true;
     }
 
-    public boolean validateId(Integer conferenceRoomId) {
+    public void validateId(Integer conferenceRoomId) {
         if (conferenceRoomId == null) {
             throw new ValidationException("Conference room id is null");
         }
-        return true;
     }
 
-    public boolean validateIds(List<Integer> conferenceRoomIds) {
+    public void validateIds(List<Integer> conferenceRoomIds) {
         if (conferenceRoomIds == null || conferenceRoomIds.isEmpty()) {
             throw new ValidationException("Conference room id list is null or empty");
         }
-        return true;
     }
 
 }

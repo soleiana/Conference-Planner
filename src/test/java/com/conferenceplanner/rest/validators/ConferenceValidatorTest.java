@@ -144,9 +144,13 @@ public class ConferenceValidatorTest extends SpringContextTest {
 
     @Test
     public void test_validateId() {
-        boolean result = validator.validateId(1);
-        assertTrue(result);
+        try {
+            validator.validateId(1);
+        } catch (Exception ex) {
+            fail();
+        }
     }
+
 
     @Test
     public void test_validator_throws_ValidationException_if_empty_conference_conference_room_id_list() {
@@ -188,9 +192,12 @@ public class ConferenceValidatorTest extends SpringContextTest {
 
     @Test
     public void test_validate_conference() {
-        for (String nameString : getValidNames()) {
-            boolean result = validator.validate(createConference(nameString));
-            assertTrue(result);
+        try {
+            for (String nameString : getValidNames()) {
+                validator.validate(createConference(nameString));
+            }
+        } catch (Exception ex) {
+            fail();
         }
     }
 

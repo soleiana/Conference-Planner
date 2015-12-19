@@ -92,15 +92,21 @@ public class ConferenceRoomValidatorTest extends SpringContextTest {
         conferenceRoom.setName("A/A aaa aaa  conference");
         conferenceRoom.setLocation("A/A  aaa  aaa");
         conferenceRoom.setMaxSeats(5);
+        try {
+            validator.validate(conferenceRoom);
+        } catch (Exception ex) {
+            fail();
+        }
 
-        boolean result = validator.validate(conferenceRoom);
-        assertTrue(result);
     }
 
     @Test
     public void test_validateId() {
-        boolean result = validator.validateId(1);
-        assertTrue(result);
+        try {
+            validator.validateId(1);
+        } catch (Exception ex) {
+            fail();
+        }
     }
 
     @Test
