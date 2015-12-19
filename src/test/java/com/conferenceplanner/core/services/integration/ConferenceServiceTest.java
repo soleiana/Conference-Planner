@@ -134,7 +134,7 @@ public class ConferenceServiceTest extends SpringContextTest {
     }
 
     @Test
-    public void test_checkIfCancelled_is_true_if_conference_is_cancelled() {
+    public void test_checkIfConferenceIsCancelled_is_true_if_conference_is_cancelled() {
         Conference conference = ConferenceFixture.createCancelledConference();
         databaseConfigurator.configure(Arrays.asList(conference));
         int id = conference.getId();
@@ -144,7 +144,7 @@ public class ConferenceServiceTest extends SpringContextTest {
     }
 
     @Test
-    public void test_checkIfCancelled_is_false_if_conference_is_not_cancelled() {
+    public void test_checkIfConferenceIsCancelled_is_false_if_conference_is_not_cancelled() {
         Conference conference = ConferenceFixture.createUpcomingConference();
         databaseConfigurator.configure(Arrays.asList(conference));
         int id = conference.getId();

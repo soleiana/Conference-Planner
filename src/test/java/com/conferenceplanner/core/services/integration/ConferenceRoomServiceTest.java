@@ -48,7 +48,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     }
 
     @Test
-    public void test_checkIfExists_is_true_if_conference_room_exists() {
+    public void test_checkIfConferenceRoomExists_is_true_if_conference_room_exists() {
         ConferenceRoom room1 = ConferenceRoomFixture.createConferenceRoom(7);
         conferenceRoomRepository.create(room1);
         assertNotNull(room1.getId());
@@ -58,7 +58,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     }
 
     @Test
-    public void test_checkIfExists_is_false_if_conference_room_does_not_exist() {
+    public void test_checkIfConferenceRoomExists_is_false_if_conference_room_does_not_exist() {
         ConferenceRoom room1 = ConferenceRoomFixture.createConferenceRoom(7);
         conferenceRoomRepository.create(room1);
         assertNotNull(room1.getId());
@@ -68,14 +68,14 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     }
 
     @Test
-    public void test_checkIfExists_is_false_if_no_conference_room_exists() {
+    public void test_checkIfConferenceRoomExists_is_false_if_no_conference_room_exists() {
         ConferenceRoom room = ConferenceRoomFixture.createConferenceRoom();
         boolean result = conferenceRoomService.checkIfConferenceRoomExists(room);
         assertFalse(result);
     }
 
     @Test
-    public void test_create() {
+    public void test_createConferenceRoom() {
         ConferenceRoom room = ConferenceRoomFixture.createConferenceRoom();
         conferenceRoomService.createConferenceRoom(room);
         assertNotNull(room.getId());
