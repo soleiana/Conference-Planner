@@ -76,7 +76,7 @@ public class DatabaseController {
     }
 
     private void setupRelationship(ConferenceRoom conferenceRoom, Conference conference) {
-        conferenceRoom.getConferences().add(conference);
+        conferenceRoom.addConference(conference);
     }
 
     private void setupRelationship(ConferenceRoom conferenceRoom, Conference conference,

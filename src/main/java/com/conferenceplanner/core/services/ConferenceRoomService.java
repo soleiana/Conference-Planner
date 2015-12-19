@@ -123,7 +123,7 @@ public class ConferenceRoomService {
                 room.addConferenceRoomAvailabilityItem(availabilityItem);
                 conference.addConferenceRoomAvailabilityItem(availabilityItem);
                 conferenceRoomAvailabilityItemRepository.create(availabilityItem);
-                room.getConferences().add(conference);
+                room.addConference(conference);
             }
         } catch (Exception ex) {
             throw new DatabaseException("Persistence level error: " + ex.getMessage());
