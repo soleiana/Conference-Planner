@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,15 +67,13 @@ public class ConferenceRoomService {
     @Transactional
     public List<ConferenceRoom> getAvailableConferenceRooms(Conference plannedConference) {
 
-        List<ConferenceRoom> availableRooms = new ArrayList<>();
+        List<ConferenceRoom> availableRooms;
         try {
             List<ConferenceRoom> allRooms = conferenceRoomRepository.getAll();
+            availableRooms = allRooms.stream()
+                    .filter(room -> conferenceRoomChecker.isAvailable(room, plannedConference))
+                    .collect(Collectors.toList());
 
-            for (ConferenceRoom room: allRooms) {
-                if (conferenceRoomChecker.isAvailable(room, plannedConference)) {
-                    availableRooms.add(room);
-                }
-            }
         } catch (Exception ex) {
             throw new DatabaseException("Persistence level error: " + ex.getMessage());
         }
@@ -89,8 +86,7 @@ public class ConferenceRoomService {
         List<ConferenceRoom> availableRooms = getAvailableConferenceRooms(plannedConference);
 
         List<Integer> availableRoomIds = availableRooms.stream()
-                .mapToInt(ConferenceRoom::getId)
-                .boxed()
+                .map(ConferenceRoom::getId)
                 .collect(Collectors.toList());
 
         return availableRoomIds.containsAll(conferenceRoomIds);
@@ -99,15 +95,12 @@ public class ConferenceRoomService {
     @Transactional
     public List<ConferenceRoomAvailabilityItem> getConferenceRoomAvailabilityItems(ConferenceRoom conferenceRoom) {
 
-        List<ConferenceRoomAvailabilityItem> actualAvailabilityItems = new ArrayList<>();
+        List<ConferenceRoomAvailabilityItem> actualAvailabilityItems;
         try {
             List<ConferenceRoomAvailabilityItem> allAvailabilityItems = conferenceRoom.getConferenceRoomAvailabilityItems();
-            for(ConferenceRoomAvailabilityItem availabilityItem: allAvailabilityItems) {
-
-                if (conferenceRoomAvailabilityItemChecker.isActual(availabilityItem)) {
-                    actualAvailabilityItems.add(availabilityItem);
-                }
-            }
+            actualAvailabilityItems = allAvailabilityItems.stream()
+                    .filter(conferenceRoomAvailabilityItemChecker::isActual)
+                    .collect(Collectors.toList());
         }  catch (Exception ex) {
             throw new DatabaseException("Persistence level error: " + ex.getMessage());
         }
