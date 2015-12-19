@@ -82,8 +82,8 @@ public class DatabaseController {
     private void setupRelationship(ConferenceRoom conferenceRoom, Conference conference,
                                    ConferenceRoomAvailabilityItem availabilityItem) {
 
-        conferenceRoom.getConferenceRoomAvailabilityItems().add(availabilityItem);
-        conference.getConferenceRoomAvailabilityItems().add(availabilityItem);
+        conferenceRoom.addConferenceRoomAvailabilityItem(availabilityItem);
+        conference.addConferenceRoomAvailabilityItem(availabilityItem);
         availabilityItem.setConferenceRoom(conferenceRoom);
         availabilityItem.setConference(conference);
         conferenceRoomAvailabilityItemRepository.create(availabilityItem);

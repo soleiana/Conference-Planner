@@ -3,6 +3,7 @@ package com.conferenceplanner.core.services;
 import com.conferenceplanner.core.domain.Conference;
 import com.conferenceplanner.core.domain.ConferenceRoom;
 import com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem;
+import com.conferenceplanner.core.repositories.ConferenceRoomAvailabilityItemRepository;
 import com.conferenceplanner.core.repositories.ConferenceRoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,9 @@ public class ConferenceRoomService {
 
     @Autowired
     private ConferenceRoomRepository conferenceRoomRepository;
+
+    @Autowired
+    private ConferenceRoomAvailabilityItemRepository conferenceRoomAvailabilityItemRepository;
 
     @Autowired
     private ConferenceRoomChecker conferenceRoomChecker;
@@ -110,15 +114,19 @@ public class ConferenceRoomService {
 
     @Transactional
     public void registerConference(Conference conference, List<Integer> conferenceRoomIds) {
-
-        for (int roomId: conferenceRoomIds) {
-            ConferenceRoom room = conferenceRoomRepository.getById(roomId);
-            ConferenceRoomAvailabilityItem availabilityItem = new ConferenceRoomAvailabilityItem(room.getMaxSeats());
-            availabilityItem.setConference(conference);
-            availabilityItem.setConferenceRoom(room);
-            room.getConferenceRoomAvailabilityItems().add(availabilityItem);
-            conference.getConferenceRoomAvailabilityItems().add(availabilityItem);
-            room.getConferences().add(conference);
+        try {
+            for (int roomId : conferenceRoomIds) {
+                ConferenceRoom room = conferenceRoomRepository.getById(roomId);
+                ConferenceRoomAvailabilityItem availabilityItem = new ConferenceRoomAvailabilityItem(room.getMaxSeats());
+                availabilityItem.setConference(conference);
+                availabilityItem.setConferenceRoom(room);
+                room.addConferenceRoomAvailabilityItem(availabilityItem);
+                conference.addConferenceRoomAvailabilityItem(availabilityItem);
+                conferenceRoomAvailabilityItemRepository.create(availabilityItem);
+                room.getConferences().add(conference);
+            }
+        } catch (Exception ex) {
+            throw new DatabaseException("Persistence level error: " + ex.getMessage());
         }
     }
 }

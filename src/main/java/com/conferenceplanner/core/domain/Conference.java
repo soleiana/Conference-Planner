@@ -73,6 +73,10 @@ public class Conference {
         return true;
     }
 
+    public void addConferenceRoomAvailabilityItem(ConferenceRoomAvailabilityItem item) {
+        getConferenceRoomAvailabilityItems().add(item);
+    }
+
     public Integer getId() {
         return id;
     }

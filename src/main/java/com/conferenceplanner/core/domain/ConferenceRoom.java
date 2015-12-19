@@ -47,6 +47,10 @@ public class ConferenceRoom {
         this.maxSeats = maxSeats;
     }
 
+    public void addConferenceRoomAvailabilityItem(ConferenceRoomAvailabilityItem item) {
+        getConferenceRoomAvailabilityItems().add(item);
+    }
+
     public Integer getId() {
         return id;
     }
