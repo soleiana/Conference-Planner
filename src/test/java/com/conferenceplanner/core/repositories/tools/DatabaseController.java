@@ -103,6 +103,7 @@ public class DatabaseController {
         conference.addConferenceRoomAvailabilityItem(availabilityItem);
         availabilityItem.setConferenceRoom(conferenceRoom);
         availabilityItem.setConference(conference);
+        conferenceRoom.addConference(conference);
         conferenceRoomAvailabilityItemRepository.create(availabilityItem);
     }
 }

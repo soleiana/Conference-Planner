@@ -132,7 +132,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     }
 
     @Test
-    public void test_checkIfConferenceRoomsAvailable_is_true_when_all_checked_rooms_are_available()  {
+    public void test_checkIfConferenceRoomsAvailable_is_true_if_all_checked_rooms_are_available()  {
         Conference plannedConference = ConferenceFixture.createConference();
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRoomsWithId(3);
         List<Integer> roomIds = rooms.stream()
@@ -149,7 +149,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     }
 
     @Test
-    public void test_checkIfConferenceRoomsAvailable_is_false_when_one_checked_room_is_unavailable()  {
+    public void test_checkIfConferenceRoomsAvailable_is_false_if_one_checked_room_is_not_available()  {
         Conference plannedConference = ConferenceFixture.createConference();
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRoomsWithId(3);
         List<Integer> roomIds = rooms.stream()

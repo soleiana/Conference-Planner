@@ -17,7 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
@@ -121,6 +123,30 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
         List<ConferenceRoom> availableRooms = conferenceRoomService.getAvailableConferenceRooms(plannedConference);
         assertEquals(rooms.size(), availableRooms.size());
         conferenceRoomServiceIntegrationTestHelper.assertGetAvailableConferenceRoomsResult(availableRooms, plannedConference);
+    }
+
+    @Test
+    public void test_checkIfConferenceRoomsAvailable_is_true_if_all_checked_rooms_are_available() {
+        Conference plannedConference = ConferenceFixture.createConference();
+        List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms();
+        List<Conference> conferences = ConferenceFixture.createNonOverlappingConferences();
+        databaseConfigurator.configureWithConferenceRoomAvailability(rooms, conferences);
+        List<Integer> roomIds = rooms.stream()
+                .map(ConferenceRoom::getId)
+                .collect(Collectors.toList());
+        boolean result = conferenceRoomService.checkIfConferenceRoomsAvailable(roomIds, plannedConference);
+        assertTrue(result);
+    }
+
+    @Test
+    public void test_checkIfConferenceRoomsAvailable_is_false_if_checked_room_is_not_available(){
+        Conference plannedConference = ConferenceFixture.createConference();
+        ConferenceRoom room = ConferenceRoomFixture.createConferenceRoom();
+        List<Conference> conferences = ConferenceFixture.createMixedConferences();
+        databaseConfigurator.configureWithConferenceRoomAvailability(room, conferences);
+        int roomId = room.getId();
+        boolean result = conferenceRoomService.checkIfConferenceRoomsAvailable(Arrays.asList(roomId), plannedConference);
+        assertFalse(result);
     }
 
     @Test

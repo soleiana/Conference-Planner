@@ -16,6 +16,10 @@ public class ConferenceFixture {
         return new Conference(PLANNED_START, PLANNED_END);
     }
 
+    public static Conference cloneConference(Conference conference) {
+        return new Conference(conference.getName(), conference.getStartDateTime(), conference.getEndDateTime(), conference.isCancelled());
+    }
+
     public static Conference createOngoingConference() {
         LocalDateTime endDateTime = START_IN_PAST.plusHours(5);
         return new Conference("name", START_IN_PAST, endDateTime, false);

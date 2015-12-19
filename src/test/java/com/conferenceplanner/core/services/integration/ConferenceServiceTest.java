@@ -132,17 +132,64 @@ public class ConferenceServiceTest extends SpringContextTest {
         assertEquals(conference, actualConference);
     }
 
+    @Test
     public void test_checkIfConferenceExists_is_true_if_planned_conference_exists() {
-
+        Conference conference = ConferenceFixture.createUpcomingConference();
+        databaseConfigurator.configure(conference);
+        assertNotNull(conference.getId());
+        Conference plannedConference = ConferenceFixture.cloneConference(conference);
+        boolean result = conferenceService.checkIfConferenceExists(plannedConference);
+        assertTrue(result);
     }
 
     @Test
     public void test_checkIfConferenceExists_is_false_if_no_conferences_exist() {
+        Conference plannedConference = ConferenceFixture.createUpcomingConference();
+        boolean result = conferenceService.checkIfConferenceExists(plannedConference);
+        assertFalse(result);
+    }
+
+    @Test
+    public void test_checkIfConferenceExists_is_false_if_planned_conference_is_cancelled() {
+        Conference conference = ConferenceFixture.createCancelledConference();
+        databaseConfigurator.configure(conference);
+        assertNotNull(conference.getId());
+        Conference plannedConference = ConferenceFixture.cloneConference(conference);
+        boolean result = conferenceService.checkIfConferenceExists(plannedConference);
+        assertFalse(result);
     }
 
     @Test
     public void test_checkIfConferenceExists_is_false_if_planned_conference_is_with_different_name() {
+        Conference conference = ConferenceFixture.createUpcomingConference();
+        databaseConfigurator.configure(conference);
+        assertNotNull(conference.getId());
+        Conference plannedConference = ConferenceFixture.cloneConference(conference);
+        plannedConference.setName(plannedConference.getName()+"1");
+        boolean result = conferenceService.checkIfConferenceExists(plannedConference);
+        assertFalse(result);
+    }
 
+    @Test
+    public void test_checkIfConferenceExists_is_false_if_planned_conference_is_with_different_start_date_time() {
+        Conference conference = ConferenceFixture.createUpcomingConference();
+        databaseConfigurator.configure(conference);
+        assertNotNull(conference.getId());
+        Conference plannedConference = ConferenceFixture.cloneConference(conference);
+        plannedConference.setStartDateTime(plannedConference.getStartDateTime().plusMinutes(1));
+        boolean result = conferenceService.checkIfConferenceExists(plannedConference);
+        assertFalse(result);
+    }
+
+    @Test
+    public void test_checkIfConferenceExists_is_false_if_planned_conference_is_with_different_end_date_time() {
+        Conference conference = ConferenceFixture.createUpcomingConference();
+        databaseConfigurator.configure(conference);
+        assertNotNull(conference.getId());
+        Conference plannedConference = ConferenceFixture.cloneConference(conference);
+        plannedConference.setEndDateTime(plannedConference.getEndDateTime().plusMinutes(1));
+        boolean result = conferenceService.checkIfConferenceExists(plannedConference);
+        assertFalse(result);
     }
 
     @Test
@@ -163,6 +210,13 @@ public class ConferenceServiceTest extends SpringContextTest {
         Conference conferenceToCheck = conferenceService.getConference(id);
         boolean result = conferenceService.checkIfConferenceIsCancelled(conferenceToCheck);
         assertFalse(result);
+    }
+
+    @Test
+    public void test_createConference() {
+        Conference conference = ConferenceFixture.createUpcomingConference();
+        conferenceService.createConference(conference);
+        assertNotNull(conference.getId());
     }
 
     @Test
