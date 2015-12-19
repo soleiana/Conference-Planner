@@ -39,4 +39,14 @@ public class ConferenceRoomFixture {
         }
         return rooms;
     }
+
+    public static List<ConferenceRoom> createConferenceRoomsWithId(int numberOfRooms) {
+        List<ConferenceRoom> rooms = new ArrayList<>();
+        for (Integer i = 1; i <= numberOfRooms; i++) {
+            ConferenceRoom room = new ConferenceRoom("name" + i.toString(), "location", 100);
+            room.setId(i);
+            rooms.add(room);
+        }
+        return rooms;
+    }
 }

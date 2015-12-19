@@ -19,6 +19,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -121,6 +122,40 @@ public class ConferenceRoomServiceTest {
     }
 
     @Test
+    public void test_checkIfConferenceRoomsAvailable_is_true_when_all_checked_rooms_are_available()  {
+        Conference plannedConference = ConferenceFixture.createConference();
+        List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRoomsWithId(3);
+        List<Integer> roomIds = rooms.stream()
+                .map(ConferenceRoom::getId)
+                .collect(Collectors.toList());
+        assertEquals(3, rooms.size());
+        when(conferenceRoomRepository.getAll()).thenReturn(rooms);
+        when(conferenceRoomChecker.isAvailable(rooms.get(0),plannedConference)).thenReturn(true);
+        when(conferenceRoomChecker.isAvailable(rooms.get(1),plannedConference)).thenReturn(true);
+        when(conferenceRoomChecker.isAvailable(rooms.get(2),plannedConference)).thenReturn(true);
+
+        boolean result = conferenceRoomService.checkIfConferenceRoomsAvailable(roomIds, plannedConference);
+        assertTrue(result);
+    }
+
+    @Test
+    public void test_checkIfConferenceRoomsAvailable_is_false_when_one_checked_room_is_unavailable()  {
+        Conference plannedConference = ConferenceFixture.createConference();
+        List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRoomsWithId(3);
+        List<Integer> roomIds = rooms.stream()
+                .map(ConferenceRoom::getId)
+                .collect(Collectors.toList());
+        assertEquals(3, rooms.size());
+        when(conferenceRoomRepository.getAll()).thenReturn(rooms);
+        when(conferenceRoomChecker.isAvailable(rooms.get(0),plannedConference)).thenReturn(true);
+        when(conferenceRoomChecker.isAvailable(rooms.get(1),plannedConference)).thenReturn(false);
+        when(conferenceRoomChecker.isAvailable(rooms.get(2),plannedConference)).thenReturn(true);
+
+        boolean result = conferenceRoomService.checkIfConferenceRoomsAvailable(roomIds, plannedConference);
+        assertFalse(result);
+    }
+
+    @Test
     public void test_getConferenceRoomAvailabilityItems_throws_DatabaseException()  {
         ConferenceRoom conferenceRoom = mock(ConferenceRoom.class);
         doThrow(new RuntimeException("Database connection failed")).when(conferenceRoom).getConferenceRoomAvailabilityItems();
@@ -144,5 +179,4 @@ public class ConferenceRoomServiceTest {
         assertEquals(availabilityItems.get(1), actualAvailabilityItems.get(0));
         assertEquals(availabilityItems.get(2), actualAvailabilityItems.get(1));
     }
-
 }
