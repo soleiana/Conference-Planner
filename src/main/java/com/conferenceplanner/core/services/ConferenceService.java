@@ -50,11 +50,6 @@ public class ConferenceService {
     }
 
     @Transactional
-    public boolean checkIfConferenceIsUpcoming(Conference conference) {
-        return getUpcomingConferences().contains(conference);
-    }
-
-    @Transactional
     public List<Conference> getAvailableConferences() {
         List<Conference> availableConferences;
 
@@ -83,6 +78,16 @@ public class ConferenceService {
     }
 
     @Transactional
+    public boolean checkIfConferenceIsCancelled(Conference conference) {
+      return conference.isCancelled();
+    }
+
+    @Transactional
+    public boolean checkIfConferenceIsUpcoming(Conference conference) {
+        return conference.isUpcoming();
+    }
+
+    @Transactional
     public void createConference(Conference conference) {
         try {
             conferenceRepository.create(conference);
@@ -92,10 +97,6 @@ public class ConferenceService {
         }
     }
 
-    @Transactional
-    public boolean checkIfConferenceIsCancelled(Conference conference) {
-      return conference.isCancelled();
-    }
 
     @Transactional
     public void cancelConference(Conference conference) {
