@@ -50,6 +50,11 @@ public class ConferenceService {
     }
 
     @Transactional
+    public boolean checkIfConferenceIsUpcoming(Conference conference) {
+        return getUpcomingConferences().contains(conference);
+    }
+
+    @Transactional
     public List<Conference> getAvailableConferences() {
         List<Conference> availableConferences;
 

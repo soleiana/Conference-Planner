@@ -2,10 +2,11 @@ package com.conferenceplanner.rest.controllers;
 
 import com.conferenceplanner.core.services.ConferenceRoomService;
 import com.conferenceplanner.core.services.ConferenceService;
+import com.conferenceplanner.core.services.ParticipantService;
 import com.conferenceplanner.rest.domain.*;
 import com.conferenceplanner.rest.domain.Conference;
-import com.conferenceplanner.rest.domain.Participant;
 import com.conferenceplanner.rest.factories.ConferenceFactory;
+import com.conferenceplanner.rest.factories.ConferenceParticipantFactory;
 import com.conferenceplanner.rest.validators.ConferenceValidator;
 import com.conferenceplanner.rest.validators.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +28,16 @@ public class ConferenceController {
     private ConferenceRoomService conferenceRoomService;
 
     @Autowired
+    private ParticipantService participantService;
+
+    @Autowired
     private ConferenceValidator conferenceValidator;
 
     @Autowired
     private ConferenceFactory conferenceFactory;
+
+    @Autowired
+    private ConferenceParticipantFactory conferenceParticipantFactory;
 
 
     @RequestMapping(method = RequestMethod.POST, consumes =  "application/json", produces = "application/json" )
@@ -94,12 +101,6 @@ public class ConferenceController {
             return new ResponseEntity<>(conferences, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(conferences, HttpStatus.OK);
-
-        //TODO: get all upcoming conferences
-        //TODO: if no conference found, return NOT_FOUND, "No conferences available for cancellation!"
-        //TODO: handle database exception: return internal server error
-        //TODO: return conference list, OK
-
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{available}", produces = "application/json")
@@ -122,8 +123,40 @@ public class ConferenceController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}/participants", produces = "application/json")
-    public ResponseEntity<List<Participant>> getParticipants(@PathVariable Integer id) {
-        return null;
+    public ResponseEntity<ConferenceParticipants> getParticipants(@PathVariable Integer id) {
+
+        ConferenceParticipants conferenceParticipants = new ConferenceParticipants();
+        try {
+            conferenceValidator.validateId(id);
+            com.conferenceplanner.core.domain.Conference coreDomainConference = conferenceService.getConference(id);
+
+            if (coreDomainConference == null) {
+                conferenceParticipants.setErrorMessage("No conference found for selected id!");
+                return new ResponseEntity<>(conferenceParticipants, HttpStatus.NOT_FOUND);
+            }
+            if (!conferenceService.checkIfConferenceIsUpcoming(coreDomainConference)) {
+                conferenceParticipants.setErrorMessage("Conference is not upcoming!");
+                return new ResponseEntity<>(conferenceParticipants, HttpStatus.CONFLICT);
+            }
+
+            List<com.conferenceplanner.core.domain.Participant> coreDomainParticipants = participantService.getParticipants(coreDomainConference);
+
+            if (coreDomainParticipants.isEmpty()) {
+                conferenceParticipants.setErrorMessage("No participants found for selected conference");
+                return new ResponseEntity<>(conferenceParticipants, HttpStatus.NOT_FOUND);
+            }
+
+            conferenceParticipants = conferenceParticipantFactory.create(coreDomainConference, coreDomainParticipants);
+
+        } catch (ValidationException ex) {
+            conferenceParticipants.setErrorMessage(ex.getMessage());
+            return new ResponseEntity<>(conferenceParticipants, HttpStatus.BAD_REQUEST);
+
+        } catch (RuntimeException ex) {
+            conferenceParticipants.setErrorMessage(ex.getMessage());
+            return new ResponseEntity<>(conferenceParticipants, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(conferenceParticipants, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/{id}", produces = "application/json")
