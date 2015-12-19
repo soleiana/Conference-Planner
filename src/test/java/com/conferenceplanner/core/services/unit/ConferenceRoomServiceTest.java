@@ -47,7 +47,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     private ConferenceRoomAvailabilityItemChecker conferenceRoomAvailabilityItemChecker;
 
     @Autowired
-    private ConferenceRoomServiceUnitTestHelper conferenceRoomServiceUnitTestHelper;
+    private ConferenceRoomServiceUnitTestHelper testHelper;
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -213,7 +213,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
         when(conferenceRoomRepository.getById(3)).thenReturn(rooms.get(2));
 
         conferenceRoomService.registerConference(conference, roomIds);
-        conferenceRoomServiceUnitTestHelper.assertRegisterConferenceResult(conference, rooms);
+        testHelper.assertRegisterConferenceResult(conference, rooms);
     }
 
 }

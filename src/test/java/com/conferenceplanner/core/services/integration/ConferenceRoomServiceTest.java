@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 import static org.junit.Assert.*;
 
@@ -39,13 +39,13 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     private ConferenceRoomService conferenceRoomService;
 
     @Autowired
-    private ConferenceRoomServiceIntegrationTestHelper conferenceRoomServiceIntegrationTestHelper;
+    private ConferenceRoomServiceIntegrationTestHelper testHelper;
 
 
     @Before
     public void setUp() throws Exception {
         databaseCleaner.clear();
-        conferenceRoomServiceIntegrationTestHelper.setNow(LocalDateTime.now());
+        testHelper.setNow(LocalDateTime.now());
     }
 
     @Test
@@ -90,7 +90,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
         databaseConfigurator.configure(rooms, conferences);
         List<ConferenceRoom> availableRooms = conferenceRoomService.getAvailableConferenceRooms(plannedConference);
         assertEquals(rooms.size(), availableRooms.size());
-        conferenceRoomServiceIntegrationTestHelper.assertGetAvailableConferenceRoomsResult(availableRooms, plannedConference);
+        testHelper.assertGetAvailableConferenceRoomsResult(availableRooms, plannedConference);
     }
 
     @Test
@@ -111,7 +111,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
         databaseConfigurator.configure(rooms, conferences);
         List<ConferenceRoom> availableRooms = conferenceRoomService.getAvailableConferenceRooms(plannedConference);
         assertEquals(rooms.size(), availableRooms.size());
-        conferenceRoomServiceIntegrationTestHelper.assertGetAvailableConferenceRoomsResult(availableRooms, plannedConference);
+        testHelper.assertGetAvailableConferenceRoomsResult(availableRooms, plannedConference);
     }
 
     @Test
@@ -122,7 +122,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
         databaseConfigurator.configure(rooms, conferences);
         List<ConferenceRoom> availableRooms = conferenceRoomService.getAvailableConferenceRooms(plannedConference);
         assertEquals(rooms.size(), availableRooms.size());
-        conferenceRoomServiceIntegrationTestHelper.assertGetAvailableConferenceRoomsResult(availableRooms, plannedConference);
+        testHelper.assertGetAvailableConferenceRoomsResult(availableRooms, plannedConference);
     }
 
     @Test
@@ -131,9 +131,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms();
         List<Conference> conferences = ConferenceFixture.createNonOverlappingConferences();
         databaseConfigurator.configureWithConferenceRoomAvailability(rooms, conferences);
-        List<Integer> roomIds = rooms.stream()
-                .map(ConferenceRoom::getId)
-                .collect(Collectors.toList());
+        List<Integer> roomIds = testHelper.getConferenceRoomIds(rooms);
         boolean result = conferenceRoomService.checkIfConferenceRoomsAvailable(roomIds, plannedConference);
         assertTrue(result);
     }
@@ -156,7 +154,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
         databaseConfigurator.configureWithConferenceRoomAvailability(room, conferences);
         List<ConferenceRoomAvailabilityItem> availabilityItems = conferenceRoomService.getConferenceRoomAvailabilityItems(room);
         assertEquals(conferences.size(), availabilityItems.size());
-        conferenceRoomServiceIntegrationTestHelper.assertGetConferenceRoomAvailabilityItemsResult(availabilityItems);
+        testHelper.assertGetConferenceRoomAvailabilityItemsResult(availabilityItems);
     }
 
     @Test
@@ -176,7 +174,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
         databaseConfigurator.configureWithConferenceRoomAvailability(room,conferences);
         List<ConferenceRoomAvailabilityItem> availabilityItems = conferenceRoomService.getConferenceRoomAvailabilityItems(room);
         assertEquals(conferences.size()-1, availabilityItems.size());
-        conferenceRoomServiceIntegrationTestHelper.assertGetConferenceRoomAvailabilityItemsResult(availabilityItems);
+        testHelper.assertGetConferenceRoomAvailabilityItemsResult(availabilityItems);
     }
 
     @Test
@@ -187,7 +185,18 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
         databaseConfigurator.configureWithConferenceRoomAvailability(room, conferences);
         List<ConferenceRoomAvailabilityItem> availabilityItems = conferenceRoomService.getConferenceRoomAvailabilityItems(room);
         assertEquals(conferences.size()-1, availabilityItems.size());
-        conferenceRoomServiceIntegrationTestHelper.assertGetConferenceRoomAvailabilityItemsResult(availabilityItems);
+        testHelper.assertGetConferenceRoomAvailabilityItemsResult(availabilityItems);
+    }
+
+    @Test
+    public void test_registerConference() {
+        List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(2);
+        databaseConfigurator.configureConferenceRooms(rooms);
+        List<Integer> roomIds = testHelper.getConferenceRoomIds(rooms);
+        Conference conference = ConferenceFixture.createUpcomingConference();
+        databaseConfigurator.configureConference(conference);
+        conferenceRoomService.registerConference(conference, roomIds);
+        testHelper.assertRegisterConferenceResult(conference, rooms);
     }
 
 }

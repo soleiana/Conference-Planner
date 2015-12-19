@@ -32,28 +32,28 @@ public class ConferenceServiceTest extends SpringContextTest {
     private ConferenceService conferenceService;
 
     @Autowired
-    private ConferenceServiceIntegrationTestHelper conferenceServiceIntegrationTestHelper;
+    private ConferenceServiceIntegrationTestHelper testHelper;
 
 
     @Before
     public void setUp() throws Exception {
         databaseCleaner.clear();
-        conferenceServiceIntegrationTestHelper.setNow(LocalDateTime.now());
+        testHelper.setNow(LocalDateTime.now());
     }
 
     @Test
     public void test_getUpcomingConferences_if_upcoming_conferences_exist() {
         List<Conference> conferences = ConferenceFixture.createUpcomingConferences();
-        databaseConfigurator.configure(conferences);
+        databaseConfigurator.configureConferences(conferences);
         List<Conference> upcomingConferences = conferenceService.getUpcomingConferences();
         assertEquals(conferences.size(), upcomingConferences.size());
-        conferenceServiceIntegrationTestHelper.assertGetUpcomingConferencesResult(upcomingConferences);
+        testHelper.assertGetUpcomingConferencesResult(upcomingConferences);
     }
 
     @Test
     public void test_getUpcomingConferences_if_only_cancelled_conferences_exist() {
         List<Conference> conferences = ConferenceFixture.createCancelledConferences();
-        databaseConfigurator.configure(conferences);
+        databaseConfigurator.configureConferences(conferences);
         List<Conference> upcomingConferences = conferenceService.getUpcomingConferences();
         assertTrue(upcomingConferences.isEmpty());
     }
@@ -62,20 +62,20 @@ public class ConferenceServiceTest extends SpringContextTest {
     public void test_getUpcomingConferences_if_one_cancelled_conference_and_upcoming_conferences_exist() {
         List<Conference> conferences = ConferenceFixture.createUpcomingConferences();
         conferences.get(0).setCancelled(true);
-        databaseConfigurator.configure(conferences);
+        databaseConfigurator.configureConferences(conferences);
         List<Conference> upcomingConferences = conferenceService.getUpcomingConferences();
         assertEquals(conferences.size()-1, upcomingConferences.size());
-        conferenceServiceIntegrationTestHelper.assertGetUpcomingConferencesResult(upcomingConferences);
+        testHelper.assertGetUpcomingConferencesResult(upcomingConferences);
     }
 
     @Test
     public void test_getUpcomingConferences_if_one_conference_in_past_and_upcoming_conferences_exist() {
         List<Conference> conferences = ConferenceFixture.createUpcomingConferences();
         conferences.get(0).setStartDateTime(LocalDateTime.now().minusMinutes(1));
-        databaseConfigurator.configure(conferences);
+        databaseConfigurator.configureConferences(conferences);
         List<Conference> upcomingConferences = conferenceService.getUpcomingConferences();
         assertEquals(conferences.size()-1, upcomingConferences.size());
-        conferenceServiceIntegrationTestHelper.assertGetUpcomingConferencesResult(upcomingConferences);
+        testHelper.assertGetUpcomingConferencesResult(upcomingConferences);
     }
 
     @Test
@@ -100,7 +100,7 @@ public class ConferenceServiceTest extends SpringContextTest {
         databaseConfigurator.configure(rooms, conferences, availabilityItems);
         List<Conference> availableConferences = conferenceService.getAvailableConferences();
         assertEquals(conferences.size(), availableConferences.size());
-        conferenceServiceIntegrationTestHelper.assertGetAvailableConferencesResult(availableConferences);
+        testHelper.assertGetAvailableConferencesResult(availableConferences);
     }
 
     @Test
@@ -113,7 +113,7 @@ public class ConferenceServiceTest extends SpringContextTest {
         databaseConfigurator.configure(rooms, conferences, availabilityItems);
         List<Conference> availableConferences = conferenceService.getAvailableConferences();
         assertEquals(conferences.size(), availableConferences.size());
-        conferenceServiceIntegrationTestHelper.assertGetAvailableConferencesResult(availableConferences);
+        testHelper.assertGetAvailableConferencesResult(availableConferences);
     }
 
     @Test
@@ -125,7 +125,7 @@ public class ConferenceServiceTest extends SpringContextTest {
     @Test
     public void test_getConference_if_conference_exists() {
         Conference conference = ConferenceFixture.createUpcomingConference();
-        databaseConfigurator.configure(conference);
+        databaseConfigurator.configureConference(conference);
         assertNotNull(conference.getId());
         int id = conference.getId();
         Conference actualConference = conferenceService.getConference(id);
@@ -135,7 +135,7 @@ public class ConferenceServiceTest extends SpringContextTest {
     @Test
     public void test_checkIfConferenceExists_is_true_if_planned_conference_exists() {
         Conference conference = ConferenceFixture.createUpcomingConference();
-        databaseConfigurator.configure(conference);
+        databaseConfigurator.configureConference(conference);
         assertNotNull(conference.getId());
         Conference plannedConference = ConferenceFixture.cloneConference(conference);
         boolean result = conferenceService.checkIfConferenceExists(plannedConference);
@@ -152,7 +152,7 @@ public class ConferenceServiceTest extends SpringContextTest {
     @Test
     public void test_checkIfConferenceExists_is_false_if_planned_conference_is_cancelled() {
         Conference conference = ConferenceFixture.createCancelledConference();
-        databaseConfigurator.configure(conference);
+        databaseConfigurator.configureConference(conference);
         assertNotNull(conference.getId());
         Conference plannedConference = ConferenceFixture.cloneConference(conference);
         boolean result = conferenceService.checkIfConferenceExists(plannedConference);
@@ -162,7 +162,7 @@ public class ConferenceServiceTest extends SpringContextTest {
     @Test
     public void test_checkIfConferenceExists_is_false_if_planned_conference_is_with_different_name() {
         Conference conference = ConferenceFixture.createUpcomingConference();
-        databaseConfigurator.configure(conference);
+        databaseConfigurator.configureConference(conference);
         assertNotNull(conference.getId());
         Conference plannedConference = ConferenceFixture.cloneConference(conference);
         plannedConference.setName(plannedConference.getName()+"1");
@@ -173,7 +173,7 @@ public class ConferenceServiceTest extends SpringContextTest {
     @Test
     public void test_checkIfConferenceExists_is_false_if_planned_conference_is_with_different_start_date_time() {
         Conference conference = ConferenceFixture.createUpcomingConference();
-        databaseConfigurator.configure(conference);
+        databaseConfigurator.configureConference(conference);
         assertNotNull(conference.getId());
         Conference plannedConference = ConferenceFixture.cloneConference(conference);
         plannedConference.setStartDateTime(plannedConference.getStartDateTime().plusMinutes(1));
@@ -184,7 +184,7 @@ public class ConferenceServiceTest extends SpringContextTest {
     @Test
     public void test_checkIfConferenceExists_is_false_if_planned_conference_is_with_different_end_date_time() {
         Conference conference = ConferenceFixture.createUpcomingConference();
-        databaseConfigurator.configure(conference);
+        databaseConfigurator.configureConference(conference);
         assertNotNull(conference.getId());
         Conference plannedConference = ConferenceFixture.cloneConference(conference);
         plannedConference.setEndDateTime(plannedConference.getEndDateTime().plusMinutes(1));
@@ -195,7 +195,7 @@ public class ConferenceServiceTest extends SpringContextTest {
     @Test
     public void test_checkIfConferenceIsCancelled_is_true_if_conference_is_cancelled() {
         Conference conference = ConferenceFixture.createCancelledConference();
-        databaseConfigurator.configure(conference);
+        databaseConfigurator.configureConference(conference);
         int id = conference.getId();
         Conference conferenceToCheck = conferenceService.getConference(id);
         boolean result = conferenceService.checkIfConferenceIsCancelled(conferenceToCheck);
@@ -205,7 +205,7 @@ public class ConferenceServiceTest extends SpringContextTest {
     @Test
     public void test_checkIfConferenceIsCancelled_is_false_if_conference_is_not_cancelled() {
         Conference conference = ConferenceFixture.createUpcomingConference();
-        databaseConfigurator.configure(conference);
+        databaseConfigurator.configureConference(conference);
         int id = conference.getId();
         Conference conferenceToCheck = conferenceService.getConference(id);
         boolean result = conferenceService.checkIfConferenceIsCancelled(conferenceToCheck);
@@ -222,7 +222,7 @@ public class ConferenceServiceTest extends SpringContextTest {
     @Test
     public void test_cancelConference() {
         Conference conference = ConferenceFixture.createUpcomingConference();
-        databaseConfigurator.configure(conference);
+        databaseConfigurator.configureConference(conference);
         conferenceService.cancelConference(conference);
         assertTrue(conference.isCancelled());
     }

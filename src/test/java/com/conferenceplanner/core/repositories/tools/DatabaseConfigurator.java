@@ -16,12 +16,16 @@ public class DatabaseConfigurator {
     private DatabaseController databaseController;
 
 
-    public void configure(List<Conference> conferences) {
+    public void configureConferences(List<Conference> conferences) {
         databaseController.persistConferences(conferences);
     }
 
-    public void configure(Conference conference) {
+    public void configureConference(Conference conference) {
         databaseController.persistConference(conference);
+    }
+
+    public void configureConferenceRooms(List<ConferenceRoom> conferenceRooms) {
+        databaseController.persistConferenceRooms(conferenceRooms);
     }
 
     public void configure(List<ConferenceRoom> conferenceRooms, List<Conference> conferences) {
