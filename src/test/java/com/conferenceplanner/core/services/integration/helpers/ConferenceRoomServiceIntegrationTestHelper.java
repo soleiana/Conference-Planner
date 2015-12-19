@@ -14,7 +14,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @Component
-public class ConferenceRoomServiceTestHelper {
+public class ConferenceRoomServiceIntegrationTestHelper {
 
     @Autowired
     private ConferenceRoomChecker conferenceRoomChecker;

@@ -7,7 +7,7 @@ import com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem;
 import com.conferenceplanner.core.repositories.tools.DatabaseCleaner;
 import com.conferenceplanner.core.repositories.tools.DatabaseConfigurator;
 import com.conferenceplanner.core.services.ConferenceService;
-import com.conferenceplanner.core.services.integration.helpers.ConferenceServiceTestHelper;
+import com.conferenceplanner.core.services.integration.helpers.ConferenceServiceIntegrationTestHelper;
 import com.conferenceplanner.core.services.fixtures.ConferenceFixture;
 import com.conferenceplanner.core.services.fixtures.ConferenceRoomAvailabilityItemFixture;
 import com.conferenceplanner.core.services.fixtures.ConferenceRoomFixture;
@@ -33,13 +33,13 @@ public class ConferenceServiceTest extends SpringContextTest {
     private ConferenceService conferenceService;
 
     @Autowired
-    private ConferenceServiceTestHelper conferenceServiceTestHelper;
+    private ConferenceServiceIntegrationTestHelper conferenceServiceIntegrationTestHelper;
 
 
     @Before
     public void setUp() throws Exception {
         databaseCleaner.clear();
-        conferenceServiceTestHelper.setNow(LocalDateTime.now());
+        conferenceServiceIntegrationTestHelper.setNow(LocalDateTime.now());
     }
 
     @Test
@@ -48,7 +48,7 @@ public class ConferenceServiceTest extends SpringContextTest {
         databaseConfigurator.configure(conferences);
         List<Conference> upcomingConferences = conferenceService.getUpcomingConferences();
         assertEquals(conferences.size(), upcomingConferences.size());
-        conferenceServiceTestHelper.assertGetUpcomingConferencesResult(upcomingConferences);
+        conferenceServiceIntegrationTestHelper.assertGetUpcomingConferencesResult(upcomingConferences);
     }
 
     @Test
@@ -66,7 +66,7 @@ public class ConferenceServiceTest extends SpringContextTest {
         databaseConfigurator.configure(conferences);
         List<Conference> upcomingConferences = conferenceService.getUpcomingConferences();
         assertEquals(conferences.size()-1, upcomingConferences.size());
-        conferenceServiceTestHelper.assertGetUpcomingConferencesResult(upcomingConferences);
+        conferenceServiceIntegrationTestHelper.assertGetUpcomingConferencesResult(upcomingConferences);
     }
 
     @Test
@@ -76,7 +76,7 @@ public class ConferenceServiceTest extends SpringContextTest {
         databaseConfigurator.configure(conferences);
         List<Conference> upcomingConferences = conferenceService.getUpcomingConferences();
         assertEquals(conferences.size()-1, upcomingConferences.size());
-        conferenceServiceTestHelper.assertGetUpcomingConferencesResult(upcomingConferences);
+        conferenceServiceIntegrationTestHelper.assertGetUpcomingConferencesResult(upcomingConferences);
     }
 
     @Test
@@ -101,7 +101,7 @@ public class ConferenceServiceTest extends SpringContextTest {
         databaseConfigurator.configure(rooms, conferences, availabilityItems);
         List<Conference> availableConferences = conferenceService.getAvailableConferences();
         assertEquals(conferences.size(), availableConferences.size());
-        conferenceServiceTestHelper.assertGetAvailableConferencesResult(availableConferences);
+        conferenceServiceIntegrationTestHelper.assertGetAvailableConferencesResult(availableConferences);
     }
 
     @Test
@@ -114,7 +114,7 @@ public class ConferenceServiceTest extends SpringContextTest {
         databaseConfigurator.configure(rooms, conferences, availabilityItems);
         List<Conference> availableConferences = conferenceService.getAvailableConferences();
         assertEquals(conferences.size(), availableConferences.size());
-        conferenceServiceTestHelper.assertGetAvailableConferencesResult(availableConferences);
+        conferenceServiceIntegrationTestHelper.assertGetAvailableConferencesResult(availableConferences);
     }
 
     @Test

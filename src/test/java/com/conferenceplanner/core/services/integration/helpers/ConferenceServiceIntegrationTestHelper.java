@@ -12,7 +12,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @Component
-public class ConferenceServiceTestHelper {
+public class ConferenceServiceIntegrationTestHelper {
 
     @Autowired
     private ConferenceChecker conferenceChecker;

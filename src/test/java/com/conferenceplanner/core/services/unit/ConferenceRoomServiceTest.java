@@ -1,13 +1,16 @@
 package com.conferenceplanner.core.services.unit;
 
+import com.conferenceplanner.SpringContextTest;
 import com.conferenceplanner.core.domain.Conference;
 import com.conferenceplanner.core.domain.ConferenceRoom;
 import com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem;
+import com.conferenceplanner.core.repositories.ConferenceRoomAvailabilityItemRepository;
 import com.conferenceplanner.core.repositories.ConferenceRoomRepository;
 import com.conferenceplanner.core.services.*;
 import com.conferenceplanner.core.services.fixtures.ConferenceFixture;
 import com.conferenceplanner.core.services.fixtures.ConferenceRoomAvailabilityItemFixture;
 import com.conferenceplanner.core.services.fixtures.ConferenceRoomFixture;
+import com.conferenceplanner.core.services.unit.helpers.ConferenceRoomServiceUnitTestHelper;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -15,16 +18,18 @@ import org.junit.rules.ExpectedException;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-public class ConferenceRoomServiceTest {
+public class ConferenceRoomServiceTest extends SpringContextTest {
 
     @InjectMocks
     private ConferenceRoomService conferenceRoomService;
@@ -33,11 +38,16 @@ public class ConferenceRoomServiceTest {
     private ConferenceRoomRepository conferenceRoomRepository;
 
     @Mock
+    private ConferenceRoomAvailabilityItemRepository conferenceRoomAvailabilityItemRepository;
+
+    @Mock
     private ConferenceRoomChecker conferenceRoomChecker;
 
     @Mock
     private ConferenceRoomAvailabilityItemChecker conferenceRoomAvailabilityItemChecker;
 
+    @Autowired
+    private ConferenceRoomServiceUnitTestHelper conferenceRoomServiceUnitTestHelper;
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -179,4 +189,31 @@ public class ConferenceRoomServiceTest {
         assertEquals(availabilityItems.get(1), actualAvailabilityItems.get(0));
         assertEquals(availabilityItems.get(2), actualAvailabilityItems.get(1));
     }
+
+    @Test
+    public void test_registerConference_throws_DatabaseException() {
+        Conference conference = ConferenceFixture.createConference();
+        doThrow(new RuntimeException("Database connection failed")).when(conferenceRoomRepository).getById(1);
+        expectedException.expect(DatabaseException.class);
+        expectedException.expectMessage("Database connection failed");
+        conferenceRoomService.registerConference(conference, Arrays.asList(1, 2, 3));
+
+    }
+
+    @Test
+    public void test_registerConference() {
+        Conference conference = ConferenceFixture.createConference();
+        List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRoomsWithId(3);
+        assertEquals(3, rooms.size());
+        List<Integer> roomIds = rooms.stream()
+                .map(ConferenceRoom::getId)
+                .collect(Collectors.toList());
+        when(conferenceRoomRepository.getById(1)).thenReturn(rooms.get(0));
+        when(conferenceRoomRepository.getById(2)).thenReturn(rooms.get(1));
+        when(conferenceRoomRepository.getById(3)).thenReturn(rooms.get(2));
+
+        conferenceRoomService.registerConference(conference, roomIds);
+        conferenceRoomServiceUnitTestHelper.assertRegisterConferenceResult(conference, rooms);
+    }
+
 }
