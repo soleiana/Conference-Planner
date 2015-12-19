@@ -107,7 +107,7 @@ public class ConferenceServiceTest {
     }
 
     @Test
-    public void test_checkIfConferenceExists_is_true_if_conference_exists() {
+    public void test_checkIfConferenceExists_is_true_if_planned_conference_exists() {
         Conference conference = ConferenceFixture.createConference();
         conference.setName("name");
         Conference plannedConference = ConferenceFixture.createConference();
@@ -129,7 +129,7 @@ public class ConferenceServiceTest {
     }
 
     @Test
-    public void test_checkIfConferenceExists_is_false_if_planned_conference_with_different_name() {
+    public void test_checkIfConferenceExists_is_false_if_planned_conference_is_with_different_name() {
         Conference conference = ConferenceFixture.createConference();
         conference.setName("name");
         Conference plannedConference = ConferenceFixture.createConference();
@@ -140,7 +140,7 @@ public class ConferenceServiceTest {
     }
 
     @Test
-    public void test_checkIfConferenceExists_is_false_if_planned_conference_with_different_start_date_time() {
+    public void test_checkIfConferenceExists_is_false_if_planned_conference_is_with_different_start_date_time() {
         Conference conference = ConferenceFixture.createConference();
         conference.setName("name");
         Conference plannedConference = ConferenceFixture.createConference();
@@ -152,7 +152,7 @@ public class ConferenceServiceTest {
     }
 
     @Test
-    public void test_checkIfConferenceExists_is_false_if_planned_conference_with_different_end_date_time() {
+    public void test_checkIfConferenceExists_is_false_if_planned_conference_is_with_different_end_date_time() {
         Conference conference = ConferenceFixture.createConference();
         conference.setName("name");
         Conference plannedConference = ConferenceFixture.createConference();

@@ -19,4 +19,11 @@ public class StringNormalizerTest {
         String normalisedString = StringNormalizer.createNormalizedConferenceRoomName(nameString);
         assertEquals("M/S Baltic Queen conference", normalisedString);
     }
+
+    @Test
+    public void test_CreateNormalizedConferenceName() {
+        String nameString = "  Jfokus    2016   ";
+        String normalisedString = StringNormalizer.createNormalizedConferenceName(nameString);
+        assertEquals("Jfokus 2016", normalisedString);
+    }
 }

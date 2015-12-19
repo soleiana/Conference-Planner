@@ -34,10 +34,20 @@ public class DatabaseController {
     }
 
     @Transactional
+    public void persistConference(Conference conference) {
+        conferenceRepository.create(conference);
+    }
+
+    @Transactional
     public void persistConferenceRooms(List<ConferenceRoom> conferenceRooms) {
         for (ConferenceRoom room: conferenceRooms) {
             conferenceRoomRepository.create(room);
         }
+    }
+
+    @Transactional
+    public void persistConferenceRoom(ConferenceRoom conferenceRoom) {
+        conferenceRoomRepository.create(conferenceRoom);
     }
 
     @Transactional
@@ -72,6 +82,13 @@ public class DatabaseController {
         for(ConferenceRoom room: conferenceRooms) {
             for (Conference conference: conferences)
                 setupRelationship(room, conference, new ConferenceRoomAvailabilityItem(room.getMaxSeats()));
+        }
+    }
+
+    @Transactional
+    public void setupRelationshipWithAvailability(ConferenceRoom conferenceRoom, List<Conference> conferences) {
+        for (Conference conference: conferences) {
+                setupRelationship(conferenceRoom, conference, new ConferenceRoomAvailabilityItem(conferenceRoom.getMaxSeats()));
         }
     }
 

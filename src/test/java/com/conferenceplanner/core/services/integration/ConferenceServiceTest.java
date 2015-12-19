@@ -16,7 +16,6 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -126,17 +125,30 @@ public class ConferenceServiceTest extends SpringContextTest {
     @Test
     public void test_getConference_if_conference_exists() {
         Conference conference = ConferenceFixture.createUpcomingConference();
-        databaseConfigurator.configure(Arrays.asList(conference));
+        databaseConfigurator.configure(conference);
         assertNotNull(conference.getId());
         int id = conference.getId();
         Conference actualConference = conferenceService.getConference(id);
         assertEquals(conference, actualConference);
     }
 
+    public void test_checkIfConferenceExists_is_true_if_planned_conference_exists() {
+
+    }
+
+    @Test
+    public void test_checkIfConferenceExists_is_false_if_no_conferences_exist() {
+    }
+
+    @Test
+    public void test_checkIfConferenceExists_is_false_if_planned_conference_is_with_different_name() {
+
+    }
+
     @Test
     public void test_checkIfConferenceIsCancelled_is_true_if_conference_is_cancelled() {
         Conference conference = ConferenceFixture.createCancelledConference();
-        databaseConfigurator.configure(Arrays.asList(conference));
+        databaseConfigurator.configure(conference);
         int id = conference.getId();
         Conference conferenceToCheck = conferenceService.getConference(id);
         boolean result = conferenceService.checkIfConferenceIsCancelled(conferenceToCheck);
@@ -146,7 +158,7 @@ public class ConferenceServiceTest extends SpringContextTest {
     @Test
     public void test_checkIfConferenceIsCancelled_is_false_if_conference_is_not_cancelled() {
         Conference conference = ConferenceFixture.createUpcomingConference();
-        databaseConfigurator.configure(Arrays.asList(conference));
+        databaseConfigurator.configure(conference);
         int id = conference.getId();
         Conference conferenceToCheck = conferenceService.getConference(id);
         boolean result = conferenceService.checkIfConferenceIsCancelled(conferenceToCheck);
@@ -156,8 +168,9 @@ public class ConferenceServiceTest extends SpringContextTest {
     @Test
     public void test_cancelConference() {
         Conference conference = ConferenceFixture.createUpcomingConference();
-        databaseConfigurator.configure(Arrays.asList(conference));
+        databaseConfigurator.configure(conference);
         conferenceService.cancelConference(conference);
         assertTrue(conference.isCancelled());
     }
+
 }

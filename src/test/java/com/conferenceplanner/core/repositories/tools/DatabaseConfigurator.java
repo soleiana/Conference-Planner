@@ -20,6 +20,10 @@ public class DatabaseConfigurator {
         databaseController.persistConferences(conferences);
     }
 
+    public void configure(Conference conference) {
+        databaseController.persistConference(conference);
+    }
+
     public void configure(List<ConferenceRoom> conferenceRooms, List<Conference> conferences) {
         databaseController.persistConferences(conferences);
         databaseController.persistConferenceRooms(conferenceRooms);
@@ -38,5 +42,11 @@ public class DatabaseConfigurator {
         databaseController.persistConferences(conferences);
         databaseController.persistConferenceRooms(conferenceRooms);
         databaseController.setupRelationshipWithAvailability(conferenceRooms, conferences);
+    }
+
+    public void configureWithConferenceRoomAvailability(ConferenceRoom conferenceRoom, List<Conference> conferences) {
+        databaseController.persistConferences(conferences);
+        databaseController.persistConferenceRoom(conferenceRoom);
+        databaseController.setupRelationshipWithAvailability(conferenceRoom, conferences);
     }
 }
