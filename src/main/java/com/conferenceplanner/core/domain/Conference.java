@@ -77,6 +77,14 @@ public class Conference {
         getConferenceRoomAvailabilityItems().add(item);
     }
 
+    public void addParticipant(Participant participant) {
+        getParticipants().add(participant);
+    }
+
+    public void removeParticipant(Participant participant) {
+        getParticipants().remove(participant);
+    }
+
     public Integer getId() {
         return id;
     }

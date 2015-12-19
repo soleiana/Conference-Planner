@@ -3,9 +3,11 @@ package com.conferenceplanner.core.repositories.tools;
 import com.conferenceplanner.core.domain.Conference;
 import com.conferenceplanner.core.domain.ConferenceRoom;
 import com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem;
+import com.conferenceplanner.core.domain.Participant;
 import com.conferenceplanner.core.repositories.ConferenceRepository;
 import com.conferenceplanner.core.repositories.ConferenceRoomAvailabilityItemRepository;
 import com.conferenceplanner.core.repositories.ConferenceRoomRepository;
+import com.conferenceplanner.core.repositories.ParticipantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,9 @@ public class DatabaseController {
 
     @Autowired
     private ConferenceRoomAvailabilityItemRepository conferenceRoomAvailabilityItemRepository;
+
+    @Autowired
+    private ParticipantRepository participantRepository;
 
 
     @Transactional
@@ -48,6 +53,13 @@ public class DatabaseController {
     @Transactional
     public void persistConferenceRoom(ConferenceRoom conferenceRoom) {
         conferenceRoomRepository.create(conferenceRoom);
+    }
+
+    @Transactional
+    public void persistParticipants(List<Participant> participants) {
+        for (Participant participant: participants) {
+            participantRepository.create(participant);
+        }
     }
 
     @Transactional
@@ -92,13 +104,22 @@ public class DatabaseController {
         }
     }
 
+    @Transactional
+    public void setupRelationship(Conference conference, List<Participant> participants) {
+        for (Participant participant: participants) {
+            setupRelationship(conference, participant);
+        }
+    }
+
+    private void setupRelationship(Conference conference, Participant participant) {
+        conference.addParticipant(participant);
+    }
+
     private void setupRelationship(ConferenceRoom conferenceRoom, Conference conference) {
         conferenceRoom.addConference(conference);
     }
 
-    private void setupRelationship(ConferenceRoom conferenceRoom, Conference conference,
-                                   ConferenceRoomAvailabilityItem availabilityItem) {
-
+    private void setupRelationship(ConferenceRoom conferenceRoom, Conference conference, ConferenceRoomAvailabilityItem availabilityItem) {
         conferenceRoom.addConferenceRoomAvailabilityItem(availabilityItem);
         conference.addConferenceRoomAvailabilityItem(availabilityItem);
         availabilityItem.setConferenceRoom(conferenceRoom);
