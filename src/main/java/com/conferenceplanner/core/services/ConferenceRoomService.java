@@ -2,12 +2,12 @@ package com.conferenceplanner.core.services;
 
 import com.conferenceplanner.core.domain.Conference;
 import com.conferenceplanner.core.domain.ConferenceRoom;
+import com.conferenceplanner.core.domain.ConferenceRoomAvailability;
 import com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem;
 import com.conferenceplanner.core.repositories.ConferenceRoomAvailabilityItemRepository;
 import com.conferenceplanner.core.repositories.ConferenceRoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -29,9 +29,6 @@ public class ConferenceRoomService {
     private ConferenceRoomChecker conferenceRoomChecker;
 
     @Autowired
-    private ConferenceRoomAvailabilityItemChecker conferenceRoomAvailabilityItemChecker;
-
-    @Autowired
     private ConferenceRoomServiceAssistant serviceAssistant;
 
 
@@ -42,19 +39,10 @@ public class ConferenceRoomService {
        serviceAssistant.createConferenceRoom(conferenceRoom);
     }
 
-    public ConferenceRoom getConferenceRoom(Integer id) {
-        ConferenceRoom conferenceRoom;
-        try {
-            conferenceRoom = conferenceRoomRepository.getById(id);
-
-        } catch (Exception ex) {
-            throw new DatabaseException("Persistence level error: " + ex.getMessage());
-        }
-        return conferenceRoom;
-    }
 
     public List<ConferenceRoom> getAvailableConferenceRooms(Conference plannedConference) {
         List<ConferenceRoom> availableRooms;
+
         try {
             List<ConferenceRoom> allRooms = conferenceRoomRepository.getAll();
             availableRooms = allRooms.stream()
@@ -80,19 +68,21 @@ public class ConferenceRoomService {
         return availableRoomIds.containsAll(conferenceRoomIds);
     }
 
-    public List<ConferenceRoomAvailabilityItem> getConferenceRoomAvailabilityItems(ConferenceRoom conferenceRoom) {
+    public ConferenceRoomAvailability getConferenceRoomAvailabilityItems(int conferenceRoomId) {
+        ConferenceRoomAvailability availability = new ConferenceRoomAvailability();
+        List<ConferenceRoomAvailabilityItem> availabilityItems;
 
-        List<ConferenceRoomAvailabilityItem> actualAvailabilityItems;
-        try {
-            List<ConferenceRoomAvailabilityItem> allAvailabilityItems = conferenceRoom.getConferenceRoomAvailabilityItems();
-            actualAvailabilityItems = allAvailabilityItems.stream()
-                    .filter(conferenceRoomAvailabilityItemChecker::isActual)
-                    .collect(Collectors.toList());
-        }  catch (Exception ex) {
-            throw new DatabaseException("Persistence level error: " + ex.getMessage());
+        com.conferenceplanner.core.domain.ConferenceRoom conferenceRoom = serviceAssistant.getConferenceRoom(conferenceRoomId);
+        if (conferenceRoom == null) {
+            throw new AccessException("No conference room found for selected id!", AccessErrorCode.NOT_FOUND);
         }
-
-        return actualAvailabilityItems;
+        availabilityItems = serviceAssistant.getConferenceRoomAvailabilityItems(conferenceRoom);
+        if (availabilityItems.isEmpty()) {
+            throw new AccessException("No upcoming conferences in this conference room!", AccessErrorCode.NOT_FOUND);
+        }
+        availability.setConferenceRoom(conferenceRoom);
+        availability.setAvailabilityItems(availabilityItems);
+        return availability;
     }
 
     public void registerConference(Conference conference, List<Integer> conferenceRoomIds) {
@@ -111,4 +101,6 @@ public class ConferenceRoomService {
             throw new DatabaseException("Persistence level error: " + ex.getMessage());
         }
     }
+
+
 }

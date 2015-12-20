@@ -97,31 +97,22 @@ public class ConferenceRoomController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}/conference-room-availability", produces = "application/json")
     public ResponseEntity<ConferenceRoomAvailability> getConferenceRoomAvailability(@PathVariable Integer id) {
-
         ConferenceRoomAvailability conferenceRoomAvailability = new ConferenceRoomAvailability();
-
         try {
             conferenceRoomValidator.validateId(id);
-            com.conferenceplanner.core.domain.ConferenceRoom coreDomainConferenceRoom = conferenceRoomService.getConferenceRoom(id);
 
-            if (coreDomainConferenceRoom == null) {
-                conferenceRoomAvailability.setErrorMessage("No conference room found for selected id!");
-                return new ResponseEntity<>(conferenceRoomAvailability, HttpStatus.NOT_FOUND);
-            }
+            com.conferenceplanner.core.domain.ConferenceRoomAvailability coreDomainConferenceRoomAvailability =
+                    conferenceRoomService.getConferenceRoomAvailabilityItems(id);
 
-            List<com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem> coreDomainConferenceRoomAvailabilityItems =
-                    conferenceRoomService.getConferenceRoomAvailabilityItems(coreDomainConferenceRoom);
-
-            if (coreDomainConferenceRoomAvailabilityItems.isEmpty()) {
-                conferenceRoomAvailability.setErrorMessage("No upcoming conferences in this conference room!");
-                return new ResponseEntity<>(conferenceRoomAvailability, HttpStatus.NOT_FOUND);
-            }
-
-            conferenceRoomAvailability = conferenceRoomAvailabilityFactory.create(coreDomainConferenceRoomAvailabilityItems, coreDomainConferenceRoom);
+            conferenceRoomAvailability = conferenceRoomAvailabilityFactory.create(coreDomainConferenceRoomAvailability);
 
         } catch(ValidationException ex) {
             conferenceRoomAvailability.setErrorMessage(ex.getMessage());
             return new ResponseEntity<>(conferenceRoomAvailability, HttpStatus.BAD_REQUEST);
+
+        }  catch (AccessException ex) {
+            conferenceRoomAvailability.setErrorMessage(ex.getMessage());
+            return new ResponseEntity<>(conferenceRoomAvailability, ResourceAccessErrorCode.RESOURCE_NOT_FOUND.getHttpStatus());
 
         } catch (RuntimeException ex) {
             conferenceRoomAvailability.setErrorMessage(ex.getMessage());

@@ -21,24 +21,23 @@ public class ConferenceRoomAvailabilityFactory {
     private ConferenceFactory conferenceFactory;
 
 
-    public ConferenceRoomAvailability create(List<ConferenceRoomAvailabilityItem> conferenceRoomAvailabilityItems,
-                                             ConferenceRoom conferenceRoom) {
+    public ConferenceRoomAvailability create(com.conferenceplanner.core.domain.ConferenceRoomAvailability conferenceRoomAvailability) {
 
-        ConferenceRoomAvailability conferenceRoomAvailability = new ConferenceRoomAvailability();
+        ConferenceRoomAvailability restDomainConferenceRoomAvailability = new ConferenceRoomAvailability();
+        List<com.conferenceplanner.rest.domain.ConferenceRoomAvailabilityItem> restDomainAvailabilityItems = new ArrayList<>();
 
-        List<com.conferenceplanner.rest.domain.ConferenceRoomAvailabilityItem> restDomainAvailabilityItems =
-                new ArrayList<>();
-
-        for (ConferenceRoomAvailabilityItem item: conferenceRoomAvailabilityItems) {
+        List<ConferenceRoomAvailabilityItem> availabilityItems = conferenceRoomAvailability.getAvailabilityItems();
+        for (ConferenceRoomAvailabilityItem item: availabilityItems) {
             com.conferenceplanner.rest.domain.ConferenceRoomAvailabilityItem restDomainAvailabilityItem = create(item);
             restDomainAvailabilityItems.add(restDomainAvailabilityItem);
         }
 
-        com.conferenceplanner.rest.domain.ConferenceRoom restDomainConferenceRoom = conferenceRoomFactory.create(conferenceRoom);
-        conferenceRoomAvailability.setConferenceRoom(restDomainConferenceRoom);
-        conferenceRoomAvailability.setConferenceRoomAvailabilityItems(restDomainAvailabilityItems);
-        return conferenceRoomAvailability;
+        ConferenceRoom conferenceRoom = conferenceRoomAvailability.getConferenceRoom();
 
+        com.conferenceplanner.rest.domain.ConferenceRoom restDomainConferenceRoom = conferenceRoomFactory.create(conferenceRoom);
+        restDomainConferenceRoomAvailability.setConferenceRoom(restDomainConferenceRoom);
+        restDomainConferenceRoomAvailability.setConferenceRoomAvailabilityItems(restDomainAvailabilityItems);
+        return restDomainConferenceRoomAvailability;
     }
 
     private com.conferenceplanner.rest.domain.ConferenceRoomAvailabilityItem create(ConferenceRoomAvailabilityItem conferenceRoomAvailabilityItem) {

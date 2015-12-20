@@ -3,6 +3,7 @@ package com.conferenceplanner.core.services.unit;
 import com.conferenceplanner.SpringContextTest;
 import com.conferenceplanner.core.domain.Conference;
 import com.conferenceplanner.core.domain.ConferenceRoom;
+import com.conferenceplanner.core.domain.ConferenceRoomAvailability;
 import com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem;
 import com.conferenceplanner.core.repositories.ConferenceRoomAvailabilityItemRepository;
 import com.conferenceplanner.core.repositories.ConferenceRoomRepository;
@@ -146,28 +147,37 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     }
 
     @Test
-    public void test_getConferenceRoomAvailabilityItems_throws_DatabaseException()  {
-        ConferenceRoom conferenceRoom = mock(ConferenceRoom.class);
-        doThrow(new RuntimeException("Database connection failed")).when(conferenceRoom).getConferenceRoomAvailabilityItems();
-        expectedException.expect(DatabaseException.class);
-        expectedException.expectMessage("Database connection failed");
-        conferenceRoomService.getConferenceRoomAvailabilityItems(conferenceRoom);
+    public void test_getConferenceRoomAvailabilityItems_throws_AccessException_if_conference_room_does_not_exist()  {
+        int id = 1;
+        when(serviceAssistant.getConferenceRoom(id)).thenReturn(null);
+        expectedException.expect(AccessException.class);
+        conferenceRoomService.getConferenceRoomAvailabilityItems(id);
+    }
+
+    @Test
+    public void test_getConferenceRoomAvailabilityItems_throws_AccessException_if_no_conference_registered()  {
+        int id = 1;
+        ConferenceRoom conferenceRoom = ConferenceRoomFixture.createConferenceRoom();
+        List<ConferenceRoomAvailabilityItem> emptyList = new ArrayList<>();
+        when(serviceAssistant.getConferenceRoom(id)).thenReturn(conferenceRoom);
+        when(serviceAssistant.getConferenceRoomAvailabilityItems(conferenceRoom)).thenReturn(emptyList);
+        expectedException.expect(AccessException.class);
+        conferenceRoomService.getConferenceRoomAvailabilityItems(id);
     }
 
     @Test
     public void test_getConferenceRoomAvailabilityItems()  {
+        int id = 1;
         ConferenceRoom conferenceRoom = ConferenceRoomFixture.createConferenceRoom();
         List<ConferenceRoomAvailabilityItem> availabilityItems =
-                ConferenceRoomAvailabilityItemFixture.createConferenceRoomsWithAvailableSeats(3);
+                ConferenceRoomAvailabilityItemFixture.createConferenceRoomsWithAvailableSeats(2);
         conferenceRoom.setConferenceRoomAvailabilityItems(availabilityItems);
-        when(conferenceRoomAvailabilityItemChecker.isActual(availabilityItems.get(0))).thenReturn(false);
-        when(conferenceRoomAvailabilityItemChecker.isActual(availabilityItems.get(1))).thenReturn(true);
-        when(conferenceRoomAvailabilityItemChecker.isActual(availabilityItems.get(2))).thenReturn(true);
-
-        List<ConferenceRoomAvailabilityItem> actualAvailabilityItems = conferenceRoomService.getConferenceRoomAvailabilityItems(conferenceRoom);
-        assertEquals(2, actualAvailabilityItems.size());
-        assertEquals(availabilityItems.get(1), actualAvailabilityItems.get(0));
-        assertEquals(availabilityItems.get(2), actualAvailabilityItems.get(1));
+        when(serviceAssistant.getConferenceRoom(id)).thenReturn(conferenceRoom);
+        when(serviceAssistant.getConferenceRoomAvailabilityItems(conferenceRoom)).thenReturn(availabilityItems);
+        ConferenceRoomAvailability availability = conferenceRoomService.getConferenceRoomAvailabilityItems(id);
+        assertEquals(2, availability.getAvailabilityItems().size());
+        assertEquals(availabilityItems.get(0), availability.getAvailabilityItems().get(0));
+        assertEquals(availabilityItems.get(1), availability.getAvailabilityItems().get(1));
     }
 
     @Test
@@ -177,7 +187,6 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
         expectedException.expect(DatabaseException.class);
         expectedException.expectMessage("Database connection failed");
         conferenceRoomService.registerConference(conference, Arrays.asList(1, 2, 3));
-
     }
 
     @Test
