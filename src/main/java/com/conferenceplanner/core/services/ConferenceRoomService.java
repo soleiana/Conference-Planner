@@ -7,7 +7,7 @@ import com.conferenceplanner.core.repositories.ConferenceRoomAvailabilityItemRep
 import com.conferenceplanner.core.repositories.ConferenceRoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,7 +29,6 @@ public class ConferenceRoomService {
     private ConferenceRoomAvailabilityItemChecker conferenceRoomAvailabilityItemChecker;
 
 
-    @Transactional
     public boolean checkIfConferenceRoomExists(ConferenceRoom conferenceRoom) {
         try {
             List<ConferenceRoom> conferenceRooms = conferenceRoomRepository.getAll();
@@ -46,7 +45,6 @@ public class ConferenceRoomService {
         return false;
     }
 
-    @Transactional
     public void createConferenceRoom(ConferenceRoom conferenceRoom) {
         try {
             conferenceRoomRepository.create(conferenceRoom);
@@ -56,7 +54,6 @@ public class ConferenceRoomService {
         }
     }
 
-    @Transactional
     public ConferenceRoom getConferenceRoom(Integer id) {
         ConferenceRoom conferenceRoom;
         try {
@@ -68,7 +65,6 @@ public class ConferenceRoomService {
         return conferenceRoom;
     }
 
-    @Transactional
     public List<ConferenceRoom> getAvailableConferenceRooms(Conference plannedConference) {
 
         List<ConferenceRoom> availableRooms;
@@ -85,7 +81,6 @@ public class ConferenceRoomService {
         return availableRooms;
     }
 
-    @Transactional
     public boolean checkIfConferenceRoomsAvailable(List<Integer> conferenceRoomIds, Conference plannedConference) {
         List<ConferenceRoom> availableRooms = getAvailableConferenceRooms(plannedConference);
 
@@ -96,7 +91,6 @@ public class ConferenceRoomService {
         return availableRoomIds.containsAll(conferenceRoomIds);
     }
 
-    @Transactional
     public List<ConferenceRoomAvailabilityItem> getConferenceRoomAvailabilityItems(ConferenceRoom conferenceRoom) {
 
         List<ConferenceRoomAvailabilityItem> actualAvailabilityItems;
@@ -112,7 +106,6 @@ public class ConferenceRoomService {
         return actualAvailabilityItems;
     }
 
-    @Transactional
     public void registerConference(Conference conference, List<Integer> conferenceRoomIds) {
         try {
             for (int roomId : conferenceRoomIds) {

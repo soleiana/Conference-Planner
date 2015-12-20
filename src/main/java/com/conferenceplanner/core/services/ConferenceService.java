@@ -4,7 +4,6 @@ import com.conferenceplanner.core.domain.Conference;
 import com.conferenceplanner.core.repositories.ConferenceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,7 +18,6 @@ public class ConferenceService {
     private ConferenceChecker conferenceChecker;
 
 
-    @Transactional
     public boolean checkIfConferenceExists(Conference conference) {
         try {
             List<Conference> conferences = conferenceRepository.getUpcoming();
@@ -37,7 +35,6 @@ public class ConferenceService {
         return false;
     }
 
-    @Transactional
     public List<Conference> getUpcomingConferences() {
         List<Conference> conferences;
         try {
@@ -49,7 +46,6 @@ public class ConferenceService {
         return conferences;
     }
 
-    @Transactional
     public List<Conference> getAvailableConferences() {
         List<Conference> availableConferences;
 
@@ -65,7 +61,6 @@ public class ConferenceService {
         return availableConferences;
     }
 
-    @Transactional
     public Conference getConference(int conferenceId) {
         Conference conference;
         try {
@@ -77,17 +72,15 @@ public class ConferenceService {
         return conference;
     }
 
-    @Transactional
     public boolean checkIfConferenceIsCancelled(Conference conference) {
       return conference.isCancelled();
     }
 
-    @Transactional
+
     public boolean checkIfConferenceIsUpcoming(Conference conference) {
         return conference.isUpcoming();
     }
 
-    @Transactional
     public void createConference(Conference conference) {
         try {
             conferenceRepository.create(conference);
@@ -98,7 +91,6 @@ public class ConferenceService {
     }
 
 
-    @Transactional
     public void cancelConference(Conference conference) {
         conference.setCancelled(true);
     }
