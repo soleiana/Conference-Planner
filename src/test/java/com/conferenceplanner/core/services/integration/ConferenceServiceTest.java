@@ -51,14 +51,6 @@ public class ConferenceServiceTest extends SpringContextTest {
     }
 
     @Test
-    public void test_getUpcomingConferences_if_only_cancelled_conferences_exist() {
-        List<Conference> conferences = ConferenceFixture.createCancelledConferences();
-        databaseConfigurator.configureConferences(conferences);
-        List<Conference> upcomingConferences = conferenceService.getUpcomingConferences();
-        assertTrue(upcomingConferences.isEmpty());
-    }
-
-    @Test
     public void test_getUpcomingConferences_if_one_cancelled_conference_and_upcoming_conferences_exist() {
         List<Conference> conferences = ConferenceFixture.createUpcomingConferences();
         conferences.get(0).setCancelled(true);
@@ -76,18 +68,6 @@ public class ConferenceServiceTest extends SpringContextTest {
         List<Conference> upcomingConferences = conferenceService.getUpcomingConferences();
         assertEquals(conferences.size()-1, upcomingConferences.size());
         testHelper.assertGetUpcomingConferencesResult(upcomingConferences);
-    }
-
-    @Test
-    public void test_getAvailableConferences_if_no_conference_room_has_available_seats() {
-        List<Conference> conferences = ConferenceFixture.createUpcomingConferences();
-        List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(2);
-
-        List<ConferenceRoomAvailabilityItem> availabilityItems =
-                ConferenceRoomAvailabilityItemFixture.createFullyOccupiedConferenceRooms(rooms.size());
-        databaseConfigurator.configure(rooms, conferences, availabilityItems);
-        List<Conference> availableConferences = conferenceService.getAvailableConferences();
-        assertTrue(availableConferences.isEmpty());
     }
 
     @Test

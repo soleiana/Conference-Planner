@@ -144,4 +144,21 @@ public class ConferenceServiceAssistantTest extends SpringContextTest {
         testHelper.assertRegisterConferenceResult(conference, rooms);
     }
 
+    @Test
+    public void test_getUpcomingConferences_throws_DatabaseException() {
+        doThrow(new RuntimeException("Database connection failed")).when(conferenceRepository).getUpcoming();
+        expectedException.expect(DatabaseException.class);
+        expectedException.expectMessage("Database connection failed");
+        serviceAssistant.getUpcomingConferences();
+    }
+
+    @Test
+    public void test_getUpcomingConferences() {
+        List<Conference> upcomingConferences = ConferenceFixture.createUpcomingConferences();
+        when(conferenceRepository.getUpcoming()).thenReturn(upcomingConferences);
+        List<Conference> conferences = serviceAssistant.getUpcomingConferences();
+        assertEquals(upcomingConferences.size(), conferences.size());
+    }
+
+
 }

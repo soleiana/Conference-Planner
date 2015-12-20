@@ -13,11 +13,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class ConferenceServiceAssistantTest extends SpringContextTest {
 
@@ -114,6 +114,43 @@ public class ConferenceServiceAssistantTest extends SpringContextTest {
         databaseConfigurator.configureConference(conference);
         serviceAssistant.registerConference(conference, roomIds);
         testHelper.assertRegisterConferenceResult(conference, rooms);
+    }
+
+    @Test
+    public void test_getUpcomingConferences_if_upcoming_conferences_exist() {
+        List<Conference> conferences = ConferenceFixture.createUpcomingConferences();
+        databaseConfigurator.configureConferences(conferences);
+        List<Conference> upcomingConferences = serviceAssistant.getUpcomingConferences();
+        assertEquals(conferences.size(), upcomingConferences.size());
+        testHelper.assertGetUpcomingConferencesResult(upcomingConferences);
+    }
+
+    @Test
+    public void test_getUpcomingConferences_if_only_cancelled_conferences_exist() {
+        List<Conference> conferences = ConferenceFixture.createCancelledConferences();
+        databaseConfigurator.configureConferences(conferences);
+        List<Conference> upcomingConferences = serviceAssistant.getUpcomingConferences();
+        assertTrue(upcomingConferences.isEmpty());
+    }
+
+    @Test
+    public void test_getUpcomingConferences_if_one_cancelled_conference_and_upcoming_conferences_exist() {
+        List<Conference> conferences = ConferenceFixture.createUpcomingConferences();
+        conferences.get(0).setCancelled(true);
+        databaseConfigurator.configureConferences(conferences);
+        List<Conference> upcomingConferences = serviceAssistant.getUpcomingConferences();
+        assertEquals(conferences.size()-1, upcomingConferences.size());
+        testHelper.assertGetUpcomingConferencesResult(upcomingConferences);
+    }
+
+    @Test
+    public void test_getUpcomingConferences_if_one_conference_in_past_and_upcoming_conferences_exist() {
+        List<Conference> conferences = ConferenceFixture.createUpcomingConferences();
+        conferences.get(0).setStartDateTime(LocalDateTime.now().minusMinutes(1));
+        databaseConfigurator.configureConferences(conferences);
+        List<Conference> upcomingConferences = serviceAssistant.getUpcomingConferences();
+        assertEquals(conferences.size()-1, upcomingConferences.size());
+        testHelper.assertGetUpcomingConferencesResult(upcomingConferences);
     }
 
 }

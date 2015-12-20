@@ -67,4 +67,14 @@ public class ConferenceServiceAssistant {
         }
     }
 
+    public List<Conference> getUpcomingConferences() {
+        List<Conference> conferences;
+        try {
+            conferences = conferenceRepository.getUpcoming();
+        } catch (Exception ex) {
+            throw new DatabaseException("Persistence level error: " + ex.getMessage());
+        }
+        return conferences;
+    }
+
 }

@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,19 +46,20 @@ public class ConferenceServiceTest {
     }
 
     @Test
-    public void test_getUpcomingConferences_throws_DatabaseException() {
-        doThrow(new RuntimeException("Database connection failed")).when(conferenceRepository).getUpcoming();
-        expectedException.expect(DatabaseException.class);
-        expectedException.expectMessage("Database connection failed");
-        conferenceService.getUpcomingConferences();
+    public void test_getUpcomingConferences() {
+        List<Conference> upcomingConferences = ConferenceFixture.createUpcomingConferences();
+        when(serviceAssistant.getUpcomingConferences()).thenReturn(upcomingConferences);
+        List<Conference> conferences = conferenceService.getUpcomingConferences();
+        assertEquals(upcomingConferences.size(), conferences.size());
     }
 
     @Test
-    public void test_getUpcomingConferences() {
-        List<Conference> upcomingConferences = ConferenceFixture.createUpcomingConferences();
-        when(conferenceRepository.getUpcoming()).thenReturn(upcomingConferences);
-        List<Conference> conferences = conferenceService.getUpcomingConferences();
-        assertEquals(upcomingConferences.size(), conferences.size());
+    public void test_getUpcomingConferences_throws_AccessException_if_no_upcoming_conferences() {
+        List<Conference> emptyList = new ArrayList<>();
+        when(serviceAssistant.getUpcomingConferences()).thenReturn(emptyList);
+        expectedException.expect(AccessException.class);
+        conferenceService.getUpcomingConferences();
+
     }
 
     @Test

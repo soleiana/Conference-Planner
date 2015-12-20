@@ -27,11 +27,9 @@ public class ConferenceService {
 
 
     public List<Conference> getUpcomingConferences() {
-        List<Conference> conferences;
-        try {
-            conferences = conferenceRepository.getUpcoming();
-        } catch (Exception ex) {
-            throw new DatabaseException("Persistence level error: " + ex.getMessage());
+        List<Conference> conferences = serviceAssistant.getUpcomingConferences();
+        if (conferences.isEmpty()) {
+            throw new AccessException("No upcoming conferences!", AccessErrorCode.NOT_FOUND);
         }
         return conferences;
     }

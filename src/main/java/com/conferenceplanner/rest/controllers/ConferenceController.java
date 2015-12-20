@@ -66,11 +66,12 @@ public class ConferenceController {
         Conferences conferences = new Conferences();
         try {
             List<com.conferenceplanner.core.domain.Conference> coreDomainConferences = conferenceService.getUpcomingConferences();
+            List<Conference> restDomainConferences = conferenceFactory.create(coreDomainConferences);
+            conferences.setConferences(restDomainConferences);
 
-            if (coreDomainConferences.isEmpty()) {
-                conferences.setErrorMessage("No conferences available for cancellation!");
-                return new ResponseEntity<>(conferences, HttpStatus.NOT_FOUND);
-            }
+        } catch (AccessException ex) {
+            conferences.setErrorMessage(ex.getMessage());
+            return new ResponseEntity<>(conferences, HttpStatus.NOT_FOUND);
 
         } catch (RuntimeException ex) {
             conferences.setErrorMessage(ex.getMessage());
@@ -85,6 +86,8 @@ public class ConferenceController {
         Conferences conferences = new Conferences();
         try {
             List<com.conferenceplanner.core.domain.Conference> coreDomainConferences = conferenceService.getAvailableConferences();
+            List<Conference> restDomainConferences = conferenceFactory.create(coreDomainConferences);
+            conferences.setConferences(restDomainConferences);
 
             if (coreDomainConferences.isEmpty()) {
                 conferences.setErrorMessage("No conferences available for registration!");
