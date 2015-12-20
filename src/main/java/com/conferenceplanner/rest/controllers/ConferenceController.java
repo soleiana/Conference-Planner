@@ -68,11 +68,10 @@ public class ConferenceController {
         return  new ResponseEntity<>("Conference created.", HttpStatus.OK);
     }
 
+
     @RequestMapping(method = RequestMethod.GET, value = "/{upcoming}", produces = "application/json")
     public ResponseEntity<Conferences> getUpcomingConferences(@PathVariable String upcoming) {
-
         Conferences conferences = new Conferences();
-
         try {
             List<com.conferenceplanner.core.domain.Conference> coreDomainConferences = conferenceService.getUpcomingConferences();
 
@@ -88,10 +87,10 @@ public class ConferenceController {
         return new ResponseEntity<>(conferences, HttpStatus.OK);
     }
 
+
     @RequestMapping(method = RequestMethod.GET, value = "/{available}", produces = "application/json")
     public ResponseEntity<Conferences> getAvailableConferences(@PathVariable String available) {
         Conferences conferences = new Conferences();
-
         try {
             List<com.conferenceplanner.core.domain.Conference> coreDomainConferences = conferenceService.getAvailableConferences();
 
@@ -107,6 +106,7 @@ public class ConferenceController {
         return new ResponseEntity<>(conferences, HttpStatus.OK);
     }
 
+
     @RequestMapping(method = RequestMethod.GET, value = "/{id}/participants", produces = "application/json")
     public ResponseEntity<ConferenceParticipants> getParticipants(@PathVariable Integer id) {
 
@@ -119,18 +119,15 @@ public class ConferenceController {
                 conferenceParticipants.setErrorMessage("No conference found for selected id!");
                 return new ResponseEntity<>(conferenceParticipants, HttpStatus.NOT_FOUND);
             }
-            if (!conferenceService.checkIfConferenceIsUpcoming(coreDomainConference)) {
+            if (!coreDomainConference.isUpcoming()) {
                 conferenceParticipants.setErrorMessage("Conference is not upcoming!");
                 return new ResponseEntity<>(conferenceParticipants, HttpStatus.CONFLICT);
             }
-
             List<com.conferenceplanner.core.domain.Participant> coreDomainParticipants = participantService.getParticipants(coreDomainConference);
-
             if (coreDomainParticipants.isEmpty()) {
                 conferenceParticipants.setErrorMessage("No participants found for selected conference");
                 return new ResponseEntity<>(conferenceParticipants, HttpStatus.NOT_FOUND);
             }
-
             conferenceParticipants = conferenceParticipantFactory.create(coreDomainConference, coreDomainParticipants);
 
         } catch (ValidationException ex) {
@@ -144,6 +141,7 @@ public class ConferenceController {
         return new ResponseEntity<>(conferenceParticipants, HttpStatus.OK);
     }
 
+
     @RequestMapping(method = RequestMethod.PUT, value = "/{id}", produces = "application/json")
     public ResponseEntity<String> cancelConference(@PathVariable Integer id) {
 
@@ -154,7 +152,7 @@ public class ConferenceController {
             if (coreDomainConference == null) {
                 return new ResponseEntity<>("No conference found for selected id!", HttpStatus.NOT_FOUND);
             }
-            if (conferenceService.checkIfConferenceIsCancelled(coreDomainConference)) {
+            if (coreDomainConference.isCancelled()) {
                 return new ResponseEntity<>("Conference already cancelled", HttpStatus.CONFLICT);
             }
             conferenceService.cancelConference(coreDomainConference);
@@ -165,7 +163,6 @@ public class ConferenceController {
         } catch (RuntimeException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
         return new ResponseEntity<>("Conference cancelled.", HttpStatus.OK);
 
     }

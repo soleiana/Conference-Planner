@@ -7,6 +7,8 @@ import com.conferenceplanner.core.repositories.ConferenceRoomAvailabilityItemRep
 import com.conferenceplanner.core.repositories.ConferenceRoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.stream.Collectors;
 
 
 @Component
+@Transactional
 public class ConferenceRoomService {
 
     @Autowired

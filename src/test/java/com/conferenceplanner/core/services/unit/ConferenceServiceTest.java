@@ -164,35 +164,6 @@ public class ConferenceServiceTest {
     }
 
     @Test
-    public void test_checkIfConferenceIsUpcoming_is_true_if_conference_is_upcoming() {
-        Conference conference = ConferenceFixture.createUpcomingConference();
-        boolean result = conferenceService.checkIfConferenceIsUpcoming(conference);
-        assertTrue(result);
-    }
-
-    @Test
-    public void test_checkIfConferenceIsUpcoming_is_false_if_conference_is_cancelled() {
-        Conference conference = ConferenceFixture.createCancelledConference();
-        boolean result = conferenceService.checkIfConferenceIsUpcoming(conference);
-        assertFalse(result);
-    }
-
-    @Test
-    public void test_checkIfConferenceIsUpcoming_is_false_if_conference_is_ongoing() {
-        Conference conference = ConferenceFixture.createOngoingConference();
-        boolean result = conferenceService.checkIfConferenceIsUpcoming(conference);
-        assertFalse(result);
-    }
-
-    @Test
-    public void test_checkIfConferenceIsCancelled_is_true_if_conference_is_cancelled() {
-        Conference conference = ConferenceFixture.createUpcomingConference();
-        conference.setCancelled(true);
-        boolean result = conferenceService.checkIfConferenceIsCancelled(conference);
-        assertTrue(result);
-    }
-
-    @Test
     public void test_createConference_throws_DatabaseException() {
         Conference conference = ConferenceFixture.createConference();
         doThrow(new RuntimeException("Database connection failed")).when(conferenceRepository).create(conference);

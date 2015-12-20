@@ -4,11 +4,13 @@ import com.conferenceplanner.core.domain.Conference;
 import com.conferenceplanner.core.repositories.ConferenceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@Transactional
 public class ConferenceService {
 
     @Autowired
@@ -39,7 +41,6 @@ public class ConferenceService {
         List<Conference> conferences;
         try {
             conferences = conferenceRepository.getUpcoming();
-
         } catch (Exception ex) {
             throw new DatabaseException("Persistence level error: " + ex.getMessage());
         }
@@ -48,7 +49,6 @@ public class ConferenceService {
 
     public List<Conference> getAvailableConferences() {
         List<Conference> availableConferences;
-
         try {
             List<Conference> conferences = conferenceRepository.getUpcoming();
             availableConferences = conferences.stream()
@@ -65,34 +65,26 @@ public class ConferenceService {
         Conference conference;
         try {
             conference = conferenceRepository.getById(conferenceId);
-
         } catch (Exception ex) {
             throw new DatabaseException("Persistence level error: " + ex.getMessage());
         }
         return conference;
     }
 
-    public boolean checkIfConferenceIsCancelled(Conference conference) {
-      return conference.isCancelled();
-    }
-
-
-    public boolean checkIfConferenceIsUpcoming(Conference conference) {
-        return conference.isUpcoming();
-    }
-
     public void createConference(Conference conference) {
         try {
             conferenceRepository.create(conference);
-
         } catch (Exception ex) {
             throw new DatabaseException("Persistence level error: " + ex.getMessage());
         }
     }
 
-
     public void cancelConference(Conference conference) {
-        conference.setCancelled(true);
+        try {
+            conference.setCancelled(true);
+        } catch (Exception ex) {
+            throw new DatabaseException("Persistence level error: " + ex.getMessage());
+        }
     }
 
 }

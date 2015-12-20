@@ -193,50 +193,6 @@ public class ConferenceServiceTest extends SpringContextTest {
     }
 
     @Test
-    public void test_checkIfConferenceIsCancelled_is_true_if_conference_is_cancelled() {
-        Conference conference = ConferenceFixture.createCancelledConference();
-        databaseConfigurator.configureConference(conference);
-        int id = conference.getId();
-        Conference conferenceToCheck = conferenceService.getConference(id);
-        boolean result = conferenceService.checkIfConferenceIsCancelled(conferenceToCheck);
-        assertTrue(result);
-    }
-
-    @Test
-    public void test_checkIfConferenceIsCancelled_is_false_if_conference_is_not_cancelled() {
-        Conference conference = ConferenceFixture.createUpcomingConference();
-        databaseConfigurator.configureConference(conference);
-        int id = conference.getId();
-        Conference conferenceToCheck = conferenceService.getConference(id);
-        boolean result = conferenceService.checkIfConferenceIsCancelled(conferenceToCheck);
-        assertFalse(result);
-    }
-
-    @Test
-    public void test_checkIfConferenceIsUpcoming_is_true_if_conference_is_upcoming() {
-        Conference conference = ConferenceFixture.createUpcomingConference();
-        databaseConfigurator.configureConference(conference);
-        boolean result = conferenceService.checkIfConferenceIsUpcoming(conference);
-        assertTrue(result);
-    }
-
-    @Test
-    public void test_checkIfConferenceIsUpcoming_is_false_if_conference_is_cancelled() {
-        Conference conference = ConferenceFixture.createCancelledConference();
-        databaseConfigurator.configureConference(conference);
-        boolean result = conferenceService.checkIfConferenceIsUpcoming(conference);
-        assertFalse(result);
-    }
-
-    @Test
-    public void test_checkIfConferenceIsUpcoming_is_false_if_conference_is_ongoing() {
-        Conference conference = ConferenceFixture.createOngoingConference();
-        databaseConfigurator.configureConference(conference);
-        boolean result = conferenceService.checkIfConferenceIsUpcoming(conference);
-        assertFalse(result);
-    }
-
-    @Test
     public void test_createConference() {
         Conference conference = ConferenceFixture.createUpcomingConference();
         conferenceService.createConference(conference);
