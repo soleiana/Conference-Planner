@@ -31,30 +31,15 @@ public class ConferenceRoomService {
     @Autowired
     private ConferenceRoomAvailabilityItemChecker conferenceRoomAvailabilityItemChecker;
 
+    @Autowired
+    private ConferenceRoomServiceAssistant serviceAssistant;
 
-    public boolean checkIfConferenceRoomExists(ConferenceRoom conferenceRoom) {
-        try {
-            List<ConferenceRoom> conferenceRooms = conferenceRoomRepository.getAll();
-
-            for (ConferenceRoom room : conferenceRooms) {
-                if (room.getName().equalsIgnoreCase(conferenceRoom.getName())
-                        && room.getLocation().equalsIgnoreCase(conferenceRoom.getLocation())) {
-                    return true;
-                }
-            }
-        } catch (Exception ex) {
-            throw new DatabaseException("Persistence level error: " + ex.getMessage());
-        }
-        return false;
-    }
 
     public void createConferenceRoom(ConferenceRoom conferenceRoom) {
-        try {
-            conferenceRoomRepository.create(conferenceRoom);
-
-        } catch (Exception ex) {
-            throw new DatabaseException("Persistence level error: " + ex.getMessage());
-        }
+       if (serviceAssistant.checkIfConferenceRoomExists(conferenceRoom)) {
+           throw new AccessException("Conference room already exists!", AccessErrorCode.CONFLICT);
+       }
+       serviceAssistant.createConferenceRoom(conferenceRoom);
     }
 
     public ConferenceRoom getConferenceRoom(Integer id) {

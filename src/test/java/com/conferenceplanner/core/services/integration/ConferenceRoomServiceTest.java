@@ -4,7 +4,6 @@ import com.conferenceplanner.SpringContextTest;
 import com.conferenceplanner.core.domain.Conference;
 import com.conferenceplanner.core.domain.ConferenceRoom;
 import com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem;
-import com.conferenceplanner.core.repositories.ConferenceRoomRepository;
 import com.conferenceplanner.core.repositories.tools.DatabaseCleaner;
 import com.conferenceplanner.core.repositories.tools.DatabaseConfigurator;
 import com.conferenceplanner.core.services.ConferenceRoomService;
@@ -34,9 +33,6 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     private DatabaseConfigurator databaseConfigurator;
 
     @Autowired
-    private ConferenceRoomRepository conferenceRoomRepository;
-
-    @Autowired
     private ConferenceRoomService conferenceRoomService;
 
     @Autowired
@@ -47,33 +43,6 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     public void setUp() throws Exception {
         databaseCleaner.clear();
         testHelper.setNow(LocalDateTime.now());
-    }
-
-    @Test
-    public void test_checkIfConferenceRoomExists_is_true_if_conference_room_exists() {
-        ConferenceRoom room1 = ConferenceRoomFixture.createConferenceRoom(7);
-        conferenceRoomRepository.create(room1);
-        assertNotNull(room1.getId());
-        ConferenceRoom room2 = ConferenceRoomFixture.createConferenceRoom(6);
-        boolean result = conferenceRoomService.checkIfConferenceRoomExists(room2);
-        assertTrue(result);
-    }
-
-    @Test
-    public void test_checkIfConferenceRoomExists_is_false_if_conference_room_does_not_exist() {
-        ConferenceRoom room1 = ConferenceRoomFixture.createConferenceRoom(7);
-        conferenceRoomRepository.create(room1);
-        assertNotNull(room1.getId());
-        ConferenceRoom room2 = ConferenceRoomFixture.createAnotherConferenceRoom(7);
-        boolean result = conferenceRoomService.checkIfConferenceRoomExists(room2);
-        assertFalse(result);
-    }
-
-    @Test
-    public void test_checkIfConferenceRoomExists_is_false_if_no_conference_room_exists() {
-        ConferenceRoom room = ConferenceRoomFixture.createConferenceRoom();
-        boolean result = conferenceRoomService.checkIfConferenceRoomExists(room);
-        assertFalse(result);
     }
 
     @Test

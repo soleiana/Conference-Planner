@@ -1,5 +1,6 @@
 package com.conferenceplanner.rest.controllers;
 
+import com.conferenceplanner.core.services.AccessException;
 import com.conferenceplanner.core.services.ConferenceRoomService;
 import com.conferenceplanner.rest.domain.*;
 import com.conferenceplanner.rest.domain.ConferenceInterval;
@@ -15,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,7 +23,6 @@ import java.util.List;
 
 @Controller
 @RequestMapping(value = "/conference-rooms")
-@Transactional
 public class ConferenceRoomController {
 
     @Autowired
@@ -50,19 +49,17 @@ public class ConferenceRoomController {
         try {
             conferenceRoomValidator.validate(conferenceRoom);
             com.conferenceplanner.core.domain.ConferenceRoom coreDomainConferenceRoom = conferenceRoomFactory.create(conferenceRoom);
-
-            if (conferenceRoomService.checkIfConferenceRoomExists(coreDomainConferenceRoom)) {
-                return new ResponseEntity<>("Conference room already exists!", HttpStatus.CONFLICT);
-            }
             conferenceRoomService.createConferenceRoom(coreDomainConferenceRoom);
 
-        } catch(ValidationException ex) {
+        } catch (ValidationException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+
+        } catch (AccessException ex) {
+            return new ResponseEntity<>(ex.getMessage(), ResourceAccessErrorCode.RESOURCE_CONFLICT.getHttpStatus());
 
         } catch (RuntimeException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
         return new ResponseEntity<>("Conference room created.", HttpStatus.CREATED);
     }
 

@@ -25,6 +25,10 @@ public class DatabaseConfigurator {
         databaseController.persistConference(conference);
     }
 
+    public void configureConferenceRoom(ConferenceRoom conferenceRoom) {
+        databaseController.persistConferenceRoom(conferenceRoom);
+    }
+
     public void configureConferenceRooms(List<ConferenceRoom> conferenceRooms) {
         databaseController.persistConferenceRooms(conferenceRooms);
     }

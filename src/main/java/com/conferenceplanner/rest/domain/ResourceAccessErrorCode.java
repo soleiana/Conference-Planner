@@ -17,7 +17,7 @@ public enum ResourceAccessErrorCode {
         this.httpStatus = httpStatus;
     }
 
-    public HttpStatus getHttpStatus(AccessErrorCode errorCode) {
+    public HttpStatus getHttpStatus() {
         return httpStatus;
     }
 }
