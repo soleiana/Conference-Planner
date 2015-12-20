@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class ConferenceRoomAvailabilityFactory {
@@ -24,13 +25,11 @@ public class ConferenceRoomAvailabilityFactory {
     public ConferenceRoomAvailability create(com.conferenceplanner.core.domain.ConferenceRoomAvailability conferenceRoomAvailability) {
 
         ConferenceRoomAvailability restDomainConferenceRoomAvailability = new ConferenceRoomAvailability();
-        List<com.conferenceplanner.rest.domain.ConferenceRoomAvailabilityItem> restDomainAvailabilityItems = new ArrayList<>();
 
-        List<ConferenceRoomAvailabilityItem> availabilityItems = conferenceRoomAvailability.getAvailabilityItems();
-        for (ConferenceRoomAvailabilityItem item: availabilityItems) {
-            com.conferenceplanner.rest.domain.ConferenceRoomAvailabilityItem restDomainAvailabilityItem = create(item);
-            restDomainAvailabilityItems.add(restDomainAvailabilityItem);
-        }
+        List<com.conferenceplanner.rest.domain.ConferenceRoomAvailabilityItem> restDomainAvailabilityItems =
+                conferenceRoomAvailability.getAvailabilityItems().stream()
+                .map(this::create)
+                .collect(Collectors.toList());
 
         ConferenceRoom conferenceRoom = conferenceRoomAvailability.getConferenceRoom();
 

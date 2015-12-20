@@ -2,11 +2,16 @@ package com.conferenceplanner.rest.factories;
 
 import com.conferenceplanner.core.domain.Conference;
 import com.conferenceplanner.rest.domain.ConferenceInterval;
+import com.conferenceplanner.rest.domain.Conferences;
 import com.conferenceplanner.rest.factories.helpers.StringNormalizer;
 import com.conferenceplanner.rest.parsers.ConferenceParser;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Component
 public class ConferenceFactory {
@@ -39,5 +44,10 @@ public class ConferenceFactory {
         ConferenceInterval interval = ConferenceParser.parse(startDateTime, endDateTime);
         String name = StringNormalizer.createNormalizedConferenceName(nameString);
         return new Conference(name, interval.getStartDateTime(), interval.getEndDateTime(), false);
+    }
+
+    public List<com.conferenceplanner.rest.domain.Conference> create(List<Conference> conferences) {
+        return conferences.stream().map(this::create).collect(Collectors.toList());
+
     }
 }

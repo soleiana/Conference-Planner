@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Component
@@ -22,16 +23,14 @@ public class ConferenceParticipantFactory {
     public ConferenceParticipants create(Conference conference, List<Participant> participants) {
         ConferenceParticipants conferenceParticipants = new ConferenceParticipants();
 
-        List<com.conferenceplanner.rest.domain.Participant> restDomainParticipants = new ArrayList<>();
+        List<com.conferenceplanner.rest.domain.Participant> restDomainParticipants = participants
+                .stream()
+                .map(participantFactory::create)
+                .collect(Collectors.toList());
 
-        for (Participant participant: participants) {
-            com.conferenceplanner.rest.domain.Participant restDomainParticipant = participantFactory.create(participant);
-            restDomainParticipants.add(restDomainParticipant);
-        }
         com.conferenceplanner.rest.domain.Conference restDomainConference = conferenceFactory.create(conference);
         conferenceParticipants.setParticipants(restDomainParticipants);
         conferenceParticipants.setConference(restDomainConference);
-
         return conferenceParticipants;
     }
 }

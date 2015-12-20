@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Component
@@ -18,12 +19,7 @@ public class ConferenceRoomFactory {
     }
 
     public List<com.conferenceplanner.rest.domain.ConferenceRoom> create(List<ConferenceRoom> conferenceRooms) {
-        List<com.conferenceplanner.rest.domain.ConferenceRoom> rooms = new ArrayList<>();
-        for (ConferenceRoom coreDomainRoom: conferenceRooms){
-            com.conferenceplanner.rest.domain.ConferenceRoom room = create(coreDomainRoom);
-            rooms.add(room);
-        }
-        return rooms;
+        return conferenceRooms.stream().map(this::create).collect(Collectors.toList());
     }
 
     public com.conferenceplanner.rest.domain.ConferenceRoom create(ConferenceRoom conferenceRoom) {
