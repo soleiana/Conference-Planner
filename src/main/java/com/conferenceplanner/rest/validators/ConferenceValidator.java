@@ -40,9 +40,8 @@ public class ConferenceValidator {
     public ConferenceInterval validate(String startDateTimeString, String endDateTimeString) {
         ConferenceInterval interval;
 
-        if (startDateTimeString == null || startDateTimeString.isEmpty()
-                || endDateTimeString == null || endDateTimeString.isEmpty()) {
-            throw new ValidationException("Start date time or end date time are are null or empty");
+        if (startDateTimeString == null || endDateTimeString == null) {
+            throw new ValidationException("Start date time or end date time are are null");
         }
 
         try {
@@ -93,8 +92,8 @@ public class ConferenceValidator {
     }
 
     private void validate(String nameString) {
-        if (nameString == null || nameString.isEmpty()) {
-            throw new ValidationException("Name is null or empty");
+        if (nameString == null) {
+            throw new ValidationException("Name is null");
         }
 
         int length = nameString.trim().replaceAll("\\s+", " ").length();

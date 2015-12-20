@@ -33,16 +33,16 @@ public class ConferenceValidatorTest extends SpringContextTest {
         String startDateTimeString = null;
         String endDateTimeString = "12/12/2015 12:20";
         expectedException.expect(ValidationException.class);
-        expectedException.expectMessage("Start date time or end date time are are null or empty");
+        expectedException.expectMessage("Start date time or end date time are are null");
         validator.validate(startDateTimeString, endDateTimeString);
     }
 
     @Test
     public void test_validator_throws_ValidationException_if_empty_conference_start_date_time() {
-        String startDateTimeString = "";
-        String endDateTimeString = "12/12/2015 12:20";
+        String endDateTimeString = null;
+        String startDateTimeString = "12/12/2015 12:20";
         expectedException.expect(ValidationException.class);
-        expectedException.expectMessage("Start date time or end date time are are null or empty");
+        expectedException.expectMessage("Start date time or end date time are are null");
         validator.validate(startDateTimeString, endDateTimeString);
     }
 
@@ -61,7 +61,6 @@ public class ConferenceValidatorTest extends SpringContextTest {
         expectedException.expectMessage("Invalid start dateTime or end dateTime format");
         validator.validate(startDateTimeString, endDateTimeString);
     }
-
 
     @Test
     public void test_validator_throws_ValidationException_if_too_few_days_before_conference_start() {
@@ -151,7 +150,6 @@ public class ConferenceValidatorTest extends SpringContextTest {
         }
     }
 
-
     @Test
     public void test_validator_throws_ValidationException_if_empty_conference_conference_room_id_list() {
         Conference conference = createConference("name");
@@ -184,7 +182,7 @@ public class ConferenceValidatorTest extends SpringContextTest {
     }
 
     @Test
-    public void test_throws_ParserException_if_too_long_name() {
+    public void test_throws_ValidationException_if_too_long_conference_name() {
         expectedException.expect(ValidationException.class);
         expectedException.expectMessage("Invalid name length");
         validator.validate(createConference(getTooLongName()));
@@ -222,6 +220,7 @@ public class ConferenceValidatorTest extends SpringContextTest {
 
     private List<String> getTooShortNames() {
         List<String> strings = new ArrayList<>();
+        strings.add("");
         strings.add("  ");
         strings.add("a");
         strings.add("0");

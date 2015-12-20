@@ -67,6 +67,8 @@ public class ConferenceParserTest {
 
     private List<String> geInvalidDateTimeStrings(){
         List<String> strings = new ArrayList<>();
+        strings.add("");
+        strings.add(" ");
         strings.add("a2/12/2015");
         strings.add("12/ 12/2015");
         strings.add("12/12/2015  12:20");

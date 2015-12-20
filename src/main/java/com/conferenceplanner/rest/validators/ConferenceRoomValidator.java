@@ -19,10 +19,8 @@ public class ConferenceRoomValidator {
         String locationString = conferenceRoom.getLocation();
         Integer maxSeats = conferenceRoom.getMaxSeats();
 
-        if (nameString == null || nameString.isEmpty()
-                || locationString == null || locationString.isEmpty()
-                || maxSeats == null) {
-            throw new ValidationException("One ore more parameters are null or empty");
+        if (nameString == null || locationString == null || maxSeats == null) {
+            throw new ValidationException("One ore more parameters are null");
         }
 
         if (maxSeats < MIN_SEATS_IN_CONFERENCE_ROOM || maxSeats > MAX_SEATS_IN_CONFERENCE_ROOM) {

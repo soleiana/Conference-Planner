@@ -8,6 +8,9 @@ import org.junit.rules.ExpectedException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 public class ConferenceRoomValidatorTest extends SpringContextTest {
@@ -25,28 +28,26 @@ public class ConferenceRoomValidatorTest extends SpringContextTest {
         conferenceRoom.setMaxSeats(20);
 
         expectedException.expect(ValidationException.class);
-        expectedException.expectMessage("One ore more parameters are null or empty");
+        expectedException.expectMessage("One ore more parameters are null");
         assertNull(conferenceRoom.getLocation());
         validator.validate(conferenceRoom);
     }
 
     @Test
     public void test_validator_throws_ValidationException_if_null_conference_room_id() {
-
         expectedException.expect(ValidationException.class);
         expectedException.expectMessage("Conference room id is null");
         validator.validateId(null);
     }
 
     @Test
-    public void test_validator_throws_ValidationException_if_empty_conference_room_location() {
+    public void test_validator_throws_ValidationException_if_null_max_seats() {
         ConferenceRoom conferenceRoom = new ConferenceRoom();
         conferenceRoom.setName("name");
-        conferenceRoom.setLocation("");
-        conferenceRoom.setMaxSeats(20);
+        conferenceRoom.setLocation("location");
 
         expectedException.expect(ValidationException.class);
-        expectedException.expectMessage("One ore more parameters are null or empty");
+        expectedException.expectMessage("One ore more parameters are null");
         validator.validate(conferenceRoom);
     }
 
@@ -97,7 +98,6 @@ public class ConferenceRoomValidatorTest extends SpringContextTest {
         } catch (Exception ex) {
             fail();
         }
-
     }
 
     @Test
@@ -116,5 +116,5 @@ public class ConferenceRoomValidatorTest extends SpringContextTest {
         validator.validateId(null);
 
     }
-
 }
+

@@ -40,6 +40,24 @@ public class ConferenceRoomParserTest {
     }
 
     @Test
+    public void test_throws_ParserException_if_empty_name() {
+        String nameString = "";
+        String locationString = "A/A  aaa  aaa";
+        expectedException.expect(ParserException.class);
+        expectedException.expectMessage("Invalid name length");
+        ConferenceRoomParser.parse(locationString, nameString);
+    }
+
+    @Test
+    public void test_throws_ParserException_if_white_space_character_name() {
+        String nameString = " ";
+        String locationString = "A/A  aaa  aaa";
+        expectedException.expect(ParserException.class);
+        expectedException.expectMessage("Invalid name length");
+        ConferenceRoomParser.parse(locationString, nameString);
+    }
+
+    @Test
     public void test_throws_ParserException_if_too_short_name() {
         String nameString = "A/A aaa conference";
         String locationString = "A/A  aaa  aaa";
@@ -54,6 +72,24 @@ public class ConferenceRoomParserTest {
         String locationString = "A/A  aaa  aaa";
         expectedException.expect(ParserException.class);
         expectedException.expectMessage("Invalid name length");
+        ConferenceRoomParser.parse(locationString, nameString);
+    }
+
+    @Test
+    public void test_throws_ParserException_if_empty_location(){
+        String nameString = "A/A aaa aaa  conference";
+        String locationString = "";
+        expectedException.expect(ParserException.class);
+        expectedException.expectMessage("Invalid location length");
+        ConferenceRoomParser.parse(locationString, nameString);
+    }
+
+    @Test
+    public void test_throws_ParserException_if_white_space_character_location(){
+        String nameString = "A/A aaa aaa  conference";
+        String locationString = " ";
+        expectedException.expect(ParserException.class);
+        expectedException.expectMessage("Invalid location length");
         ConferenceRoomParser.parse(locationString, nameString);
     }
 
