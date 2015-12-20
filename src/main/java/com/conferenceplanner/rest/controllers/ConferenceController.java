@@ -1,5 +1,6 @@
 package com.conferenceplanner.rest.controllers;
 
+import com.conferenceplanner.core.services.AccessException;
 import com.conferenceplanner.core.services.ConferenceRoomService;
 import com.conferenceplanner.core.services.ConferenceService;
 import com.conferenceplanner.core.services.ParticipantService;
@@ -13,14 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
 @RequestMapping(value = "/conferences")
-@Transactional
 public class ConferenceController {
 
     @Autowired
@@ -47,22 +46,15 @@ public class ConferenceController {
         try {
             conferenceValidator.validate(conference);
             com.conferenceplanner.core.domain.Conference coreDomainConference = conferenceFactory.create(conference);
-
-            if(conferenceService.checkIfConferenceExists(coreDomainConference)) {
-                return new ResponseEntity<>("Conference already exists!", HttpStatus.CONFLICT);
-            }
-
-            if(conferenceRoomService.checkIfConferenceRoomsAvailable(conference.getConferenceRoomIds(), coreDomainConference)) {
-                return new ResponseEntity<>("Conference room(s) not available!", HttpStatus.CONFLICT);
-            }
-
-            conferenceService.createConference(coreDomainConference);
-            conferenceRoomService.registerConference(coreDomainConference, conference.getConferenceRoomIds());
+            conferenceService.createConference(coreDomainConference, conference.getConferenceRoomIds());
 
         } catch (ValidationException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 
-        } catch (RuntimeException ex) {
+        } catch (AccessException ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+        }
+        catch (RuntimeException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return  new ResponseEntity<>("Conference created.", HttpStatus.OK);

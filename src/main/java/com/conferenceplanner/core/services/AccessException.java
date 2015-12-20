@@ -7,4 +7,8 @@ public class AccessException extends RuntimeException {
     public AccessException(String errorMessage, AccessErrorCode errorCode) {
         super(errorMessage);
     }
+
+    public AccessErrorCode getErrorCode() {
+        return errorCode;
+    }
 }

@@ -11,7 +11,7 @@ import com.conferenceplanner.core.services.*;
 import com.conferenceplanner.core.services.fixtures.ConferenceFixture;
 import com.conferenceplanner.core.services.fixtures.ConferenceRoomAvailabilityItemFixture;
 import com.conferenceplanner.core.services.fixtures.ConferenceRoomFixture;
-import com.conferenceplanner.core.services.unit.helpers.ConferenceRoomServiceUnitTestHelper;
+import com.conferenceplanner.core.services.unit.helpers.ConferenceServiceUnitTestHelper;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -23,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,7 +50,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     private ConferenceRoomAvailabilityItemChecker conferenceRoomAvailabilityItemChecker;
 
     @Autowired
-    private ConferenceRoomServiceUnitTestHelper testHelper;
+    private ConferenceServiceUnitTestHelper testHelper;
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -178,31 +177,6 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
         assertEquals(2, availability.getAvailabilityItems().size());
         assertEquals(availabilityItems.get(0), availability.getAvailabilityItems().get(0));
         assertEquals(availabilityItems.get(1), availability.getAvailabilityItems().get(1));
-    }
-
-    @Test
-    public void test_registerConference_throws_DatabaseException() {
-        Conference conference = ConferenceFixture.createConference();
-        doThrow(new RuntimeException("Database connection failed")).when(conferenceRoomRepository).getById(1);
-        expectedException.expect(DatabaseException.class);
-        expectedException.expectMessage("Database connection failed");
-        conferenceRoomService.registerConference(conference, Arrays.asList(1, 2, 3));
-    }
-
-    @Test
-    public void test_registerConference() {
-        Conference conference = ConferenceFixture.createConference();
-        List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRoomsWithId(3);
-        assertEquals(3, rooms.size());
-        List<Integer> roomIds = rooms.stream()
-                .map(ConferenceRoom::getId)
-                .collect(Collectors.toList());
-        when(conferenceRoomRepository.getById(1)).thenReturn(rooms.get(0));
-        when(conferenceRoomRepository.getById(2)).thenReturn(rooms.get(1));
-        when(conferenceRoomRepository.getById(3)).thenReturn(rooms.get(2));
-
-        conferenceRoomService.registerConference(conference, roomIds);
-        testHelper.assertRegisterConferenceResult(conference, rooms);
     }
 
 }

@@ -85,22 +85,4 @@ public class ConferenceRoomService {
         return availability;
     }
 
-    public void registerConference(Conference conference, List<Integer> conferenceRoomIds) {
-        try {
-            for (int roomId : conferenceRoomIds) {
-                ConferenceRoom room = conferenceRoomRepository.getById(roomId);
-                ConferenceRoomAvailabilityItem availabilityItem = new ConferenceRoomAvailabilityItem(room.getMaxSeats());
-                availabilityItem.setConference(conference);
-                availabilityItem.setConferenceRoom(room);
-                room.addConferenceRoomAvailabilityItem(availabilityItem);
-                conference.addConferenceRoomAvailabilityItem(availabilityItem);
-                conferenceRoomAvailabilityItemRepository.create(availabilityItem);
-                room.addConference(conference);
-            }
-        } catch (Exception ex) {
-            throw new DatabaseException("Persistence level error: " + ex.getMessage());
-        }
-    }
-
-
 }

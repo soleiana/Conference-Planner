@@ -6,12 +6,13 @@ import com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @Component
-public class ConferenceRoomServiceUnitTestHelper {
+public class ConferenceServiceUnitTestHelper {
 
     public void assertRegisterConferenceResult(Conference conference, List<ConferenceRoom> rooms) {
         List<ConferenceRoomAvailabilityItem> availabilityItems = conference.getConferenceRoomAvailabilityItems();
@@ -29,5 +30,9 @@ public class ConferenceRoomServiceUnitTestHelper {
             assertEquals(1, room.getConferences().size());
             assertEquals(1, room.getConferenceRoomAvailabilityItems().size());
         }
+    }
+
+    public List<Integer> getConferenceRoomIds(List<ConferenceRoom> conferenceRooms) {
+        return conferenceRooms.stream().map(ConferenceRoom::getId).collect(Collectors.toList());
     }
 }

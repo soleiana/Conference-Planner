@@ -131,15 +131,4 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
         testHelper.assertGetConferenceRoomAvailabilityItemsResult(availability.getAvailabilityItems());
     }
 
-    @Test
-    public void test_registerConference() {
-        List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(2);
-        databaseConfigurator.configureConferenceRooms(rooms);
-        List<Integer> roomIds = testHelper.getConferenceRoomIds(rooms);
-        Conference conference = ConferenceFixture.createUpcomingConference();
-        databaseConfigurator.configureConference(conference);
-        conferenceRoomService.registerConference(conference, roomIds);
-        testHelper.assertRegisterConferenceResult(conference, rooms);
-    }
-
 }

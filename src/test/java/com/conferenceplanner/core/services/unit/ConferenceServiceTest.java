@@ -2,9 +2,7 @@ package com.conferenceplanner.core.services.unit;
 
 import com.conferenceplanner.core.domain.Conference;
 import com.conferenceplanner.core.repositories.ConferenceRepository;
-import com.conferenceplanner.core.services.ConferenceChecker;
-import com.conferenceplanner.core.services.ConferenceService;
-import com.conferenceplanner.core.services.DatabaseException;
+import com.conferenceplanner.core.services.*;
 import com.conferenceplanner.core.services.fixtures.ConferenceFixture;
 import org.junit.Before;
 import org.junit.Rule;
@@ -14,7 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,7 +24,13 @@ public class ConferenceServiceTest {
     private ConferenceService conferenceService;
 
     @Mock
+    private ConferenceRoomService conferenceRoomService;
+
+    @Mock
     private ConferenceRepository conferenceRepository;
+
+    @Mock
+    private ConferenceServiceAssistant serviceAssistant;
 
     @Mock
     private ConferenceChecker conferenceChecker;
@@ -98,85 +101,31 @@ public class ConferenceServiceTest {
     }
 
     @Test
-    public void test_checkIfConferenceExists_throws_DatabaseException() {
-        Conference plannedConference = ConferenceFixture.createConference();
-        doThrow(new RuntimeException("Database connection failed")).when(conferenceRepository).getUpcoming();
-        expectedException.expect(DatabaseException.class);
-        expectedException.expectMessage("Database connection failed");
-        conferenceService.checkIfConferenceExists(plannedConference);
-    }
-
-    @Test
-    public void test_checkIfConferenceExists_is_true_if_planned_conference_exists() {
+    public void test_createConference_throws_AccessException_if_conference_exists() {
         Conference conference = ConferenceFixture.createConference();
-        conference.setName("name");
-        Conference plannedConference = ConferenceFixture.createConference();
-        plannedConference.setName("name");
-        when(conferenceRepository.getUpcoming()).thenReturn(Arrays.asList(conference));
-        boolean result = conferenceService.checkIfConferenceExists(plannedConference);
-        assertTrue(result);
+        List<Integer> roomIds = Arrays.asList(1, 2, 3);
+        when(serviceAssistant.checkIfConferenceExists(conference)).thenReturn(true);
+        expectedException.expect(AccessException.class);
+        conferenceService.createConference(conference, roomIds);
     }
 
     @Test
-    public void test_checkIfConferenceExists_is_false_if_no_conferences_exist() {
-        Conference plannedConference = ConferenceFixture.createConference();
-        plannedConference.setName("name");
-        plannedConference.setEndDateTime(plannedConference.getEndDateTime().plusMinutes(1));
-        List<Conference> emptyList = new ArrayList<>();
-        when(conferenceRepository.getUpcoming()).thenReturn(emptyList);
-        boolean result = conferenceService.checkIfConferenceExists(plannedConference);
-        assertFalse(result);
-    }
-
-    @Test
-    public void test_checkIfConferenceExists_is_false_if_planned_conference_is_with_different_name() {
+    public void test_createConference_throws_AccessException_if_conference_rooms_are_not_available() {
         Conference conference = ConferenceFixture.createConference();
-        conference.setName("name");
-        Conference plannedConference = ConferenceFixture.createConference();
-        plannedConference.setName("anotherName");
-        when(conferenceRepository.getUpcoming()).thenReturn(Arrays.asList(conference));
-        boolean result = conferenceService.checkIfConferenceExists(plannedConference);
-        assertFalse(result);
-    }
-
-    @Test
-    public void test_checkIfConferenceExists_is_false_if_planned_conference_is_with_different_start_date_time() {
-        Conference conference = ConferenceFixture.createConference();
-        conference.setName("name");
-        Conference plannedConference = ConferenceFixture.createConference();
-        plannedConference.setName("name");
-        plannedConference.setStartDateTime(plannedConference.getStartDateTime().plusMinutes(1));
-        when(conferenceRepository.getUpcoming()).thenReturn(Arrays.asList(conference));
-        boolean result = conferenceService.checkIfConferenceExists(plannedConference);
-        assertFalse(result);
-    }
-
-    @Test
-    public void test_checkIfConferenceExists_is_false_if_planned_conference_is_with_different_end_date_time() {
-        Conference conference = ConferenceFixture.createConference();
-        conference.setName("name");
-        Conference plannedConference = ConferenceFixture.createConference();
-        plannedConference.setName("name");
-        plannedConference.setEndDateTime(plannedConference.getEndDateTime().plusMinutes(1));
-        when(conferenceRepository.getUpcoming()).thenReturn(Arrays.asList(conference));
-        boolean result = conferenceService.checkIfConferenceExists(plannedConference);
-        assertFalse(result);
-    }
-
-    @Test
-    public void test_createConference_throws_DatabaseException() {
-        Conference conference = ConferenceFixture.createConference();
-        doThrow(new RuntimeException("Database connection failed")).when(conferenceRepository).create(conference);
-        expectedException.expect(DatabaseException.class);
-        expectedException.expectMessage("Database connection failed");
-        conferenceService.createConference(conference);
+        List<Integer> roomIds = Arrays.asList(1, 2, 3);
+        when(conferenceRoomService.checkIfConferenceRoomsAvailable(roomIds, conference)).thenReturn(false);
+        expectedException.expect(AccessException.class);
+        conferenceService.createConference(conference, roomIds);
     }
 
     @Test
     public void test_createConference() {
         Conference conference = ConferenceFixture.createUpcomingConference();
-        conferenceService.createConference(conference);
-        verify(conferenceRepository, times(1)).create(conference);
+        List<Integer> roomIds = Arrays.asList(1, 2, 3);
+        when(serviceAssistant.checkIfConferenceExists(conference)).thenReturn(false);
+        when(conferenceRoomService.checkIfConferenceRoomsAvailable(roomIds, conference)).thenReturn(true);
+        conferenceService.createConference(conference, roomIds);
+        verify(serviceAssistant, times(1)).registerConference(conference, roomIds);
     }
 
     @Test

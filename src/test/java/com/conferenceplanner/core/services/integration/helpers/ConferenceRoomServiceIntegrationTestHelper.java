@@ -4,7 +4,6 @@ import com.conferenceplanner.core.domain.Conference;
 import com.conferenceplanner.core.domain.ConferenceRoom;
 import com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem;
 import com.conferenceplanner.core.services.ConferenceRoomChecker;
-import com.conferenceplanner.core.services.unit.helpers.ConferenceRoomServiceUnitTestHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,9 +19,6 @@ public class ConferenceRoomServiceIntegrationTestHelper {
 
     @Autowired
     private ConferenceRoomChecker conferenceRoomChecker;
-
-    @Autowired
-    private ConferenceRoomServiceUnitTestHelper unitTestHelper;
 
     private LocalDateTime now;
 
@@ -48,7 +44,4 @@ public class ConferenceRoomServiceIntegrationTestHelper {
         return conferenceRooms.stream().map(ConferenceRoom::getId).collect(Collectors.toList());
     }
 
-    public void assertRegisterConferenceResult(Conference conference, List<ConferenceRoom> rooms) {
-        unitTestHelper.assertRegisterConferenceResult(conference, rooms);
-    }
 }

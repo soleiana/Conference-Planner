@@ -19,23 +19,12 @@ public class ConferenceService {
     @Autowired
     private ConferenceChecker conferenceChecker;
 
+    @Autowired
+    private ConferenceServiceAssistant serviceAssistant;
 
-    public boolean checkIfConferenceExists(Conference conference) {
-        try {
-            List<Conference> conferences = conferenceRepository.getUpcoming();
+    @Autowired
+    private ConferenceRoomService conferenceRoomService;
 
-            for (Conference c : conferences) {
-                if (c.getName().equalsIgnoreCase(conference.getName())
-                        && c.getStartDateTime().equals(conference.getStartDateTime())
-                        && c.getEndDateTime().equals(conference.getEndDateTime())) {
-                    return true;
-                }
-            }
-        } catch (Exception ex) {
-            throw new DatabaseException("Persistence level error: " + ex.getMessage());
-        }
-        return false;
-    }
 
     public List<Conference> getUpcomingConferences() {
         List<Conference> conferences;
@@ -71,12 +60,16 @@ public class ConferenceService {
         return conference;
     }
 
-    public void createConference(Conference conference) {
-        try {
-            conferenceRepository.create(conference);
-        } catch (Exception ex) {
-            throw new DatabaseException("Persistence level error: " + ex.getMessage());
+    public void createConference(Conference conference, List<Integer> conferenceRoomIds) {
+
+        if (serviceAssistant.checkIfConferenceExists(conference)) {
+             throw new AccessException("Conference already exists!", AccessErrorCode.CONFLICT);
         }
+        if (!conferenceRoomService.checkIfConferenceRoomsAvailable(conferenceRoomIds, conference)) {
+            throw new AccessException("Conference room(s) not available!", AccessErrorCode.CONFLICT);
+        }
+        serviceAssistant.createConference(conference);
+        serviceAssistant.registerConference(conference, conferenceRoomIds);
     }
 
     public void cancelConference(Conference conference) {

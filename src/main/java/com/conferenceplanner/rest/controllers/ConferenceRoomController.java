@@ -55,7 +55,7 @@ public class ConferenceRoomController {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 
         } catch (AccessException ex) {
-            return new ResponseEntity<>(ex.getMessage(), ResourceAccessErrorCode.RESOURCE_CONFLICT.getHttpStatus());
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
 
         } catch (RuntimeException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -86,7 +86,7 @@ public class ConferenceRoomController {
 
         } catch (AccessException ex) {
             availableConferenceRooms.setErrorMessage(ex.getMessage());
-            return new ResponseEntity<>(availableConferenceRooms, ResourceAccessErrorCode.RESOURCE_NOT_FOUND.getHttpStatus());
+            return new ResponseEntity<>(availableConferenceRooms, HttpStatus.NOT_FOUND);
 
         } catch (RuntimeException ex) {
             availableConferenceRooms.setErrorMessage(ex.getMessage());
@@ -112,7 +112,7 @@ public class ConferenceRoomController {
 
         }  catch (AccessException ex) {
             conferenceRoomAvailability.setErrorMessage(ex.getMessage());
-            return new ResponseEntity<>(conferenceRoomAvailability, ResourceAccessErrorCode.RESOURCE_NOT_FOUND.getHttpStatus());
+            return new ResponseEntity<>(conferenceRoomAvailability, HttpStatus.NOT_FOUND);
 
         } catch (RuntimeException ex) {
             conferenceRoomAvailability.setErrorMessage(ex.getMessage());
