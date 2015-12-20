@@ -70,21 +70,8 @@ public class ConferenceServiceAssistantTest extends SpringContextTest {
     }
 
     @Test
-    public void test_checkIfConferenceExists_is_true_if_planned_conference_exists() {
-        Conference conference = ConferenceFixture.createConference();
-        conference.setName("name");
-        Conference plannedConference = ConferenceFixture.createConference();
-        plannedConference.setName("name");
-        when(conferenceRepository.getUpcoming()).thenReturn(Arrays.asList(conference));
-        boolean result = serviceAssistant.checkIfConferenceExists(plannedConference);
-        assertTrue(result);
-    }
-
-    @Test
     public void test_checkIfConferenceExists_is_false_if_no_conferences_exist() {
-        Conference plannedConference = ConferenceFixture.createConference();
-        plannedConference.setName("name");
-        plannedConference.setEndDateTime(plannedConference.getEndDateTime().plusMinutes(1));
+        Conference plannedConference = ConferenceFixture.createUpcomingConference();
         List<Conference> emptyList = new ArrayList<>();
         when(conferenceRepository.getUpcoming()).thenReturn(emptyList);
         boolean result = serviceAssistant.checkIfConferenceExists(plannedConference);
@@ -92,38 +79,23 @@ public class ConferenceServiceAssistantTest extends SpringContextTest {
     }
 
     @Test
-    public void test_checkIfConferenceExists_is_false_if_planned_conference_is_with_different_name() {
+    public void test_checkIfConferenceExists_is_false_if_planned_conference_does_not_exist() {
         Conference conference = ConferenceFixture.createConference();
-        conference.setName("name");
         Conference plannedConference = ConferenceFixture.createConference();
-        plannedConference.setName("anotherName");
         when(conferenceRepository.getUpcoming()).thenReturn(Arrays.asList(conference));
+        when(conferenceChecker.compare(conference, plannedConference)).thenReturn(false);
         boolean result = serviceAssistant.checkIfConferenceExists(plannedConference);
         assertFalse(result);
     }
 
     @Test
-    public void test_checkIfConferenceExists_is_false_if_planned_conference_is_with_different_start_date_time() {
+    public void test_checkIfConferenceExists_is_true_if_planned_conference_exists() {
         Conference conference = ConferenceFixture.createConference();
-        conference.setName("name");
         Conference plannedConference = ConferenceFixture.createConference();
-        plannedConference.setName("name");
-        plannedConference.setStartDateTime(plannedConference.getStartDateTime().plusMinutes(1));
         when(conferenceRepository.getUpcoming()).thenReturn(Arrays.asList(conference));
+        when(conferenceChecker.compare(conference, plannedConference)).thenReturn(true);
         boolean result = serviceAssistant.checkIfConferenceExists(plannedConference);
-        assertFalse(result);
-    }
-
-    @Test
-    public void test_checkIfConferenceExists_is_false_if_planned_conference_is_with_different_end_date_time() {
-        Conference conference = ConferenceFixture.createConference();
-        conference.setName("name");
-        Conference plannedConference = ConferenceFixture.createConference();
-        plannedConference.setName("name");
-        plannedConference.setEndDateTime(plannedConference.getEndDateTime().plusMinutes(1));
-        when(conferenceRepository.getUpcoming()).thenReturn(Arrays.asList(conference));
-        boolean result = serviceAssistant.checkIfConferenceExists(plannedConference);
-        assertFalse(result);
+        assertTrue(result);
     }
 
     @Test

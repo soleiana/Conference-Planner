@@ -32,18 +32,11 @@ public class ConferenceServiceAssistant {
     public boolean checkIfConferenceExists(Conference conference) {
         try {
             List<Conference> conferences = conferenceRepository.getUpcoming();
+            return conferences.stream().anyMatch(c -> conferenceChecker.compare(c, conference));
 
-            for (Conference c : conferences) {
-                if (c.getName().equalsIgnoreCase(conference.getName())
-                        && c.getStartDateTime().equals(conference.getStartDateTime())
-                        && c.getEndDateTime().equals(conference.getEndDateTime())) {
-                    return true;
-                }
-            }
         } catch (Exception ex) {
             throw new DatabaseException("Persistence level error: " + ex.getMessage());
         }
-        return false;
     }
 
     public void createConference(Conference conference) {

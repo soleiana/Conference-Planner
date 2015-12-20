@@ -10,15 +10,21 @@ import java.util.List;
 public class ConferenceChecker {
 
     public boolean isAvailable(Conference conference) {
-
         List<ConferenceRoomAvailabilityItem> availabilityItems = conference.getConferenceRoomAvailabilityItems();
-
         for (ConferenceRoomAvailabilityItem item: availabilityItems) {
             if (item.getAvailableSeats() > 0) {
                 return true;
             }
         }
+        return false;
+    }
 
+    public boolean compare(Conference conference, Conference conferenceToCompare) {
+        if (conferenceToCompare.getName().equalsIgnoreCase(conference.getName())
+                && conferenceToCompare.getStartDateTime().equals(conference.getStartDateTime())
+                && conferenceToCompare.getEndDateTime().equals(conference.getEndDateTime())) {
+            return true;
+        }
         return false;
     }
 }
