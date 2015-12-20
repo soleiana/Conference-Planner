@@ -64,16 +64,6 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     }
 
     @Test
-    public void test_getAvailableConferenceRooms_if_planned_conference_overlaps_with_scheduled_conference() {
-        Conference plannedConference = ConferenceFixture.createConference();
-        List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms();
-        List<Conference> conferences = ConferenceFixture.createMixedConferences();
-        databaseConfigurator.configure(rooms, conferences);
-        List<ConferenceRoom> availableRooms = conferenceRoomService.getAvailableConferenceRooms(plannedConference);
-        assertTrue(availableRooms.isEmpty());
-    }
-
-    @Test
     public void test_getAvailableConferenceRooms_if_only_cancelled_conferences_are_registered() {
         Conference plannedConference = ConferenceFixture.createConference();
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms();
@@ -104,17 +94,6 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
         List<Integer> roomIds = testHelper.getConferenceRoomIds(rooms);
         boolean result = conferenceRoomService.checkIfConferenceRoomsAvailable(roomIds, plannedConference);
         assertTrue(result);
-    }
-
-    @Test
-    public void test_checkIfConferenceRoomsAvailable_is_false_if_checked_room_is_not_available(){
-        Conference plannedConference = ConferenceFixture.createConference();
-        ConferenceRoom room = ConferenceRoomFixture.createConferenceRoom();
-        List<Conference> conferences = ConferenceFixture.createMixedConferences();
-        databaseConfigurator.configureWithConferenceRoomAvailability(room, conferences);
-        int roomId = room.getId();
-        boolean result = conferenceRoomService.checkIfConferenceRoomsAvailable(Arrays.asList(roomId), plannedConference);
-        assertFalse(result);
     }
 
     @Test

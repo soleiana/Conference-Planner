@@ -88,6 +88,16 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     }
 
     @Test
+    public void test_getAvailableConferenceRooms_throws_AccessException()  {
+        Conference plannedConference = ConferenceFixture.createConference();
+        List<ConferenceRoom> emptyRoomList = new ArrayList<>();
+        when(conferenceRoomRepository.getAll()).thenReturn(emptyRoomList);
+        expectedException.expect(AccessException.class);
+        expectedException.expectMessage("No conference rooms found for selected conference interval!");
+        conferenceRoomService.getAvailableConferenceRooms(plannedConference);
+    }
+
+    @Test
     public void test_getAvailableConferenceRooms()  {
         Conference plannedConference = ConferenceFixture.createConference();
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms();

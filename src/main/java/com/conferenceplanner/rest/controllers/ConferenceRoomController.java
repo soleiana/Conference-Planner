@@ -74,12 +74,6 @@ public class ConferenceRoomController {
             com.conferenceplanner.core.domain.Conference coreDomainConference = conferenceFactory.create(interval);
 
             List<com.conferenceplanner.core.domain.ConferenceRoom> coreDomainConferenceRooms = conferenceRoomService.getAvailableConferenceRooms(coreDomainConference);
-
-            if (coreDomainConferenceRooms.isEmpty()) {
-                availableConferenceRooms.setErrorMessage("No conference rooms found for selected conference interval!");
-                return new ResponseEntity<>(availableConferenceRooms, HttpStatus.NOT_FOUND);
-            }
-
             List<ConferenceRoom> conferenceRooms = conferenceRoomFactory.create(coreDomainConferenceRooms);
             availableConferenceRooms.setAvailableConferenceRooms(conferenceRooms);
 
@@ -90,11 +84,14 @@ public class ConferenceRoomController {
             availableConferenceRooms.setErrorMessage(ex.getMessage());
             return new ResponseEntity<>(availableConferenceRooms, HttpStatus.BAD_REQUEST);
 
+        } catch (AccessException ex) {
+            availableConferenceRooms.setErrorMessage(ex.getMessage());
+            return new ResponseEntity<>(availableConferenceRooms, ResourceAccessErrorCode.RESOURCE_NOT_FOUND.getHttpStatus());
+
         } catch (RuntimeException ex) {
             availableConferenceRooms.setErrorMessage(ex.getMessage());
             return new ResponseEntity<>(availableConferenceRooms, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
         return new ResponseEntity<>(availableConferenceRooms, HttpStatus.OK);
     }
 

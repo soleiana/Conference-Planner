@@ -54,7 +54,6 @@ public class ConferenceRoomService {
     }
 
     public List<ConferenceRoom> getAvailableConferenceRooms(Conference plannedConference) {
-
         List<ConferenceRoom> availableRooms;
         try {
             List<ConferenceRoom> allRooms = conferenceRoomRepository.getAll();
@@ -65,7 +64,9 @@ public class ConferenceRoomService {
         } catch (Exception ex) {
             throw new DatabaseException("Persistence level error: " + ex.getMessage());
         }
-
+        if (availableRooms.isEmpty()) {
+            throw new AccessException("No conference rooms found for selected conference interval!", AccessErrorCode.NOT_FOUND);
+        }
         return availableRooms;
     }
 
