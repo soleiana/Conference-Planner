@@ -4,6 +4,7 @@ import com.conferenceplanner.core.domain.ConferenceRoom;
 import com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem;
 import com.conferenceplanner.core.repositories.ConferenceRoomRepository;
 import com.conferenceplanner.core.services.ConferenceRoomAvailabilityItemChecker;
+import com.conferenceplanner.core.services.ConferenceRoomChecker;
 import com.conferenceplanner.core.services.ConferenceRoomServiceAssistant;
 import com.conferenceplanner.core.services.DatabaseException;
 import com.conferenceplanner.core.services.fixtures.ConferenceRoomAvailabilityItemFixture;
@@ -34,6 +35,9 @@ public class ConferenceRoomServiceAssistantTest {
 
     @Mock
     private ConferenceRoomAvailabilityItemChecker conferenceRoomAvailabilityItemChecker;
+
+    @Mock
+    private ConferenceRoomChecker conferenceRoomChecker;
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -88,19 +92,25 @@ public class ConferenceRoomServiceAssistantTest {
     }
 
     @Test
-    public void test_checkIfConferenceRoomExists_is_false_if_conference_room_does_not_exist()  {
-        ConferenceRoom room = ConferenceRoomFixture.createConferenceRoom();
-        when(conferenceRoomRepository.getAll()).thenReturn(ConferenceRoomFixture.createConferenceRooms());
+    public void test_checkIfConferenceRoomExists_is_true_if_conference_room_exists()  {
+        ConferenceRoom room = ConferenceRoomFixture.createConferenceRoom(10);
+        List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(2);
+        when(conferenceRoomChecker.compare(room, rooms.get(0))).thenReturn(false);
+        when(conferenceRoomChecker.compare(room, rooms.get(1))).thenReturn(true);
+        when(conferenceRoomRepository.getAll()).thenReturn(rooms);
         boolean result = serviceAssistant.checkIfConferenceRoomExists(room);
-        assertFalse(result);
+        assertTrue(result);
     }
 
     @Test
-    public void test_checkIfConferenceRoomExists_is_true_if_conference_room_exists()  {
-        ConferenceRoom room = ConferenceRoomFixture.createConferenceRoom(7);
-        when(conferenceRoomRepository.getAll()).thenReturn(ConferenceRoomFixture.createConferenceRooms());
+    public void test_checkIfConferenceRoomExists_is_false_if_conference_room_does_not_exist()  {
+        ConferenceRoom room = ConferenceRoomFixture.createConferenceRoom(10);
+        List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(2);
+        when(conferenceRoomChecker.compare(room, rooms.get(0))).thenReturn(false);
+        when(conferenceRoomChecker.compare(room, rooms.get(1))).thenReturn(false);
+        when(conferenceRoomRepository.getAll()).thenReturn(rooms);
         boolean result = serviceAssistant.checkIfConferenceRoomExists(room);
-        assertTrue(result);
+        assertFalse(result);
     }
 
     @Test

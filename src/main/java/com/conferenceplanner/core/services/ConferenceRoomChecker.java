@@ -29,6 +29,14 @@ public class ConferenceRoomChecker {
         return true;
     }
 
+    public boolean compare(ConferenceRoom conferenceRoom, ConferenceRoom roomToCompare) {
+        if (conferenceRoom.getName().equalsIgnoreCase(roomToCompare.getName())
+                && conferenceRoom.getLocation().equalsIgnoreCase(roomToCompare.getLocation())) {
+            return true;
+        }
+        return false;
+    }
+
     private boolean overlap(Conference scheduledConference, Conference plannedConference) {
 
         LocalDateTime plannedStart = plannedConference.getStartDateTime();
@@ -50,4 +58,5 @@ public class ConferenceRoomChecker {
         }
     return false;
     }
+
 }

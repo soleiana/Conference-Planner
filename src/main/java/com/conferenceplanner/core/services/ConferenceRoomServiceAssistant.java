@@ -16,22 +16,19 @@ public class ConferenceRoomServiceAssistant {
     private ConferenceRoomRepository conferenceRoomRepository;
 
     @Autowired
+    private ConferenceRoomChecker conferenceRoomChecker;
+
+    @Autowired
     private ConferenceRoomAvailabilityItemChecker conferenceRoomAvailabilityItemChecker;
 
     public boolean checkIfConferenceRoomExists(ConferenceRoom conferenceRoom) {
         try {
             List<ConferenceRoom> conferenceRooms = conferenceRoomRepository.getAll();
+            return conferenceRooms.stream().anyMatch(room -> conferenceRoomChecker.compare(conferenceRoom, room));
 
-            for (ConferenceRoom room : conferenceRooms) {
-                if (room.getName().equalsIgnoreCase(conferenceRoom.getName())
-                        && room.getLocation().equalsIgnoreCase(conferenceRoom.getLocation())) {
-                    return true;
-                }
-            }
         } catch (Exception ex) {
             throw new DatabaseException("Persistence level error: " + ex.getMessage());
         }
-        return false;
     }
 
     public void createConferenceRoom(ConferenceRoom conferenceRoom) {

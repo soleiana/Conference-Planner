@@ -53,7 +53,21 @@ public class ConferenceRoomCheckerTest {
         conferenceRoom.setConferences(conferences);
         boolean result = checker.isAvailable(conferenceRoom, plannedConference);
         assertFalse(result);
+    }
 
+    @Test
+    public void test_compare_is_true() {
+        ConferenceRoom room1 = ConferenceRoomFixture.createConferenceRoom(10);
+        ConferenceRoom room2 = ConferenceRoomFixture.createConferenceRoom(20);
+        assertTrue(checker.compare(room1, room2));
+    }
+
+    @Test
+    public void test_compare_is_false() {
+        ConferenceRoom room1 = ConferenceRoomFixture.createConferenceRoom(10);
+        ConferenceRoom room2 = ConferenceRoomFixture.createConferenceRoom(10);
+        room2.setName(room2.getName()+"a");
+        assertFalse(checker.compare(room1, room2));
     }
 
 }
