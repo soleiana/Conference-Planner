@@ -6,6 +6,7 @@ import com.conferenceplanner.core.domain.ConferenceRoom;
 import com.conferenceplanner.core.repositories.ConferenceRepository;
 import com.conferenceplanner.core.repositories.ConferenceRoomAvailabilityItemRepository;
 import com.conferenceplanner.core.repositories.ConferenceRoomRepository;
+import com.conferenceplanner.core.services.ConferenceChecker;
 import com.conferenceplanner.core.services.ConferenceServiceAssistant;
 import com.conferenceplanner.core.services.DatabaseException;
 import com.conferenceplanner.core.services.fixtures.ConferenceFixture;
@@ -43,6 +44,9 @@ public class ConferenceServiceAssistantTest extends SpringContextTest {
 
     @Mock
     private ConferenceRoomAvailabilityItemRepository conferenceRoomAvailabilityItemRepository;
+
+    @Mock
+    private ConferenceChecker conferenceChecker;
 
     @Autowired
     private ConferenceServiceUnitTestHelper testHelper;
@@ -145,6 +149,14 @@ public class ConferenceServiceAssistantTest extends SpringContextTest {
     }
 
     @Test
+    public void test_getUpcomingConferences() {
+        List<Conference> upcomingConferences = ConferenceFixture.createUpcomingConferences();
+        when(conferenceRepository.getUpcoming()).thenReturn(upcomingConferences);
+        List<Conference> conferences = serviceAssistant.getUpcomingConferences();
+        assertEquals(upcomingConferences.size(), conferences.size());
+    }
+
+    @Test
     public void test_getUpcomingConferences_throws_DatabaseException() {
         doThrow(new RuntimeException("Database connection failed")).when(conferenceRepository).getUpcoming();
         expectedException.expect(DatabaseException.class);
@@ -153,12 +165,24 @@ public class ConferenceServiceAssistantTest extends SpringContextTest {
     }
 
     @Test
-    public void test_getUpcomingConferences() {
+    public void test_getAvailableConferences() {
         List<Conference> upcomingConferences = ConferenceFixture.createUpcomingConferences();
+        assertEquals(3, upcomingConferences.size());
         when(conferenceRepository.getUpcoming()).thenReturn(upcomingConferences);
-        List<Conference> conferences = serviceAssistant.getUpcomingConferences();
-        assertEquals(upcomingConferences.size(), conferences.size());
+        when(conferenceChecker.isAvailable(upcomingConferences.get(0))).thenReturn(false);
+        when(conferenceChecker.isAvailable(upcomingConferences.get(1))).thenReturn(true);
+        when(conferenceChecker.isAvailable(upcomingConferences.get(2))).thenReturn(false);
+        List<Conference> conferences = serviceAssistant.getAvailableConferences();
+        assertEquals(1, conferences.size());
+        assertEquals(upcomingConferences.get(1), conferences.get(0));
     }
 
+    @Test
+    public void test_getAvailableConferences_throws_DatabaseException() {
+        doThrow(new RuntimeException("Database connection failed")).when(conferenceRepository).getUpcoming();
+        expectedException.expect(DatabaseException.class);
+        expectedException.expectMessage("Database connection failed");
+        serviceAssistant.getAvailableConferences();
+    }
 
 }

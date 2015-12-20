@@ -54,34 +54,27 @@ public class ConferenceServiceTest {
     }
 
     @Test
-    public void test_getUpcomingConferences_throws_AccessException_if_no_upcoming_conferences() {
+    public void test_getUpcomingConferences_throws_AccessException() {
         List<Conference> emptyList = new ArrayList<>();
         when(serviceAssistant.getUpcomingConferences()).thenReturn(emptyList);
         expectedException.expect(AccessException.class);
         conferenceService.getUpcomingConferences();
-
     }
 
     @Test
-    public void test_getAvailableConferences_throws_DatabaseException() {
-        doThrow(new RuntimeException("Database connection failed")).when(conferenceRepository).getUpcoming();
-        expectedException.expect(DatabaseException.class);
-        expectedException.expectMessage("Database connection failed");
+    public void test_getAvailableConferences_throws_AccessException() {
+        List<Conference> emptyList = new ArrayList<>();
+        when(serviceAssistant.getAvailableConferences()).thenReturn(emptyList);
+        expectedException.expect(AccessException.class);
         conferenceService.getAvailableConferences();
     }
 
     @Test
     public void test_getAvailableConferences() {
         List<Conference> upcomingConferences = ConferenceFixture.createUpcomingConferences();
-        assertEquals(3, upcomingConferences.size());
-        when(conferenceRepository.getUpcoming()).thenReturn(upcomingConferences);
-        when(conferenceChecker.isAvailable(upcomingConferences.get(0))).thenReturn(false);
-        when(conferenceChecker.isAvailable(upcomingConferences.get(1))).thenReturn(true);
-        when(conferenceChecker.isAvailable(upcomingConferences.get(2))).thenReturn(false);
-
+        when(serviceAssistant.getAvailableConferences()).thenReturn(upcomingConferences);
         List<Conference> conferences = conferenceService.getAvailableConferences();
-        assertEquals(1, conferences.size());
-        assertEquals(upcomingConferences.get(1), conferences.get(0));
+        assertEquals(upcomingConferences.size(), conferences.size());
     }
 
     @Test

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Component
@@ -20,6 +21,9 @@ public class ConferenceServiceAssistant {
 
     @Autowired
     private ConferenceRoomRepository conferenceRoomRepository;
+
+    @Autowired
+    private ConferenceChecker conferenceChecker;
 
     @Autowired
     private ConferenceRoomAvailabilityItemRepository conferenceRoomAvailabilityItemRepository;
@@ -68,13 +72,23 @@ public class ConferenceServiceAssistant {
     }
 
     public List<Conference> getUpcomingConferences() {
-        List<Conference> conferences;
         try {
-            conferences = conferenceRepository.getUpcoming();
+            return conferenceRepository.getUpcoming();
         } catch (Exception ex) {
             throw new DatabaseException("Persistence level error: " + ex.getMessage());
         }
-        return conferences;
+    }
+
+    public List<Conference> getAvailableConferences() {
+        try {
+            return conferenceRepository.getUpcoming().stream()
+                    .filter(conferenceChecker::isAvailable)
+                    .collect(Collectors.toList());
+
+        } catch (Exception ex) {
+            throw new DatabaseException("Persistence level error: " + ex.getMessage());
+        }
+
     }
 
 }

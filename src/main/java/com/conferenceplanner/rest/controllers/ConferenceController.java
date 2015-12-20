@@ -89,10 +89,9 @@ public class ConferenceController {
             List<Conference> restDomainConferences = conferenceFactory.create(coreDomainConferences);
             conferences.setConferences(restDomainConferences);
 
-            if (coreDomainConferences.isEmpty()) {
-                conferences.setErrorMessage("No conferences available for registration!");
-                return new ResponseEntity<>(conferences, HttpStatus.NOT_FOUND);
-            }
+        } catch (AccessException ex) {
+            conferences.setErrorMessage(ex.getMessage());
+            return new ResponseEntity<>(conferences, HttpStatus.NOT_FOUND);
 
         } catch (RuntimeException ex) {
             conferences.setErrorMessage(ex.getMessage());

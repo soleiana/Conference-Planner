@@ -35,15 +35,9 @@ public class ConferenceService {
     }
 
     public List<Conference> getAvailableConferences() {
-        List<Conference> availableConferences;
-        try {
-            List<Conference> conferences = conferenceRepository.getUpcoming();
-            availableConferences = conferences.stream()
-                    .filter(conferenceChecker::isAvailable)
-                    .collect(Collectors.toList());
-
-        } catch (Exception ex) {
-            throw new DatabaseException("Persistence level error: " + ex.getMessage());
+        List<Conference> availableConferences = serviceAssistant.getAvailableConferences();
+        if (availableConferences.isEmpty()) {
+            throw new AccessException("No available conferences!", AccessErrorCode.NOT_FOUND);
         }
         return availableConferences;
     }
