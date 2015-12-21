@@ -3,6 +3,7 @@ package com.conferenceplanner.core.services;
 import com.conferenceplanner.core.domain.Conference;
 import com.conferenceplanner.core.domain.ConferenceRoom;
 import com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem;
+import com.conferenceplanner.core.domain.Participant;
 import com.conferenceplanner.core.repositories.ConferenceRepository;
 import com.conferenceplanner.core.repositories.ConferenceRoomAvailabilityItemRepository;
 import com.conferenceplanner.core.repositories.ConferenceRoomRepository;
@@ -64,6 +65,16 @@ public class ConferenceServiceAssistant {
         }
     }
 
+    public Conference getConference(int conferenceId) {
+        Conference conference;
+        try {
+            conference = conferenceRepository.getById(conferenceId);
+        } catch (Exception ex) {
+            throw new DatabaseException("Persistence level error: " + ex.getMessage());
+        }
+        return conference;
+    }
+
     public List<Conference> getUpcomingConferences() {
         try {
             return conferenceRepository.getUpcoming();
@@ -81,7 +92,16 @@ public class ConferenceServiceAssistant {
         } catch (Exception ex) {
             throw new DatabaseException("Persistence level error: " + ex.getMessage());
         }
+    }
 
+    public List<Participant> getParticipants(Conference conference) {
+        List<Participant> participants;
+        try {
+            participants = conference.getParticipants();
+        } catch (Exception ex) {
+            throw new DatabaseException("Persistence level error: " + ex.getMessage());
+        }
+        return participants;
     }
 
 }

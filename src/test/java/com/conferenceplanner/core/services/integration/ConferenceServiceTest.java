@@ -1,12 +1,11 @@
 package com.conferenceplanner.core.services.integration;
 
 import com.conferenceplanner.SpringContextTest;
-import com.conferenceplanner.core.domain.Conference;
-import com.conferenceplanner.core.domain.ConferenceRoom;
-import com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem;
+import com.conferenceplanner.core.domain.*;
 import com.conferenceplanner.core.repositories.tools.DatabaseCleaner;
 import com.conferenceplanner.core.repositories.tools.DatabaseConfigurator;
 import com.conferenceplanner.core.services.ConferenceService;
+import com.conferenceplanner.core.services.fixtures.ParticipantFixture;
 import com.conferenceplanner.core.services.integration.helpers.ConferenceServiceIntegrationTestHelper;
 import com.conferenceplanner.core.services.fixtures.ConferenceFixture;
 import com.conferenceplanner.core.services.fixtures.ConferenceRoomAvailabilityItemFixture;
@@ -97,22 +96,6 @@ public class ConferenceServiceTest extends SpringContextTest {
     }
 
     @Test
-    public void test_getConference_if_conference_does_not_exist() {
-        Conference actualConference = conferenceService.getConference(1);
-        assertNull(actualConference);
-    }
-
-    @Test
-    public void test_getConference_if_conference_exists() {
-        Conference conference = ConferenceFixture.createUpcomingConference();
-        databaseConfigurator.configureConference(conference);
-        assertNotNull(conference.getId());
-        int id = conference.getId();
-        Conference actualConference = conferenceService.getConference(id);
-        assertEquals(conference, actualConference);
-    }
-
-    @Test
     public void test_createConference() {
         Conference conference = ConferenceFixture.createUpcomingConference();
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(2);
@@ -126,8 +109,18 @@ public class ConferenceServiceTest extends SpringContextTest {
     public void test_cancelConference() {
         Conference conference = ConferenceFixture.createUpcomingConference();
         databaseConfigurator.configureConference(conference);
-        conferenceService.cancelConference(conference);
+        conferenceService.cancelConference(conference.getId());
         assertTrue(conference.isCancelled());
+    }
+
+    @Test
+    public void test_getParticipants() {
+        Conference conference = ConferenceFixture.createUpcomingConference();
+        List<Participant> participants = ParticipantFixture.createParticipants(3);
+        databaseConfigurator.configure(conference, participants);
+        ConferenceParticipants conferenceParticipants = conferenceService.getParticipants(conference.getId());
+        assertEquals(participants.size(), conferenceParticipants.getParticipants().size());
+        assertEquals(conference, conferenceParticipants.getConference());
     }
 
 }

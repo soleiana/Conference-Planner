@@ -1,11 +1,11 @@
 package com.conferenceplanner.rest.controllers;
 
+
 import com.conferenceplanner.core.services.AccessException;
-import com.conferenceplanner.core.services.ConferenceRoomService;
 import com.conferenceplanner.core.services.ConferenceService;
-import com.conferenceplanner.core.services.ParticipantService;
 import com.conferenceplanner.rest.domain.*;
 import com.conferenceplanner.rest.domain.Conference;
+import com.conferenceplanner.rest.domain.ConferenceParticipants;
 import com.conferenceplanner.rest.factories.ConferenceFactory;
 import com.conferenceplanner.rest.factories.ConferenceParticipantFactory;
 import com.conferenceplanner.rest.validators.ConferenceValidator;
@@ -24,12 +24,6 @@ public class ConferenceController {
 
     @Autowired
     private ConferenceService conferenceService;
-
-    @Autowired
-    private ConferenceRoomService conferenceRoomService;
-
-    @Autowired
-    private ParticipantService participantService;
 
     @Autowired
     private ConferenceValidator conferenceValidator;
@@ -107,26 +101,17 @@ public class ConferenceController {
         ConferenceParticipants conferenceParticipants = new ConferenceParticipants();
         try {
             conferenceValidator.validateId(id);
-            com.conferenceplanner.core.domain.Conference coreDomainConference = conferenceService.getConference(id);
-
-            if (coreDomainConference == null) {
-                conferenceParticipants.setErrorMessage("No conference found for selected id!");
-                return new ResponseEntity<>(conferenceParticipants, HttpStatus.NOT_FOUND);
-            }
-            if (!coreDomainConference.isUpcoming()) {
-                conferenceParticipants.setErrorMessage("Conference is not upcoming!");
-                return new ResponseEntity<>(conferenceParticipants, HttpStatus.CONFLICT);
-            }
-            List<com.conferenceplanner.core.domain.Participant> coreDomainParticipants = participantService.getParticipants(coreDomainConference);
-            if (coreDomainParticipants.isEmpty()) {
-                conferenceParticipants.setErrorMessage("No participants found for selected conference");
-                return new ResponseEntity<>(conferenceParticipants, HttpStatus.NOT_FOUND);
-            }
-            conferenceParticipants = conferenceParticipantFactory.create(coreDomainConference, coreDomainParticipants);
+            com.conferenceplanner.core.domain.ConferenceParticipants coreDomainConferenceParticipants = conferenceService.getParticipants(id);
+            conferenceParticipants = conferenceParticipantFactory.create(coreDomainConferenceParticipants);
 
         } catch (ValidationException ex) {
             conferenceParticipants.setErrorMessage(ex.getMessage());
             return new ResponseEntity<>(conferenceParticipants, HttpStatus.BAD_REQUEST);
+
+        } catch (AccessException ex) {
+            conferenceParticipants.setErrorMessage(ex.getMessage());
+            HttpStatus httpStatus = ResourceAccessErrorCode.getHttpStatus(ex.getErrorCode());
+            return new ResponseEntity<>(conferenceParticipants, httpStatus);
 
         } catch (RuntimeException ex) {
             conferenceParticipants.setErrorMessage(ex.getMessage());
@@ -138,27 +123,21 @@ public class ConferenceController {
 
     @RequestMapping(method = RequestMethod.PUT, value = "/{id}", produces = "application/json")
     public ResponseEntity<String> cancelConference(@PathVariable Integer id) {
-
         try {
             conferenceValidator.validateId(id);
-            com.conferenceplanner.core.domain.Conference coreDomainConference = conferenceService.getConference(id);
+            conferenceService.cancelConference(id);
 
-            if (coreDomainConference == null) {
-                return new ResponseEntity<>("No conference found for selected id!", HttpStatus.NOT_FOUND);
-            }
-            if (coreDomainConference.isCancelled()) {
-                return new ResponseEntity<>("Conference already cancelled", HttpStatus.CONFLICT);
-            }
-            conferenceService.cancelConference(coreDomainConference);
-
-        } catch (ValidationException ex) {
+        } catch (AccessException ex) {
+            HttpStatus httpStatus = ResourceAccessErrorCode.getHttpStatus(ex.getErrorCode());
+            return new ResponseEntity<>(ex.getMessage(), httpStatus);
+        }
+        catch (ValidationException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 
         } catch (RuntimeException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>("Conference cancelled.", HttpStatus.OK);
-
     }
 
 }

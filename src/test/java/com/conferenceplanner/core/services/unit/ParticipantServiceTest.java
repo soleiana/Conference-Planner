@@ -36,20 +36,7 @@ public class ParticipantServiceTest {
     }
 
     @Test
-    public void test_getParticipants_throws_DatabaseException(){
-        Conference conference = mock(Conference.class);
-        doThrow(new RuntimeException("Database connection failed")).when(conference).getParticipants();
-        expectedException.expect(DatabaseException.class);
-        expectedException.expectMessage("Database connection failed");
-        participantService.getParticipants(conference);
-    }
+    public void  test_addParticipant() {
 
-    @Test
-    public void test_getParticipants(){
-        Conference conference = ConferenceFixture.createUpcomingConference();
-        List<Participant> participants = ParticipantFixture.createParticipants(3);
-        conference.setParticipants(participants);
-        List<Participant> actualParticipants = participantService.getParticipants(conference);
-        assertEquals(participants.size(), actualParticipants.size());
     }
 }

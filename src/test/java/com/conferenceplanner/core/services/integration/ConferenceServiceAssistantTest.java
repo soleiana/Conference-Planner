@@ -3,11 +3,13 @@ package com.conferenceplanner.core.services.integration;
 import com.conferenceplanner.SpringContextTest;
 import com.conferenceplanner.core.domain.Conference;
 import com.conferenceplanner.core.domain.ConferenceRoom;
+import com.conferenceplanner.core.domain.Participant;
 import com.conferenceplanner.core.repositories.tools.DatabaseCleaner;
 import com.conferenceplanner.core.repositories.tools.DatabaseConfigurator;
 import com.conferenceplanner.core.services.ConferenceServiceAssistant;
 import com.conferenceplanner.core.services.fixtures.ConferenceFixture;
 import com.conferenceplanner.core.services.fixtures.ConferenceRoomFixture;
+import com.conferenceplanner.core.services.fixtures.ParticipantFixture;
 import com.conferenceplanner.core.services.integration.helpers.ConferenceServiceIntegrationTestHelper;
 import org.junit.Before;
 import org.junit.Test;
@@ -151,6 +153,31 @@ public class ConferenceServiceAssistantTest extends SpringContextTest {
         List<Conference> upcomingConferences = serviceAssistant.getUpcomingConferences();
         assertEquals(conferences.size()-1, upcomingConferences.size());
         testHelper.assertGetUpcomingConferencesResult(upcomingConferences);
+    }
+
+    @Test
+    public void test_getConference_if_conference_does_not_exist() {
+        Conference actualConference = serviceAssistant.getConference(1);
+        assertNull(actualConference);
+    }
+
+    @Test
+    public void test_getConference_if_conference_exists() {
+        Conference conference = ConferenceFixture.createUpcomingConference();
+        databaseConfigurator.configureConference(conference);
+        assertNotNull(conference.getId());
+        int id = conference.getId();
+        Conference actualConference = serviceAssistant.getConference(id);
+        assertEquals(conference, actualConference);
+    }
+
+    @Test
+    public void test_getParticipants() {
+        Conference conference = ConferenceFixture.createUpcomingConference();
+        List<Participant> participants = ParticipantFixture.createParticipants(3);
+        databaseConfigurator.configure(conference, participants);
+        List<Participant> actualParticipants = serviceAssistant.getParticipants(conference);
+        assertEquals(participants.size(), actualParticipants.size());
     }
 
 }

@@ -33,11 +33,7 @@ public class ParticipantServiceTest extends SpringContextTest {
     }
 
     @Test
-    public void test_getParticipants() {
-        Conference conference = ConferenceFixture.createUpcomingConference();
-        List<Participant> participants = ParticipantFixture.createParticipants(3);
-        databaseConfigurator.configure(conference, participants);
-        List<Participant> actualParticipants = participantService.getParticipants(conference);
-        assertEquals(participants.size(), actualParticipants.size());
+    public void test_addParticipant() {
+
     }
 }

@@ -17,7 +17,19 @@ public enum ResourceAccessErrorCode {
         this.httpStatus = httpStatus;
     }
 
+    public AccessErrorCode getErrorCode() {
+        return errorCode;
+    }
+
     public HttpStatus getHttpStatus() {
         return httpStatus;
+    }
+
+    public static HttpStatus getHttpStatus(AccessErrorCode errorCode) {
+        for (ResourceAccessErrorCode code: values()) {
+            if (code.errorCode == errorCode)
+                return code.getHttpStatus();
+        }
+        throw new IllegalArgumentException("Invalid accessErrorCode!");
     }
 }

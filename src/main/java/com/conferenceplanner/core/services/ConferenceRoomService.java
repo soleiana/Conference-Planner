@@ -4,7 +4,6 @@ import com.conferenceplanner.core.domain.Conference;
 import com.conferenceplanner.core.domain.ConferenceRoom;
 import com.conferenceplanner.core.domain.ConferenceRoomAvailability;
 import com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem;
-import com.conferenceplanner.core.repositories.ConferenceRoomAvailabilityItemRepository;
 import com.conferenceplanner.core.repositories.ConferenceRoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,9 +20,6 @@ public class ConferenceRoomService {
 
     @Autowired
     private ConferenceRoomRepository conferenceRoomRepository;
-
-    @Autowired
-    private ConferenceRoomAvailabilityItemRepository conferenceRoomAvailabilityItemRepository;
 
     @Autowired
     private ConferenceRoomChecker conferenceRoomChecker;

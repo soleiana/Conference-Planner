@@ -6,7 +6,6 @@ import com.conferenceplanner.rest.domain.ConferenceParticipants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,17 +19,18 @@ public class ConferenceParticipantFactory {
     @Autowired
     private ConferenceFactory conferenceFactory;
 
-    public ConferenceParticipants create(Conference conference, List<Participant> participants) {
-        ConferenceParticipants conferenceParticipants = new ConferenceParticipants();
+    public ConferenceParticipants create(com.conferenceplanner.core.domain.ConferenceParticipants conferenceParticipants) {
+        ConferenceParticipants restDomainConferenceParticipants = new ConferenceParticipants();
 
-        List<com.conferenceplanner.rest.domain.Participant> restDomainParticipants = participants
+        List<com.conferenceplanner.rest.domain.Participant> restDomainParticipants = conferenceParticipants.getParticipants()
                 .stream()
                 .map(participantFactory::create)
                 .collect(Collectors.toList());
 
+        Conference conference = conferenceParticipants.getConference();
         com.conferenceplanner.rest.domain.Conference restDomainConference = conferenceFactory.create(conference);
-        conferenceParticipants.setParticipants(restDomainParticipants);
-        conferenceParticipants.setConference(restDomainConference);
-        return conferenceParticipants;
+        restDomainConferenceParticipants.setParticipants(restDomainParticipants);
+        restDomainConferenceParticipants.setConference(restDomainConference);
+        return restDomainConferenceParticipants;
     }
 }

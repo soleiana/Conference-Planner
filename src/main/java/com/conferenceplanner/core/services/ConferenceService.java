@@ -1,23 +1,18 @@
 package com.conferenceplanner.core.services;
 
 import com.conferenceplanner.core.domain.Conference;
-import com.conferenceplanner.core.repositories.ConferenceRepository;
+import com.conferenceplanner.core.domain.ConferenceParticipants;
+import com.conferenceplanner.core.domain.Participant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Component
 @Transactional
 public class ConferenceService {
-
-    @Autowired
-    private ConferenceRepository conferenceRepository;
-
-    @Autowired
-    private ConferenceChecker conferenceChecker;
 
     @Autowired
     private ConferenceServiceAssistant serviceAssistant;
@@ -42,16 +37,6 @@ public class ConferenceService {
         return availableConferences;
     }
 
-    public Conference getConference(int conferenceId) {
-        Conference conference;
-        try {
-            conference = conferenceRepository.getById(conferenceId);
-        } catch (Exception ex) {
-            throw new DatabaseException("Persistence level error: " + ex.getMessage());
-        }
-        return conference;
-    }
-
     public void createConference(Conference conference, List<Integer> conferenceRoomIds) {
 
         if (serviceAssistant.checkIfConferenceExists(conference)) {
@@ -64,12 +49,34 @@ public class ConferenceService {
         serviceAssistant.registerConference(conference, conferenceRoomIds);
     }
 
-    public void cancelConference(Conference conference) {
-        try {
-            conference.setCancelled(true);
-        } catch (Exception ex) {
-            throw new DatabaseException("Persistence level error: " + ex.getMessage());
+    public void cancelConference(int conferenceId) {
+        Conference conference = serviceAssistant.getConference(conferenceId);
+        if (conference == null) {
+            throw  new AccessException("No conference found for selected id!", AccessErrorCode.NOT_FOUND);
         }
+        if (conference.isCancelled()) {
+                throw  new AccessException("Conference already cancelled", AccessErrorCode.CONFLICT);
+        }
+        conference.setCancelled(true);
+    }
+
+    public ConferenceParticipants getParticipants(int conferenceId) {
+        ConferenceParticipants conferenceParticipants = new ConferenceParticipants();
+        List<Participant> participants;
+        Conference conference = serviceAssistant.getConference(conferenceId);
+        if (conference == null) {
+            throw new AccessException("No conference found for selected id!", AccessErrorCode.NOT_FOUND);
+        }
+        if (!conference.isUpcoming()) {
+            throw new AccessException("Conference is not upcoming!", AccessErrorCode.CONFLICT);
+        }
+        participants = serviceAssistant.getParticipants(conference);
+        if(participants.isEmpty()) {
+            throw new AccessException("No participants found!", AccessErrorCode.NOT_FOUND);
+        }
+        conferenceParticipants.setConference(conference);
+        conferenceParticipants.setParticipants(participants);
+        return conferenceParticipants;
     }
 
 }
