@@ -7,7 +7,6 @@ import com.conferenceplanner.core.repositories.tools.DatabaseCleaner;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,21 +26,18 @@ public class ParticipantRepositoryTest extends SpringContextTest {
     private Participant participant;
 
     @Before
-    @Transactional
     public void setUp() throws Exception {
         databaseCleaner.clear();
         participant = ParticipantFixture.createParticipant(SURNAME);
     }
 
     @Test
-    @Transactional
     public void testCreate() throws Exception {
         participantRepository.create(participant);
         assertNotNull(participant.getId());
     }
 
     @Test
-    @Transactional
     public void testGetById() throws Exception {
         participantRepository.create(participant);
         int id = participant.getId();
@@ -49,7 +45,6 @@ public class ParticipantRepositoryTest extends SpringContextTest {
     }
 
     @Test
-    @Transactional
     public void testGetAll() throws Exception {
         Participant participant1 = ParticipantFixture.createParticipant(SURNAME);
         Participant participant2 = ParticipantFixture.createParticipant(ANOTHER_SURNAME);

@@ -8,7 +8,7 @@ import com.conferenceplanner.core.repositories.tools.DatabaseCleaner;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+
 
 import static org.junit.Assert.*;
 
@@ -31,7 +31,6 @@ public class ConferenceRoomAvailabilityItemRepositoryTest extends SpringContextT
 
 
     @Before
-    @Transactional
     public void setUp() throws Exception {
         databaseCleaner.clear();
         conferenceRoom = ConferenceRoomFixture.createConferenceRoom("University");
@@ -41,7 +40,6 @@ public class ConferenceRoomAvailabilityItemRepositoryTest extends SpringContextT
     }
 
     @Test
-    @Transactional
     public void testCreate() throws Exception {
         ConferenceRoomAvailabilityItem conferenceRoomAvailabilityItem = new ConferenceRoomAvailabilityItem(conferenceRoom.getMaxSeats());
 
