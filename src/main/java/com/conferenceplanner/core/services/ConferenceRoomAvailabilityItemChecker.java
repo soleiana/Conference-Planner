@@ -8,10 +8,6 @@ import org.springframework.stereotype.Component;
 public class ConferenceRoomAvailabilityItemChecker {
 
     public boolean isActual(ConferenceRoomAvailabilityItem conferenceRoomAvailabilityItem) {
-        Conference conference = conferenceRoomAvailabilityItem.getConference();
-        if (conference.isUpcoming()) {
-            return true;
-        }
-        return false;
+        return conferenceRoomAvailabilityItem.getConference().isUpcoming();
     }
 }

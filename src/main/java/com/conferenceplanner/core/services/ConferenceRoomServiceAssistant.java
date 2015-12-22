@@ -41,14 +41,12 @@ public class ConferenceRoomServiceAssistant {
     }
 
     public ConferenceRoom getConferenceRoom(Integer id) {
-        ConferenceRoom conferenceRoom;
         try {
-            conferenceRoom = conferenceRoomRepository.getById(id);
+            return conferenceRoomRepository.getById(id);
 
         } catch (Exception ex) {
             throw new DatabaseException("Persistence level error: " + ex.getMessage());
         }
-        return conferenceRoom;
     }
 
     public List<ConferenceRoomAvailabilityItem> getConferenceRoomAvailabilityItems(ConferenceRoom conferenceRoom) {

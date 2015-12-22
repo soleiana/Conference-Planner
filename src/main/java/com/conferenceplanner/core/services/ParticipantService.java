@@ -19,4 +19,19 @@ public class ParticipantService {
     @Autowired
     private ConferenceService conferenceService;
 
+
+    public void removeParticipant(int participantId, int conferenceId) {
+        Conference conference = conferenceService.getConference(conferenceId);
+        if (!conference.isUpcoming()) {
+            throw new AccessException("Conference is not upcoming!", AccessErrorCode.CONFLICT);
+        }
+        Participant participant = serviceAssistant.getParticipant(participantId);
+        List<Participant> registeredParticipants = conferenceService.getParticipants(conference);
+
+        if (registeredParticipants.contains(participant)) {
+            throw new AccessException("No participant with selected id registered in conference!", AccessErrorCode.NOT_FOUND);
+        }
+        serviceAssistant.removeParticipant(participant, conference);
+    }
+
 }

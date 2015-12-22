@@ -50,10 +50,7 @@ public class ConferenceService {
     }
 
     public void cancelConference(int conferenceId) {
-        Conference conference = serviceAssistant.getConference(conferenceId);
-        if (conference == null) {
-            throw  new AccessException("No conference found for selected id!", AccessErrorCode.NOT_FOUND);
-        }
+        Conference conference = getConference(conferenceId);
         if (conference.isCancelled()) {
                 throw  new AccessException("Conference already cancelled", AccessErrorCode.CONFLICT);
         }
@@ -63,20 +60,30 @@ public class ConferenceService {
     public ConferenceParticipants getParticipants(int conferenceId) {
         ConferenceParticipants conferenceParticipants = new ConferenceParticipants();
         List<Participant> participants;
+        Conference conference = getConference(conferenceId);
+        if (!conference.isUpcoming()) {
+            throw new AccessException("Conference is not upcoming!", AccessErrorCode.CONFLICT);
+        }
+        participants = getParticipants(conference);
+        conferenceParticipants.setConference(conference);
+        conferenceParticipants.setParticipants(participants);
+        return conferenceParticipants;
+    }
+
+    public Conference getConference(int conferenceId) {
         Conference conference = serviceAssistant.getConference(conferenceId);
         if (conference == null) {
             throw new AccessException("No conference found for selected id!", AccessErrorCode.NOT_FOUND);
         }
-        if (!conference.isUpcoming()) {
-            throw new AccessException("Conference is not upcoming!", AccessErrorCode.CONFLICT);
-        }
-        participants = serviceAssistant.getParticipants(conference);
+        return conference;
+    }
+
+    public List<Participant> getParticipants(Conference conference) {
+        List<Participant> participants = serviceAssistant.getParticipants(conference);
         if(participants.isEmpty()) {
             throw new AccessException("No participants found!", AccessErrorCode.NOT_FOUND);
         }
-        conferenceParticipants.setConference(conference);
-        conferenceParticipants.setParticipants(participants);
-        return conferenceParticipants;
+        return participants;
     }
 
 }

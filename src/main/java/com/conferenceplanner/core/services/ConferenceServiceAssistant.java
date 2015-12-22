@@ -66,13 +66,11 @@ public class ConferenceServiceAssistant {
     }
 
     public Conference getConference(int conferenceId) {
-        Conference conference;
         try {
-            conference = conferenceRepository.getById(conferenceId);
+            return conferenceRepository.getById(conferenceId);
         } catch (Exception ex) {
             throw new DatabaseException("Persistence level error: " + ex.getMessage());
         }
-        return conference;
     }
 
     public List<Conference> getUpcomingConferences() {
@@ -95,13 +93,11 @@ public class ConferenceServiceAssistant {
     }
 
     public List<Participant> getParticipants(Conference conference) {
-        List<Participant> participants;
         try {
-            participants = conference.getParticipants();
+            return conference.getParticipants();
         } catch (Exception ex) {
             throw new DatabaseException("Persistence level error: " + ex.getMessage());
         }
-        return participants;
     }
 
 }
