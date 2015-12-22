@@ -1,12 +1,13 @@
 package com.conferenceplanner.core.services.unit;
 
+import com.conferenceplanner.core.domain.Conference;
 import com.conferenceplanner.core.domain.ConferenceRoom;
 import com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem;
 import com.conferenceplanner.core.repositories.ConferenceRoomRepository;
-import com.conferenceplanner.core.services.ConferenceRoomAvailabilityItemChecker;
 import com.conferenceplanner.core.services.ConferenceRoomChecker;
 import com.conferenceplanner.core.services.ConferenceRoomServiceAssistant;
 import com.conferenceplanner.core.services.DatabaseException;
+import com.conferenceplanner.core.services.fixtures.ConferenceFixture;
 import com.conferenceplanner.core.services.fixtures.ConferenceRoomAvailabilityItemFixture;
 import com.conferenceplanner.core.services.fixtures.ConferenceRoomFixture;
 import org.junit.Before;
@@ -32,9 +33,6 @@ public class ConferenceRoomServiceAssistantTest {
 
     @Mock
     private ConferenceRoomRepository conferenceRoomRepository;
-
-    @Mock
-    private ConferenceRoomAvailabilityItemChecker conferenceRoomAvailabilityItemChecker;
 
     @Mock
     private ConferenceRoomChecker conferenceRoomChecker;
@@ -123,19 +121,25 @@ public class ConferenceRoomServiceAssistantTest {
     }
 
     @Test
-    public void test_getConferenceRoomAvailabilityItems()  {
+    public void test_getConferenceRoomAvailabilityItems_if_conference_is_upcoming()  {
         ConferenceRoom conferenceRoom = ConferenceRoomFixture.createConferenceRoom();
+        Conference conference = ConferenceFixture.createUpcomingConference();
         List<ConferenceRoomAvailabilityItem> availabilityItems =
-                ConferenceRoomAvailabilityItemFixture.createConferenceRoomsWithAvailableSeats(3);
+                ConferenceRoomAvailabilityItemFixture.createConferenceRoomsWithAvailableSeats(conference, 3);
         conferenceRoom.setConferenceRoomAvailabilityItems(availabilityItems);
-        when(conferenceRoomAvailabilityItemChecker.isActual(availabilityItems.get(0))).thenReturn(false);
-        when(conferenceRoomAvailabilityItemChecker.isActual(availabilityItems.get(1))).thenReturn(true);
-        when(conferenceRoomAvailabilityItemChecker.isActual(availabilityItems.get(2))).thenReturn(true);
-
         List<ConferenceRoomAvailabilityItem> actualAvailabilityItems = serviceAssistant.getConferenceRoomAvailabilityItems(conferenceRoom);
-        assertEquals(2, actualAvailabilityItems.size());
-        assertEquals(availabilityItems.get(1), actualAvailabilityItems.get(0));
-        assertEquals(availabilityItems.get(2), actualAvailabilityItems.get(1));
+        assertEquals(availabilityItems.size(), actualAvailabilityItems.size());
+    }
+
+    @Test
+    public void test_getConferenceRoomAvailabilityItems_if_conference_is_cancelled()  {
+        ConferenceRoom conferenceRoom = ConferenceRoomFixture.createConferenceRoom();
+        Conference conference = ConferenceFixture.createCancelledConference();
+        List<ConferenceRoomAvailabilityItem> availabilityItems =
+                ConferenceRoomAvailabilityItemFixture.createConferenceRoomsWithAvailableSeats(conference, 3);
+        conferenceRoom.setConferenceRoomAvailabilityItems(availabilityItems);
+        List<ConferenceRoomAvailabilityItem> actualAvailabilityItems = serviceAssistant.getConferenceRoomAvailabilityItems(conferenceRoom);
+        assertTrue(actualAvailabilityItems.isEmpty());
     }
 
 }

@@ -18,8 +18,6 @@ public class ConferenceRoomServiceAssistant {
     @Autowired
     private ConferenceRoomChecker conferenceRoomChecker;
 
-    @Autowired
-    private ConferenceRoomAvailabilityItemChecker conferenceRoomAvailabilityItemChecker;
 
     public boolean checkIfConferenceRoomExists(ConferenceRoom conferenceRoom) {
         try {
@@ -53,7 +51,7 @@ public class ConferenceRoomServiceAssistant {
         try {
             return conferenceRoom.getConferenceRoomAvailabilityItems()
                 .stream()
-                .filter(conferenceRoomAvailabilityItemChecker::isActual)
+                .filter(item -> item.getConference().isUpcoming())
                 .collect(Collectors.toList());
         } catch (Exception ex) {
             throw new DatabaseException("Persistence level error: " + ex.getMessage());

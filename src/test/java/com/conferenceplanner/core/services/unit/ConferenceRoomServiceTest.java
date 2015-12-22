@@ -11,7 +11,6 @@ import com.conferenceplanner.core.services.*;
 import com.conferenceplanner.core.services.fixtures.ConferenceFixture;
 import com.conferenceplanner.core.services.fixtures.ConferenceRoomAvailabilityItemFixture;
 import com.conferenceplanner.core.services.fixtures.ConferenceRoomFixture;
-import com.conferenceplanner.core.services.unit.helpers.ConferenceServiceUnitTestHelper;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -19,7 +18,6 @@ import org.junit.rules.ExpectedException;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
 
 
 import java.util.ArrayList;
@@ -46,11 +44,6 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     @Mock
     private ConferenceRoomChecker conferenceRoomChecker;
 
-    @Mock
-    private ConferenceRoomAvailabilityItemChecker conferenceRoomAvailabilityItemChecker;
-
-    @Autowired
-    private ConferenceServiceUnitTestHelper testHelper;
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
