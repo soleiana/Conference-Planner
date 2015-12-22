@@ -13,32 +13,16 @@ import java.util.List;
 public class ConferenceRoomChecker {
 
     public boolean isAvailable(ConferenceRoom conferenceRoom, Conference plannedConference) {
-
-        List<Conference> conferences = conferenceRoom.getConferences();
-        if (conferences.isEmpty()) {
-            return true;
-        }
-        for (Conference conference: conferences) {
-            if (conference.isCancelled()){
-                continue;
-            }
-            if (overlap(conference, plannedConference)) {
-                return false;
-            }
-        }
-        return true;
+        return !conferenceRoom.getConferences().stream()
+                .anyMatch(c -> !c.isCancelled() && this.overlap(c, plannedConference));
     }
 
     public boolean compare(ConferenceRoom conferenceRoom, ConferenceRoom roomToCompare) {
-        if (conferenceRoom.getName().equalsIgnoreCase(roomToCompare.getName())
-                && conferenceRoom.getLocation().equalsIgnoreCase(roomToCompare.getLocation())) {
-            return true;
-        }
-        return false;
+        return conferenceRoom.getName().equalsIgnoreCase(roomToCompare.getName())
+                && conferenceRoom.getLocation().equalsIgnoreCase(roomToCompare.getLocation());
     }
 
     private boolean overlap(Conference scheduledConference, Conference plannedConference) {
-
         LocalDateTime plannedStart = plannedConference.getStartDateTime();
         LocalDateTime plannedEnd = plannedConference.getEndDateTime();
         LocalDateTime scheduledStart = scheduledConference.getStartDateTime();
@@ -49,14 +33,11 @@ public class ConferenceRoomChecker {
         ConferenceInterval scheduledInterval = new ConferenceInterval(actualStartDateTime, actualEndDateTime);
         ConferenceInterval plannedInterval = new ConferenceInterval(plannedStart, plannedEnd);
 
-        if (plannedInterval.contains(actualStartDateTime)
+        return plannedInterval.contains(actualStartDateTime)
                 || plannedInterval.contains(actualEndDateTime)
                 || scheduledInterval.contains(plannedStart)
-                || scheduledInterval.contains(plannedEnd)) {
+                || scheduledInterval.contains(plannedEnd);
 
-            return true;
-        }
-    return false;
     }
 
 }

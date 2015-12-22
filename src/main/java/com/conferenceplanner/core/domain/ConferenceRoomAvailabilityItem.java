@@ -36,6 +36,10 @@ public class ConferenceRoomAvailabilityItem {
         return availableSeats;
     }
 
+    public boolean hasAvailableSeats() {
+        return getAvailableSeats() > 0;
+    }
+
     public void releaseAvailableSeat() {
         this.availableSeats++;
     }

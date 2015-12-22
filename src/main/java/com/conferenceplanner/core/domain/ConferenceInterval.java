@@ -16,19 +16,14 @@ public class ConferenceInterval {
     }
 
     public boolean contains(LocalDateTime dateTime) {
-        if (dateTime.isAfter(startDateTime) && dateTime.isBefore(endDateTime)) {
-            return true;
-        }
-        return false;
+        return dateTime.isAfter(startDateTime) && dateTime.isBefore(endDateTime);
     }
 
     public static LocalDateTime getActualStartDateTime(LocalDateTime startDateTime){
-        LocalDateTime actualDateTime = startDateTime.minusMinutes(MIN_INTERVAL_BETWEEN_CONFERENCES_IN_MINUTES);
-        return actualDateTime;
+        return startDateTime.minusMinutes(MIN_INTERVAL_BETWEEN_CONFERENCES_IN_MINUTES);
     }
 
     public static LocalDateTime getActualEndDateTime(LocalDateTime endDateTime){
-        LocalDateTime actualDateTime = endDateTime.plusMinutes(MIN_INTERVAL_BETWEEN_CONFERENCES_IN_MINUTES);
-        return actualDateTime;
+        return endDateTime.plusMinutes(MIN_INTERVAL_BETWEEN_CONFERENCES_IN_MINUTES);
     }
 }
