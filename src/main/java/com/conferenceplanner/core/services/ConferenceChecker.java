@@ -11,7 +11,7 @@ public class ConferenceChecker {
 
     public boolean isAvailable(Conference conference) {
         return conference.getConferenceRoomAvailabilityItems().stream()
-                .anyMatch(item -> item.hasAvailableSeats());
+                .anyMatch(ConferenceRoomAvailabilityItem::hasAvailableSeats);
 
     }
 
