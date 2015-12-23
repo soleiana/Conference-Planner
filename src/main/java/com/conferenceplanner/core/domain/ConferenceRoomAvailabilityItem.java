@@ -37,16 +37,21 @@ public class ConferenceRoomAvailabilityItem {
     }
 
     public boolean hasAvailableSeats() {
-        return getAvailableSeats() > 0;
+        return availableSeats > 0;
+    }
+
+    public boolean relatesToEmptyConferenceRoom() {
+        return availableSeats == conferenceRoom.getMaxSeats();
+    }
+
+    public void takeAvailableSeat() {
+        this.availableSeats--;
     }
 
     public void releaseAvailableSeat() {
         this.availableSeats++;
     }
 
-    public void occupyAvailableSeat() {
-        this.availableSeats--;
-    }
 
     public ConferenceRoom getConferenceRoom() {
         return conferenceRoom;

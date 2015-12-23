@@ -33,7 +33,7 @@ public class ParticipantServiceAssistant {
             conference.removeParticipant(participant);
 
             ConferenceRoomAvailabilityItem availabilityItem = conference.getConferenceRoomAvailabilityItems().stream()
-                    .filter(item -> item.getAvailableSeats()!= item.getConferenceRoom().getMaxSeats())
+                    .filter(item -> !item.relatesToEmptyConferenceRoom())
                     .findFirst()
                     .get();
             availabilityItem.releaseAvailableSeat();
