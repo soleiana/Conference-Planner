@@ -6,9 +6,11 @@ import com.conferenceplanner.core.domain.Participant;
 import com.conferenceplanner.core.repositories.ParticipantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Component
+@Transactional
 public class ParticipantServiceAssistant {
 
     @Autowired
