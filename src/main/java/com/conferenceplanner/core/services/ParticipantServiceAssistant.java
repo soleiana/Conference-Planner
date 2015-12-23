@@ -1,16 +1,11 @@
 package com.conferenceplanner.core.services;
 
 import com.conferenceplanner.core.domain.Conference;
-import com.conferenceplanner.core.domain.ConferenceRoom;
 import com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem;
 import com.conferenceplanner.core.domain.Participant;
-import com.conferenceplanner.core.repositories.ConferenceRoomRepository;
 import com.conferenceplanner.core.repositories.ParticipantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Component
