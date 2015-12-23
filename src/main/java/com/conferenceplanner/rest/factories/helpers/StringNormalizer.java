@@ -3,60 +3,47 @@ package com.conferenceplanner.rest.factories.helpers;
 
 public class StringNormalizer {
 
+    private static final String FIRST_WORD_PATTERN = "[a-z]/[a-z]";
+
     public static String createNormalizedConferenceRoomLocation(String locationString) {
-
-        if (locationString == null || locationString.isEmpty()) {
-            throw new IllegalArgumentException("Can not normalize null or empty string!");
-        }
-
         String normalizedString = "";
         String[] words = locationString.toLowerCase().trim().split("\\s+");
 
-        normalizedString += words[0].toUpperCase();
+        normalizedString += normalizeFirstWord(words[0]);
 
         for (int i = 1; i < words.length; i++) {
-            normalizedString += " ";
-            normalizedString += capitalize(words[i]);
+            normalizedString += " " + capitalize(words[i]);
         }
         return normalizedString;
     }
 
     public static String createNormalizedConferenceRoomName(String nameString) {
-
-        if (nameString == null || nameString.isEmpty()) {
-            throw new IllegalArgumentException("Can not normalize null or empty string!");
-        }
-
         String normalizedString = "";
         String[] words = nameString.toLowerCase().trim().split("\\s+");
 
-        normalizedString += words[0].toUpperCase();
+        normalizedString += normalizeFirstWord(words[0]);
 
-        for (int i = 1; i < words.length; i++) {
-            normalizedString += " ";
-            if (i != words.length - 1) {
-                normalizedString += capitalize(words[i]);
-            } else {
-                normalizedString += words[i];
-            }
+        for (int i = 1; i < words.length - 1; i++) {
+            normalizedString += " " + capitalize(words[i]);
         }
-
+        normalizedString += " conference";
         return normalizedString;
     }
 
     public static String createNormalizedConferenceName(String nameString) {
-        if (nameString == null || nameString.isEmpty()) {
-            throw new IllegalArgumentException("Can not normalize null or empty string!");
-        }
         return nameString.trim().replaceAll("\\s+", " ");
+    }
+
+    private static String normalizeFirstWord(String word) {
+        if (word.matches(FIRST_WORD_PATTERN)) {
+            return word.toUpperCase();
+        } else {
+            return capitalize(word);
+        }
     }
 
     private static String capitalize(String str) {
         String capitalizedString;
-
-        if (str == null || str.isEmpty()) {
-            throw new IllegalArgumentException("Can not capitalize null or empty string!");
-        }
         char firstCharacter = str.charAt(0);
         capitalizedString = str.replace(firstCharacter, Character.toUpperCase(firstCharacter));
         return capitalizedString;
