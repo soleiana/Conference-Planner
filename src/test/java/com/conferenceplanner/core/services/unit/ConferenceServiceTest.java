@@ -109,15 +109,6 @@ public class ConferenceServiceTest {
     }
 
     @Test
-    public void test_cancelConference() {
-        int id = 1;
-        Conference conference = ConferenceFixture.createUpcomingConference();
-        when(serviceAssistant.getConference(id)).thenReturn(conference);
-        conferenceService.cancelConference(id);
-        assertTrue(conference.isCancelled());
-    }
-
-    @Test
     public void test_cancelConference_throws_AccessException() {
         int id = 1;
         when(serviceAssistant.getConference(id)).thenReturn(null);

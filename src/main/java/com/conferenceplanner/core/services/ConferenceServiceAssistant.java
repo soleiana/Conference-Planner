@@ -67,6 +67,14 @@ public class ConferenceServiceAssistant {
         }
     }
 
+    public void cancelConference(Conference conference) {
+        try {
+            conference.setCancelled(true);
+        }catch (Exception ex) {
+            throw new DatabaseException("Persistence level error: " + ex.getMessage());
+        }
+    }
+
     public Conference getConference(int conferenceId) {
         try {
             return conferenceRepository.getById(conferenceId);

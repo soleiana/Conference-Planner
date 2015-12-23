@@ -54,7 +54,7 @@ public class ConferenceService {
         if (conference.isCancelled()) {
                 throw  new AccessException("Conference already cancelled", AccessErrorCode.CONFLICT);
         }
-        conference.setCancelled(true);
+        serviceAssistant.cancelConference(conference);
     }
 
     public ConferenceParticipants getParticipants(int conferenceId) {
