@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @Component
-public class ConferenceServiceUnitTestHelper {
+public class ServiceUnitTestHelper {
 
     public void assertRegisterConferenceResult(Conference conference, List<ConferenceRoom> rooms) {
         List<ConferenceRoomAvailabilityItem> availabilityItems = conference.getConferenceRoomAvailabilityItems();

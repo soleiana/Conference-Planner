@@ -1,6 +1,6 @@
 package com.conferenceplanner.rest.controllers;
 
-import com.conferenceplanner.core.services.AccessException;
+import com.conferenceplanner.core.services.ApplicationException;
 import com.conferenceplanner.core.services.ParticipantService;
 import com.conferenceplanner.rest.domain.Participant;
 import com.conferenceplanner.rest.domain.ResourceAccessErrorCode;
@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -43,7 +42,7 @@ public class ParticipantController {
         } catch (ValidationException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 
-        } catch (AccessException ex) {
+        } catch (ApplicationException ex) {
             HttpStatus httpStatus = ResourceAccessErrorCode.getHttpStatus(ex.getErrorCode());
             return new ResponseEntity<>(ex.getMessage(), httpStatus);
         }

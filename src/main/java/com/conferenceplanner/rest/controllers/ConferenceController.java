@@ -1,7 +1,7 @@
 package com.conferenceplanner.rest.controllers;
 
 
-import com.conferenceplanner.core.services.AccessException;
+import com.conferenceplanner.core.services.ApplicationException;
 import com.conferenceplanner.core.services.ConferenceService;
 import com.conferenceplanner.rest.domain.*;
 import com.conferenceplanner.rest.domain.Conference;
@@ -45,7 +45,7 @@ public class ConferenceController {
         } catch (ValidationException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 
-        } catch (AccessException ex) {
+        } catch (ApplicationException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
         }
         catch (RuntimeException ex) {
@@ -63,7 +63,7 @@ public class ConferenceController {
             List<Conference> restDomainConferences = conferenceFactory.create(coreDomainConferences);
             conferences.setConferences(restDomainConferences);
 
-        } catch (AccessException ex) {
+        } catch (ApplicationException ex) {
             conferences.setErrorMessage(ex.getMessage());
             return new ResponseEntity<>(conferences, HttpStatus.NOT_FOUND);
 
@@ -83,7 +83,7 @@ public class ConferenceController {
             List<Conference> restDomainConferences = conferenceFactory.create(coreDomainConferences);
             conferences.setConferences(restDomainConferences);
 
-        } catch (AccessException ex) {
+        } catch (ApplicationException ex) {
             conferences.setErrorMessage(ex.getMessage());
             return new ResponseEntity<>(conferences, HttpStatus.NOT_FOUND);
 
@@ -108,7 +108,7 @@ public class ConferenceController {
             conferenceParticipants.setErrorMessage(ex.getMessage());
             return new ResponseEntity<>(conferenceParticipants, HttpStatus.BAD_REQUEST);
 
-        } catch (AccessException ex) {
+        } catch (ApplicationException ex) {
             conferenceParticipants.setErrorMessage(ex.getMessage());
             HttpStatus httpStatus = ResourceAccessErrorCode.getHttpStatus(ex.getErrorCode());
             return new ResponseEntity<>(conferenceParticipants, httpStatus);
@@ -127,7 +127,7 @@ public class ConferenceController {
             conferenceValidator.validateId(id);
             conferenceService.cancelConference(id);
 
-        } catch (AccessException ex) {
+        } catch (ApplicationException ex) {
             HttpStatus httpStatus = ResourceAccessErrorCode.getHttpStatus(ex.getErrorCode());
             return new ResponseEntity<>(ex.getMessage(), httpStatus);
         }

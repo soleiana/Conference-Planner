@@ -1,23 +1,23 @@
 package com.conferenceplanner.rest.domain;
 
-import com.conferenceplanner.core.services.AccessErrorCode;
+import com.conferenceplanner.core.services.ApplicationErrorCode;
 import org.springframework.http.HttpStatus;
 
 public enum ResourceAccessErrorCode {
 
-    RESOURCE_NOT_FOUND(AccessErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND),
-    RESOURCE_CONFLICT(AccessErrorCode.CONFLICT, HttpStatus.CONFLICT)
+    RESOURCE_NOT_FOUND(ApplicationErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND),
+    RESOURCE_CONFLICT(ApplicationErrorCode.CONFLICT, HttpStatus.CONFLICT)
     ;
 
-    private AccessErrorCode errorCode;
+    private ApplicationErrorCode errorCode;
     private HttpStatus httpStatus;
 
-    private ResourceAccessErrorCode(AccessErrorCode errorCode, HttpStatus httpStatus){
+    private ResourceAccessErrorCode(ApplicationErrorCode errorCode, HttpStatus httpStatus){
         this.errorCode = errorCode;
         this.httpStatus = httpStatus;
     }
 
-    public AccessErrorCode getErrorCode() {
+    public ApplicationErrorCode getErrorCode() {
         return errorCode;
     }
 
@@ -25,11 +25,11 @@ public enum ResourceAccessErrorCode {
         return httpStatus;
     }
 
-    public static HttpStatus getHttpStatus(AccessErrorCode errorCode) {
+    public static HttpStatus getHttpStatus(ApplicationErrorCode errorCode) {
         for (ResourceAccessErrorCode code: values()) {
             if (code.errorCode == errorCode)
                 return code.getHttpStatus();
         }
-        throw new IllegalArgumentException("Invalid accessErrorCode!");
+        throw new IllegalArgumentException("Invalid applicationErrorCode!");
     }
 }

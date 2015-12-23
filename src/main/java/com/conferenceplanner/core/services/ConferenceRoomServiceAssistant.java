@@ -1,5 +1,6 @@
 package com.conferenceplanner.core.services;
 
+import com.conferenceplanner.core.domain.Conference;
 import com.conferenceplanner.core.domain.ConferenceRoom;
 import com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem;
 import com.conferenceplanner.core.repositories.ConferenceRoomRepository;
@@ -22,42 +23,28 @@ public class ConferenceRoomServiceAssistant {
 
 
     public boolean checkIfConferenceRoomExists(ConferenceRoom conferenceRoom) {
-        try {
-            List<ConferenceRoom> conferenceRooms = conferenceRoomRepository.getAll();
-            return conferenceRooms.stream().anyMatch(room -> conferenceRoomChecker.compare(conferenceRoom, room));
-
-        } catch (Exception ex) {
-            throw new DatabaseException("Persistence level error: " + ex.getMessage());
-        }
+        return conferenceRoomRepository.getAll().stream().
+                    anyMatch(room -> conferenceRoomChecker.compare(conferenceRoom, room));
     }
 
     public void createConferenceRoom(ConferenceRoom conferenceRoom) {
-        try {
-            conferenceRoomRepository.create(conferenceRoom);
-
-        } catch (Exception ex) {
-            throw new DatabaseException("Persistence level error: " + ex.getMessage());
-        }
+        conferenceRoomRepository.create(conferenceRoom);
     }
 
     public ConferenceRoom getConferenceRoom(Integer id) {
-        try {
-            return conferenceRoomRepository.getById(id);
+        return conferenceRoomRepository.getById(id);
+    }
 
-        } catch (Exception ex) {
-            throw new DatabaseException("Persistence level error: " + ex.getMessage());
-        }
+    public List<ConferenceRoom> getAvailableConferenceRooms(Conference plannedConference) {
+        return conferenceRoomRepository.getAll().stream()
+                .filter(room -> conferenceRoomChecker.isAvailable(room, plannedConference))
+                .collect(Collectors.toList());
     }
 
     public List<ConferenceRoomAvailabilityItem> getConferenceRoomAvailabilityItems(ConferenceRoom conferenceRoom) {
-        try {
-            return conferenceRoom.getConferenceRoomAvailabilityItems()
-                .stream()
+            return conferenceRoom.getConferenceRoomAvailabilityItems().stream()
                 .filter(item -> item.getConference().isUpcoming())
                 .collect(Collectors.toList());
-        } catch (Exception ex) {
-            throw new DatabaseException("Persistence level error: " + ex.getMessage());
-        }
     }
 
 }

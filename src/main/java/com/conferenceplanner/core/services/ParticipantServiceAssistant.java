@@ -18,25 +18,16 @@ public class ParticipantServiceAssistant {
 
 
     public Participant getParticipant(int participantId) {
-        try {
-            return participantRepository.getById(participantId);
-        } catch (Exception ex) {
-            throw new DatabaseException("Persistence level error: " + ex.getMessage());
-        }
+        return participantRepository.getById(participantId);
     }
 
     public void removeParticipant(Participant participant, Conference conference) {
-        try {
-            conference.removeParticipant(participant);
+        conference.removeParticipant(participant);
 
-            ConferenceRoomAvailabilityItem availabilityItem = conference.getConferenceRoomAvailabilityItems().stream()
-                    .filter(item -> !item.relatesToEmptyConferenceRoom())
-                    .findFirst()
-                    .get();
-            availabilityItem.releaseAvailableSeat();
-
-        } catch (Exception ex) {
-            throw new DatabaseException("Persistence level error: " + ex.getMessage());
-        }
+        ConferenceRoomAvailabilityItem availabilityItem = conference.getConferenceRoomAvailabilityItems().stream()
+                .filter(item -> !item.relatesToEmptyConferenceRoom())
+                .findFirst()
+                .get();
+        availabilityItem.releaseAvailableSeat();
     }
 }

@@ -1,7 +1,6 @@
 package com.conferenceplanner.core.services;
 
-public enum AccessErrorCode {
-
+public enum ApplicationErrorCode {
     CONFLICT,
     NOT_FOUND;
 }

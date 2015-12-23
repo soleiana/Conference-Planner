@@ -9,11 +9,10 @@ import com.conferenceplanner.core.repositories.ConferenceRoomAvailabilityItemRep
 import com.conferenceplanner.core.repositories.ConferenceRoomRepository;
 import com.conferenceplanner.core.services.ConferenceChecker;
 import com.conferenceplanner.core.services.ConferenceServiceAssistant;
-import com.conferenceplanner.core.services.DatabaseException;
 import com.conferenceplanner.core.services.fixtures.ConferenceFixture;
 import com.conferenceplanner.core.services.fixtures.ConferenceRoomFixture;
 import com.conferenceplanner.core.services.fixtures.ParticipantFixture;
-import com.conferenceplanner.core.services.unit.helpers.ConferenceServiceUnitTestHelper;
+import com.conferenceplanner.core.services.unit.helpers.ServiceUnitTestHelper;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -51,7 +50,7 @@ public class ConferenceServiceAssistantTest extends SpringContextTest {
     private ConferenceChecker conferenceChecker;
 
     @Autowired
-    private ConferenceServiceUnitTestHelper testHelper;
+    private ServiceUnitTestHelper testHelper;
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -60,15 +59,6 @@ public class ConferenceServiceAssistantTest extends SpringContextTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-    }
-
-    @Test
-    public void test_checkIfConferenceExists_throws_DatabaseException() {
-        Conference plannedConference = ConferenceFixture.createConference();
-        doThrow(new RuntimeException("Database connection failed")).when(conferenceRepository).getUpcoming();
-        expectedException.expect(DatabaseException.class);
-        expectedException.expectMessage("Database connection failed");
-        serviceAssistant.checkIfConferenceExists(plannedConference);
     }
 
     @Test
@@ -101,15 +91,6 @@ public class ConferenceServiceAssistantTest extends SpringContextTest {
     }
 
     @Test
-    public void test_registerConference_throws_DatabaseException() {
-        Conference conference = ConferenceFixture.createConference();
-        doThrow(new RuntimeException("Database connection failed")).when(conferenceRoomRepository).getById(1);
-        expectedException.expect(DatabaseException.class);
-        expectedException.expectMessage("Database connection failed");
-        serviceAssistant.registerConference(conference, Arrays.asList(1, 2, 3));
-    }
-
-    @Test
     public void test_registerConference() {
         Conference conference = ConferenceFixture.createConference();
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRoomsWithId(3);
@@ -131,14 +112,6 @@ public class ConferenceServiceAssistantTest extends SpringContextTest {
     }
 
     @Test
-    public void test_getUpcomingConferences_throws_DatabaseException() {
-        doThrow(new RuntimeException("Database connection failed")).when(conferenceRepository).getUpcoming();
-        expectedException.expect(DatabaseException.class);
-        expectedException.expectMessage("Database connection failed");
-        serviceAssistant.getUpcomingConferences();
-    }
-
-    @Test
     public void test_getAvailableConferences() {
         List<Conference> upcomingConferences = ConferenceFixture.createUpcomingConferences();
         assertEquals(3, upcomingConferences.size());
@@ -152,38 +125,12 @@ public class ConferenceServiceAssistantTest extends SpringContextTest {
     }
 
     @Test
-    public void test_getAvailableConferences_throws_DatabaseException() {
-        doThrow(new RuntimeException("Database connection failed")).when(conferenceRepository).getUpcoming();
-        expectedException.expect(DatabaseException.class);
-        expectedException.expectMessage("Database connection failed");
-        serviceAssistant.getAvailableConferences();
-    }
-
-    @Test
-    public void test_getParticipants_throws_DatabaseException(){
-        Conference conference = mock(Conference.class);
-        doThrow(new RuntimeException("Database connection failed")).when(conference).getParticipants();
-        expectedException.expect(DatabaseException.class);
-        expectedException.expectMessage("Database connection failed");
-        serviceAssistant.getParticipants(conference);
-    }
-
-    @Test
     public void test_getParticipants(){
         Conference conference = ConferenceFixture.createUpcomingConference();
         List<Participant> participants = ParticipantFixture.createParticipants(3);
         conference.setParticipants(participants);
         List<Participant> actualParticipants = serviceAssistant.getParticipants(conference);
         assertEquals(participants.size(), actualParticipants.size());
-    }
-
-    @Test
-    public void test_getConference_throws_DatabaseException() {
-        final int id = 1;
-        doThrow(new RuntimeException("Database connection failed")).when(conferenceRepository).getById(id);
-        expectedException.expect(DatabaseException.class);
-        expectedException.expectMessage("Database connection failed");
-        serviceAssistant.getConference(id);
     }
 
     @Test

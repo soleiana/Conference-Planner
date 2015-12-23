@@ -1,6 +1,6 @@
 package com.conferenceplanner.rest.controllers;
 
-import com.conferenceplanner.core.services.AccessException;
+import com.conferenceplanner.core.services.ApplicationException;
 import com.conferenceplanner.core.services.ConferenceRoomService;
 import com.conferenceplanner.rest.domain.*;
 import com.conferenceplanner.rest.domain.ConferenceInterval;
@@ -54,7 +54,7 @@ public class ConferenceRoomController {
         } catch (ValidationException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 
-        } catch (AccessException ex) {
+        } catch (ApplicationException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
 
         } catch (RuntimeException ex) {
@@ -84,7 +84,7 @@ public class ConferenceRoomController {
             availableConferenceRooms.setErrorMessage(ex.getMessage());
             return new ResponseEntity<>(availableConferenceRooms, HttpStatus.BAD_REQUEST);
 
-        } catch (AccessException ex) {
+        } catch (ApplicationException ex) {
             availableConferenceRooms.setErrorMessage(ex.getMessage());
             return new ResponseEntity<>(availableConferenceRooms, HttpStatus.NOT_FOUND);
 
@@ -110,7 +110,7 @@ public class ConferenceRoomController {
             conferenceRoomAvailability.setErrorMessage(ex.getMessage());
             return new ResponseEntity<>(conferenceRoomAvailability, HttpStatus.BAD_REQUEST);
 
-        }  catch (AccessException ex) {
+        }  catch (ApplicationException ex) {
             conferenceRoomAvailability.setErrorMessage(ex.getMessage());
             return new ResponseEntity<>(conferenceRoomAvailability, HttpStatus.NOT_FOUND);
 

@@ -24,7 +24,7 @@ public class ConferenceService {
     public List<Conference> getUpcomingConferences() {
         List<Conference> conferences = serviceAssistant.getUpcomingConferences();
         if (conferences.isEmpty()) {
-            throw new AccessException("No upcoming conferences!", AccessErrorCode.NOT_FOUND);
+            throw new ApplicationException("No upcoming conferences!", ApplicationErrorCode.NOT_FOUND);
         }
         return conferences;
     }
@@ -32,18 +32,17 @@ public class ConferenceService {
     public List<Conference> getAvailableConferences() {
         List<Conference> availableConferences = serviceAssistant.getAvailableConferences();
         if (availableConferences.isEmpty()) {
-            throw new AccessException("No available conferences!", AccessErrorCode.NOT_FOUND);
+            throw new ApplicationException("No available conferences!", ApplicationErrorCode.NOT_FOUND);
         }
         return availableConferences;
     }
 
     public void createConference(Conference conference, List<Integer> conferenceRoomIds) {
-
         if (serviceAssistant.checkIfConferenceExists(conference)) {
-             throw new AccessException("Conference already exists!", AccessErrorCode.CONFLICT);
+             throw new ApplicationException("Conference already exists!", ApplicationErrorCode.CONFLICT);
         }
         if (!conferenceRoomService.checkIfConferenceRoomsAvailable(conferenceRoomIds, conference)) {
-            throw new AccessException("Conference room(s) not available!", AccessErrorCode.CONFLICT);
+            throw new ApplicationException("Conference room(s) not available!", ApplicationErrorCode.CONFLICT);
         }
         serviceAssistant.createConference(conference);
         serviceAssistant.registerConference(conference, conferenceRoomIds);
@@ -52,7 +51,7 @@ public class ConferenceService {
     public void cancelConference(int conferenceId) {
         Conference conference = getConference(conferenceId);
         if (conference.isCancelled()) {
-                throw  new AccessException("Conference already cancelled", AccessErrorCode.CONFLICT);
+                throw  new ApplicationException("Conference already cancelled", ApplicationErrorCode.CONFLICT);
         }
         serviceAssistant.cancelConference(conference);
     }
@@ -62,7 +61,7 @@ public class ConferenceService {
         List<Participant> participants;
         Conference conference = getConference(conferenceId);
         if (!conference.isUpcoming()) {
-            throw new AccessException("Conference is not upcoming!", AccessErrorCode.CONFLICT);
+            throw new ApplicationException("Conference is not upcoming!", ApplicationErrorCode.CONFLICT);
         }
         participants = getParticipants(conference);
         conferenceParticipants.setConference(conference);
@@ -73,7 +72,7 @@ public class ConferenceService {
     public Conference getConference(int conferenceId) {
         Conference conference = serviceAssistant.getConference(conferenceId);
         if (conference == null) {
-            throw new AccessException("No conference found for selected id!", AccessErrorCode.NOT_FOUND);
+            throw new ApplicationException("No conference found for selected id!", ApplicationErrorCode.NOT_FOUND);
         }
         return conference;
     }
@@ -81,7 +80,7 @@ public class ConferenceService {
     public List<Participant> getParticipants(Conference conference) {
         List<Participant> participants = serviceAssistant.getParticipants(conference);
         if(participants.isEmpty()) {
-            throw new AccessException("No participants found!", AccessErrorCode.NOT_FOUND);
+            throw new ApplicationException("No participants found!", ApplicationErrorCode.NOT_FOUND);
         }
         return participants;
     }

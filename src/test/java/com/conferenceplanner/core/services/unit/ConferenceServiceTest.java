@@ -57,18 +57,18 @@ public class ConferenceServiceTest {
     }
 
     @Test
-    public void test_getUpcomingConferences_throws_AccessException() {
+    public void test_getUpcomingConferences_throws_ApplicationException() {
         List<Conference> emptyList = new ArrayList<>();
         when(serviceAssistant.getUpcomingConferences()).thenReturn(emptyList);
-        expectedException.expect(AccessException.class);
+        expectedException.expect(ApplicationException.class);
         conferenceService.getUpcomingConferences();
     }
 
     @Test
-    public void test_getAvailableConferences_throws_AccessException() {
+    public void test_getAvailableConferences_throws_ApplicationException() {
         List<Conference> emptyList = new ArrayList<>();
         when(serviceAssistant.getAvailableConferences()).thenReturn(emptyList);
-        expectedException.expect(AccessException.class);
+        expectedException.expect(ApplicationException.class);
         conferenceService.getAvailableConferences();
     }
 
@@ -81,20 +81,20 @@ public class ConferenceServiceTest {
     }
 
     @Test
-    public void test_createConference_throws_AccessException_if_conference_exists() {
+    public void test_createConference_throws_ApplicationException_if_conference_exists() {
         Conference conference = ConferenceFixture.createConference();
         List<Integer> roomIds = Arrays.asList(1, 2, 3);
         when(serviceAssistant.checkIfConferenceExists(conference)).thenReturn(true);
-        expectedException.expect(AccessException.class);
+        expectedException.expect(ApplicationException.class);
         conferenceService.createConference(conference, roomIds);
     }
 
     @Test
-    public void test_createConference_throws_AccessException_if_conference_rooms_are_not_available() {
+    public void test_createConference_throws_ApplicationException_if_conference_rooms_are_not_available() {
         Conference conference = ConferenceFixture.createConference();
         List<Integer> roomIds = Arrays.asList(1, 2, 3);
         when(conferenceRoomService.checkIfConferenceRoomsAvailable(roomIds, conference)).thenReturn(false);
-        expectedException.expect(AccessException.class);
+        expectedException.expect(ApplicationException.class);
         conferenceService.createConference(conference, roomIds);
     }
 
@@ -109,38 +109,38 @@ public class ConferenceServiceTest {
     }
 
     @Test
-    public void test_cancelConference_throws_AccessException() {
+    public void test_cancelConference_throws_ApplicationException() {
         int id = 1;
         when(serviceAssistant.getConference(id)).thenReturn(null);
-        expectedException.expect(AccessException.class);
+        expectedException.expect(ApplicationException.class);
         conferenceService.cancelConference(id);
     }
 
     @Test
-    public void test_getParticipants_throws_AccessException_if_conference_does_not_exist(){
+    public void test_getParticipants_throws_ApplicationException_if_conference_does_not_exist(){
         int id = 1;
         when(serviceAssistant.getConference(id)).thenReturn(null);
-        expectedException.expect(AccessException.class);
+        expectedException.expect(ApplicationException.class);
         conferenceService.getParticipants(id);
     }
 
     @Test
-    public void test_getParticipants_throws_AccessException_if_conference_is_not_upcoming(){
+    public void test_getParticipants_throws_ApplicationException_if_conference_is_not_upcoming(){
         int id = 1;
         Conference conference = ConferenceFixture.createCancelledConference();
         when(serviceAssistant.getConference(id)).thenReturn(conference);
-        expectedException.expect(AccessException.class);
+        expectedException.expect(ApplicationException.class);
         conferenceService.getParticipants(id);
     }
 
     @Test
-    public void test_getParticipants_throws_AccessException_if_no_participant_exists(){
+    public void test_getParticipants_throws_ApplicationException_if_no_participant_exists(){
         int id = 1;
         Conference conference = ConferenceFixture.createUpcomingConference();
         when(serviceAssistant.getConference(id)).thenReturn(conference);
         List<Participant> emptyList = new ArrayList<>();
         when(serviceAssistant.getParticipants(conference)).thenReturn(emptyList);
-        expectedException.expect(AccessException.class);
+        expectedException.expect(ApplicationException.class);
         conferenceService.getParticipants(id);
     }
 

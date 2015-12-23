@@ -33,81 +33,50 @@ public class ConferenceServiceAssistant {
 
 
     public boolean checkIfConferenceExists(Conference conference) {
-        try {
-            List<Conference> conferences = conferenceRepository.getUpcoming();
-            return conferences.stream().anyMatch(c -> conferenceChecker.compare(c, conference));
-
-        } catch (Exception ex) {
-            throw new DatabaseException("Persistence level error: " + ex.getMessage());
-        }
+        return conferenceRepository.getUpcoming().stream()
+                .anyMatch(c -> conferenceChecker.compare(c, conference));
     }
 
     public void createConference(Conference conference) {
-        try {
             conferenceRepository.create(conference);
-        } catch (Exception ex) {
-            throw new DatabaseException("Persistence level error: " + ex.getMessage());
-        }
     }
 
     public void registerConference(Conference conference, List<Integer> conferenceRoomIds) {
-        try {
-            for (int roomId : conferenceRoomIds) {
-                ConferenceRoom room = conferenceRoomRepository.getById(roomId);
-                ConferenceRoomAvailabilityItem availabilityItem = new ConferenceRoomAvailabilityItem(room.getMaxSeats());
-                availabilityItem.setConference(conference);
-                availabilityItem.setConferenceRoom(room);
-                room.addConferenceRoomAvailabilityItem(availabilityItem);
-                conference.addConferenceRoomAvailabilityItem(availabilityItem);
-                conferenceRoomAvailabilityItemRepository.create(availabilityItem);
-                room.addConference(conference);
-            }
-        } catch (Exception ex) {
-            throw new DatabaseException("Persistence level error: " + ex.getMessage());
-        }
+      conferenceRoomIds.stream().
+              forEach(roomId -> registerConference(conference, roomId));
     }
 
     public void cancelConference(Conference conference) {
-        try {
-            conference.setCancelled(true);
-        }catch (Exception ex) {
-            throw new DatabaseException("Persistence level error: " + ex.getMessage());
-        }
+        conference.setCancelled(true);
     }
 
     public Conference getConference(int conferenceId) {
-        try {
-            return conferenceRepository.getById(conferenceId);
-        } catch (Exception ex) {
-            throw new DatabaseException("Persistence level error: " + ex.getMessage());
-        }
+        return conferenceRepository.getById(conferenceId);
     }
 
     public List<Conference> getUpcomingConferences() {
-        try {
-            return conferenceRepository.getUpcoming();
-        } catch (Exception ex) {
-            throw new DatabaseException("Persistence level error: " + ex.getMessage());
-        }
+        return conferenceRepository.getUpcoming();
     }
 
     public List<Conference> getAvailableConferences() {
-        try {
-            return conferenceRepository.getUpcoming().stream()
-                    .filter(conferenceChecker::isAvailable)
-                    .collect(Collectors.toList());
-
-        } catch (Exception ex) {
-            throw new DatabaseException("Persistence level error: " + ex.getMessage());
-        }
+        return conferenceRepository.getUpcoming().stream()
+                .filter(conferenceChecker::isAvailable)
+                .collect(Collectors.toList());
     }
 
     public List<Participant> getParticipants(Conference conference) {
-        try {
             return conference.getParticipants();
-        } catch (Exception ex) {
-            throw new DatabaseException("Persistence level error: " + ex.getMessage());
-        }
+    }
+
+    private void registerConference(Conference conference, int conferenceRoomId) {
+        ConferenceRoom room = conferenceRoomRepository.getById(conferenceRoomId);
+        ConferenceRoomAvailabilityItem availabilityItem = new ConferenceRoomAvailabilityItem(room.getMaxSeats());
+        availabilityItem.setConference(conference);
+        availabilityItem.setConferenceRoom(room);
+        room.addConferenceRoomAvailabilityItem(availabilityItem);
+        conference.addConferenceRoomAvailabilityItem(availabilityItem);
+        conferenceRoomAvailabilityItemRepository.create(availabilityItem);
+        room.addConference(conference);
     }
 
 }

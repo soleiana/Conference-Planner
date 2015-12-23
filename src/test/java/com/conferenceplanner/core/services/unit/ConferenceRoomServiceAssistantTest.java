@@ -6,7 +6,6 @@ import com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem;
 import com.conferenceplanner.core.repositories.ConferenceRoomRepository;
 import com.conferenceplanner.core.services.ConferenceRoomChecker;
 import com.conferenceplanner.core.services.ConferenceRoomServiceAssistant;
-import com.conferenceplanner.core.services.DatabaseException;
 import com.conferenceplanner.core.services.fixtures.ConferenceFixture;
 import com.conferenceplanner.core.services.fixtures.ConferenceRoomAvailabilityItemFixture;
 import com.conferenceplanner.core.services.fixtures.ConferenceRoomFixture;
@@ -54,30 +53,12 @@ public class ConferenceRoomServiceAssistantTest {
     }
 
     @Test
-    public void test_createConferenceRoom_throws_DatabaseException() {
-        ConferenceRoom room = ConferenceRoomFixture.createConferenceRoom();
-        doThrow(new RuntimeException("Database connection failed")).when(conferenceRoomRepository).create(room);
-        expectedException.expect(DatabaseException.class);
-        expectedException.expectMessage("Database connection failed");
-        serviceAssistant.createConferenceRoom(room);
-    }
-
-    @Test
     public void test_getConferenceRoom() {
         int id = 1;
         ConferenceRoom room = ConferenceRoomFixture.createConferenceRoom();
         when(conferenceRoomRepository.getById(id)).thenReturn(room);
         ConferenceRoom conferenceRoom = serviceAssistant.getConferenceRoom(id);
         assertEquals(room, conferenceRoom);
-    }
-
-    @Test
-    public void test_getConferenceRoom_throws_DatabaseException() {
-        int id = 1;
-        doThrow(new RuntimeException("Database connection failed")).when(conferenceRoomRepository).getById(id);
-        expectedException.expect(DatabaseException.class);
-        expectedException.expectMessage("Database connection failed");
-        serviceAssistant.getConferenceRoom(id);
     }
 
     @Test
@@ -109,15 +90,6 @@ public class ConferenceRoomServiceAssistantTest {
         when(conferenceRoomRepository.getAll()).thenReturn(rooms);
         boolean result = serviceAssistant.checkIfConferenceRoomExists(room);
         assertFalse(result);
-    }
-
-    @Test
-    public void test_checkIfConferenceRoomExists_throws_DatabaseException()  {
-        ConferenceRoom room = ConferenceRoomFixture.createConferenceRoom();
-        doThrow(new RuntimeException("Database connection failed")).when(conferenceRoomRepository).getAll();
-        expectedException.expect(DatabaseException.class);
-        expectedException.expectMessage("Database connection failed");
-        serviceAssistant.checkIfConferenceRoomExists(room);
     }
 
     @Test

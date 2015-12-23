@@ -2,7 +2,6 @@ package com.conferenceplanner.core.services.unit;
 
 import com.conferenceplanner.core.domain.Conference;
 import com.conferenceplanner.core.domain.Participant;
-import com.conferenceplanner.core.services.DatabaseException;
 import com.conferenceplanner.core.services.ParticipantService;
 import com.conferenceplanner.core.services.fixtures.ConferenceFixture;
 import com.conferenceplanner.core.services.fixtures.ParticipantFixture;
