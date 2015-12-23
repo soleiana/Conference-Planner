@@ -4,6 +4,7 @@ import com.conferenceplanner.core.domain.Conference;
 import com.conferenceplanner.core.domain.ConferenceRoom;
 import com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem;
 import com.conferenceplanner.core.services.ConferenceRoomChecker;
+import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,22 +23,29 @@ public class ConferenceRoomServiceIntegrationTestHelper {
 
     private LocalDateTime now;
 
-
     public void setNow(LocalDateTime now) {
         this.now = now;
     }
 
+
     public void assertGetAvailableConferenceRoomsResult(List<ConferenceRoom> conferenceRooms, Conference plannedConference) {
-        for (ConferenceRoom room: conferenceRooms) {
-            assertTrue(conferenceRoomChecker.isAvailable(room, plannedConference));
-        }
+       conferenceRooms.stream()
+               .map(room -> conferenceRoomChecker.isAvailable(room, plannedConference))
+               .forEach(Assert::assertTrue);
     }
 
     public void assertGetConferenceRoomAvailabilityItemsResult(List<ConferenceRoomAvailabilityItem> availabilityItems) {
-        for (ConferenceRoomAvailabilityItem item: availabilityItems) {
-            assertFalse(item.getConference().isCancelled());
-            assertTrue(item.getConference().getStartDateTime().isAfter(now));
-        }
+        availabilityItems.stream()
+                .map(ConferenceRoomAvailabilityItem::getConference)
+                .map(Conference::isCancelled)
+                .forEach(Assert::assertFalse);
+
+        availabilityItems.stream()
+                .map(ConferenceRoomAvailabilityItem::getConference)
+                .map(Conference::getStartDateTime)
+                .map(date -> date.isAfter(now))
+                .forEach(Assert::assertTrue);
+
     }
 
     public List<Integer> getConferenceRoomIds(List<ConferenceRoom> conferenceRooms) {
