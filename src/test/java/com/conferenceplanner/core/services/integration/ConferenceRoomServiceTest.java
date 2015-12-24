@@ -7,12 +7,15 @@ import com.conferenceplanner.core.domain.ConferenceRoomAvailability;
 import com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem;
 import com.conferenceplanner.core.repositories.tools.DatabaseCleaner;
 import com.conferenceplanner.core.repositories.tools.DatabaseConfigurator;
+import com.conferenceplanner.core.services.ApplicationException;
 import com.conferenceplanner.core.services.ConferenceRoomService;
 import com.conferenceplanner.core.services.integration.helpers.ConferenceRoomServiceIntegrationTestHelper;
 import com.conferenceplanner.core.services.fixtures.ConferenceFixture;
 import com.conferenceplanner.core.services.fixtures.ConferenceRoomFixture;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
@@ -39,6 +42,9 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     @Autowired
     private ConferenceRoomServiceIntegrationTestHelper testHelper;
 
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
+
 
     @Before
     public void setUp() throws Exception {
@@ -51,6 +57,16 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
         ConferenceRoom room = ConferenceRoomFixture.createConferenceRoom();
         conferenceRoomService.createConferenceRoom(room);
         assertNotNull(room.getId());
+    }
+
+    @Test
+    public void test_createConferenceRoom_throws_ApplicationException_if_conferenceRoom_exists() {
+        ConferenceRoom room1 = ConferenceRoomFixture.createConferenceRoom();
+        databaseConfigurator.configureConferenceRoom(room1);
+        assertNotNull(room1);
+        ConferenceRoom room2 = ConferenceRoomFixture.createConferenceRoom();
+        expectedException.expect(ApplicationException.class);
+        conferenceRoomService.createConferenceRoom(room2);
     }
 
     @Test
@@ -84,6 +100,16 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
         List<ConferenceRoom> availableRooms = conferenceRoomService.getAvailableConferenceRooms(plannedConference);
         assertEquals(rooms.size(), availableRooms.size());
         testHelper.assertGetAvailableConferenceRoomsResult(availableRooms, plannedConference);
+    }
+
+    @Test
+    public void test_getAvailableConferenceRooms_throws_ApplicationException_if_no_available_conferenceRoom_exist() {
+        Conference plannedConference = ConferenceFixture.createConference();
+        List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms();
+        List<Conference> conferences = ConferenceFixture.createMixedConferences();
+        databaseConfigurator.configure(rooms, conferences);
+        expectedException.expect(ApplicationException.class);
+        conferenceRoomService.getAvailableConferenceRooms(plannedConference);
     }
 
     @Test
@@ -129,6 +155,21 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
         assertEquals(conferences.size()-1, availability.getAvailabilityItems().size());
         assertNotNull(availability.getConferenceRoom());
         testHelper.assertGetConferenceRoomAvailabilityItemsResult(availability.getAvailabilityItems());
+    }
+
+    @Test
+    public void test_getConferenceRoomAvailabilityItems_throws_ApplicationException_if_conferenceRoom_does_not_exist() {
+        expectedException.expect(ApplicationException.class);
+        conferenceRoomService.getConferenceRoomAvailabilityItems(1);
+    }
+
+    @Test
+    public void test_getConferenceRoomAvailabilityItems_throws_ApplicationException_if_no_upcoming_conference_is_registered() {
+        ConferenceRoom room = ConferenceRoomFixture.createConferenceRoom();
+        List<Conference> conferences = ConferenceFixture.createCancelledConferences();
+        databaseConfigurator.configureWithConferenceRoomAvailability(room, conferences);
+        expectedException.expect(ApplicationException.class);
+        conferenceRoomService.getConferenceRoomAvailabilityItems(room.getId());
     }
 
 }
