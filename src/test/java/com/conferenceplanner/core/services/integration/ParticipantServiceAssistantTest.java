@@ -6,7 +6,7 @@ import com.conferenceplanner.core.domain.ConferenceRoom;
 import com.conferenceplanner.core.domain.Participant;
 import com.conferenceplanner.core.repositories.tools.DatabaseCleaner;
 import com.conferenceplanner.core.repositories.tools.DatabaseConfigurator;
-import com.conferenceplanner.core.services.ParticipantService;
+import com.conferenceplanner.core.services.ParticipantServiceAssistant;
 import com.conferenceplanner.core.services.fixtures.ConferenceFixture;
 import com.conferenceplanner.core.services.fixtures.ConferenceRoomFixture;
 import com.conferenceplanner.core.services.fixtures.ParticipantFixture;
@@ -14,11 +14,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+
 import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class ParticipantServiceTest extends SpringContextTest {
+
+public class ParticipantServiceAssistantTest extends SpringContextTest {
 
     @Autowired
     private DatabaseCleaner databaseCleaner;
@@ -27,7 +29,8 @@ public class ParticipantServiceTest extends SpringContextTest {
     private DatabaseConfigurator databaseConfigurator;
 
     @Autowired
-    private ParticipantService participantService;
+    private ParticipantServiceAssistant serviceAssistant;
+
 
     @Before
     public void setUp() throws Exception {
@@ -35,8 +38,12 @@ public class ParticipantServiceTest extends SpringContextTest {
     }
 
     @Test
-    public void test_addParticipant() {
-
+    public void test_getParticipant() {
+        Participant participant = ParticipantFixture.createParticipant();
+        databaseConfigurator.configureParticipant(participant);
+        assertNotNull(participant.getId());
+        Participant actualParticipant = serviceAssistant.getParticipant(participant.getId());
+        assertEquals(participant, actualParticipant);
     }
 
     @Test
@@ -48,8 +55,9 @@ public class ParticipantServiceTest extends SpringContextTest {
         rooms.get(0).getConferenceRoomAvailabilityItems().get(0).takeAvailableSeat();
         databaseConfigurator.configure(conference, participant);
         assertEquals(1, conference.getParticipants().size());
-        participantService.removeParticipant(participant.getId(), conference.getId());
+        serviceAssistant.removeParticipant(participant, conference);
         assertTrue(conference.getParticipants().isEmpty());
     }
+
 
 }

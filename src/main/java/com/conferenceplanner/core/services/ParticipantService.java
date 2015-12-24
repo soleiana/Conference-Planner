@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+
 @Component
 @Transactional
 public class ParticipantService {
@@ -27,7 +28,7 @@ public class ParticipantService {
         Participant participant = serviceAssistant.getParticipant(participantId);
         List<Participant> registeredParticipants = conferenceService.getParticipants(conference);
 
-        if (registeredParticipants.contains(participant)) {
+        if (!registeredParticipants.contains(participant)) {
             throw new ApplicationException("No participant with selected id registered in conference!", ApplicationErrorCode.NOT_FOUND);
         }
         serviceAssistant.removeParticipant(participant, conference);

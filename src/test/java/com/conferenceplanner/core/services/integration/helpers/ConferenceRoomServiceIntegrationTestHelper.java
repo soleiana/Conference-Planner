@@ -3,6 +3,7 @@ package com.conferenceplanner.core.services.integration.helpers;
 import com.conferenceplanner.core.domain.Conference;
 import com.conferenceplanner.core.domain.ConferenceRoom;
 import com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem;
+import com.conferenceplanner.core.services.CommonTestHelper;
 import com.conferenceplanner.core.services.ConferenceRoomChecker;
 import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class ConferenceRoomServiceIntegrationTestHelper {
 
     @Autowired
     private ConferenceRoomChecker conferenceRoomChecker;
+
+    @Autowired
+    private CommonTestHelper commonTestHelper;
 
     private LocalDateTime now;
 
@@ -49,7 +53,7 @@ public class ConferenceRoomServiceIntegrationTestHelper {
     }
 
     public List<Integer> getConferenceRoomIds(List<ConferenceRoom> conferenceRooms) {
-        return conferenceRooms.stream().map(ConferenceRoom::getId).collect(Collectors.toList());
+        return commonTestHelper.getConferenceRoomIds(conferenceRooms);
     }
 
 }
