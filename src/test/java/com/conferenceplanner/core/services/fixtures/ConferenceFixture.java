@@ -33,6 +33,10 @@ public class ConferenceFixture {
         return new Conference("name", PLANNED_START, PLANNED_END, false);
     }
 
+    public static Conference createUpcomingConference(String name) {
+        return new Conference(name, PLANNED_START, PLANNED_END, false);
+    }
+
     public static List<Conference> createCancelledConferences() {
         List<Conference> conferences = new ArrayList<>();
         LocalDateTime start = PLANNED_START.plusHours(1);

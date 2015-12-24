@@ -4,6 +4,7 @@ import com.conferenceplanner.SpringContextTest;
 import com.conferenceplanner.core.domain.*;
 import com.conferenceplanner.core.repositories.tools.DatabaseCleaner;
 import com.conferenceplanner.core.repositories.tools.DatabaseConfigurator;
+import com.conferenceplanner.core.services.ApplicationException;
 import com.conferenceplanner.core.services.ConferenceService;
 import com.conferenceplanner.core.services.fixtures.ParticipantFixture;
 import com.conferenceplanner.core.services.integration.helpers.ConferenceServiceIntegrationTestHelper;
@@ -11,7 +12,9 @@ import com.conferenceplanner.core.services.fixtures.ConferenceFixture;
 import com.conferenceplanner.core.services.fixtures.ConferenceRoomAvailabilityItemFixture;
 import com.conferenceplanner.core.services.fixtures.ConferenceRoomFixture;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
@@ -32,6 +35,9 @@ public class ConferenceServiceTest extends SpringContextTest {
 
     @Autowired
     private ConferenceServiceIntegrationTestHelper testHelper;
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
 
     @Before
@@ -70,6 +76,14 @@ public class ConferenceServiceTest extends SpringContextTest {
     }
 
     @Test
+    public void test_getUpcomingConferences_if_throws_ApplicationException_if_no_upcoming_conference_exist() {
+        List<Conference> conferences = ConferenceFixture.createCancelledConferences();
+        databaseConfigurator.configureConferences(conferences);
+        expectedException.expect(ApplicationException.class);
+        conferenceService.getUpcomingConferences();
+    }
+
+    @Test
     public void test_getAvailableConferences_if_one_conference_room_has_available_seats() {
         List<Conference> conferences = ConferenceFixture.createUpcomingConferences();
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(2);
@@ -86,13 +100,23 @@ public class ConferenceServiceTest extends SpringContextTest {
     public void test_getAvailableConferences_if_all_conference_rooms_have_available_seats() {
         List<Conference> conferences = ConferenceFixture.createUpcomingConferences();
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(2);
-
         List<ConferenceRoomAvailabilityItem> availabilityItems =
                 ConferenceRoomAvailabilityItemFixture.createConferenceRoomsWithAvailableSeats(rooms.size());
         databaseConfigurator.configure(rooms, conferences, availabilityItems);
         List<Conference> availableConferences = conferenceService.getAvailableConferences();
         assertEquals(conferences.size(), availableConferences.size());
         testHelper.assertGetAvailableConferencesResult(availableConferences);
+    }
+
+    @Test
+    public void test_getAvailableConferences_if_no_available_conference_exist() {
+        List<Conference> conferences = ConferenceFixture.createUpcomingConferences();
+        List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(2);
+        List<ConferenceRoomAvailabilityItem> availabilityItems =
+                ConferenceRoomAvailabilityItemFixture.createFullyOccupiedConferenceRooms(rooms.size());
+        databaseConfigurator.configure(rooms, conferences, availabilityItems);
+        expectedException.expect(ApplicationException.class);
+        conferenceService.getAvailableConferences();
     }
 
     @Test
@@ -106,11 +130,41 @@ public class ConferenceServiceTest extends SpringContextTest {
     }
 
     @Test
+    public void test_createConference_throws_ApplicationException_if_conference_exists() {
+        Conference conference1 = ConferenceFixture.createUpcomingConference();
+        Conference conference2 = ConferenceFixture.cloneConference(conference1);
+        List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(2);
+        databaseConfigurator.configureWithConferenceRoomAvailability(rooms, conference1);
+        List<Integer> roomIds = testHelper.getConferenceRoomIds(rooms);
+        expectedException.expect(ApplicationException.class);
+        conferenceService.createConference(conference2, roomIds);
+    }
+
+    @Test
+    public void test_createConference_throws_ApplicationException_if_conferenceRoom_is_not_available() {
+        Conference conference1 = ConferenceFixture.createUpcomingConference("Devoxx");
+        Conference conference2 = ConferenceFixture.createUpcomingConference("JavaOne");
+        List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(2);
+        databaseConfigurator.configureWithConferenceRoomAvailability(rooms, conference1);
+        List<Integer> roomIds = testHelper.getConferenceRoomIds(rooms);
+        expectedException.expect(ApplicationException.class);
+        conferenceService.createConference(conference2, roomIds);
+    }
+
+    @Test
     public void test_cancelConference() {
         Conference conference = ConferenceFixture.createUpcomingConference();
         databaseConfigurator.configureConference(conference);
         conferenceService.cancelConference(conference.getId());
         assertTrue(conference.isCancelled());
+    }
+
+    @Test
+    public void test_cancelConference_throws_ApplicationException_if_conference_is_cancelled() {
+        Conference conference = ConferenceFixture.createCancelledConference();
+        databaseConfigurator.configureConference(conference);
+        expectedException.expect(ApplicationException.class);
+        conferenceService.cancelConference(conference.getId());
     }
 
     @Test
@@ -121,6 +175,22 @@ public class ConferenceServiceTest extends SpringContextTest {
         ConferenceParticipants conferenceParticipants = conferenceService.getParticipants(conference.getId());
         assertEquals(participants.size(), conferenceParticipants.getParticipants().size());
         assertEquals(conference, conferenceParticipants.getConference());
+    }
+
+    @Test
+    public void test_getParticipants_throws_ApplicationException_if_conference_is_not_upcoming() {
+        Conference conference = ConferenceFixture.createOngoingConference();
+        databaseConfigurator.configureConference(conference);
+        expectedException.expect(ApplicationException.class);
+        conferenceService.getParticipants(conference.getId());
+    }
+
+    @Test
+    public void test_getParticipants_throws_ApplicationException_if_no_participant_is_registered() {
+        Conference conference = ConferenceFixture.createUpcomingConference();
+        databaseConfigurator.configureConference(conference);
+        expectedException.expect(ApplicationException.class);
+        conferenceService.getParticipants(conference.getId());
     }
 
 }
