@@ -125,7 +125,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     }
 
     @Test
-    public void test_getConferenceRoomAvailabilityItems_throws_ApplicationException_if_no_conference_registered()  {
+    public void test_getConferenceRoomAvailabilityItems_throws_ApplicationException_if_no_conference_is_registered()  {
         int id = 1;
         ConferenceRoom conferenceRoom = ConferenceRoomFixture.createConferenceRoom();
         List<ConferenceRoomAvailabilityItem> emptyList = new ArrayList<>();

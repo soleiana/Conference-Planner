@@ -134,7 +134,7 @@ public class ConferenceServiceTest {
     }
 
     @Test
-    public void test_getParticipants_throws_ApplicationException_if_no_participant_exists(){
+    public void test_getParticipants_throws_ApplicationException_if_no_participant_is_registered(){
         int id = 1;
         Conference conference = ConferenceFixture.createUpcomingConference();
         when(serviceAssistant.getConference(id)).thenReturn(conference);

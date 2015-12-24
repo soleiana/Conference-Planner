@@ -134,7 +134,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     }
 
     @Test
-    public void test_getConferenceRoomAvailabilityItems_if_one_cancelled_conference_and_upcoming_conferences_are_registered() {
+    public void test_getConferenceRoomAvailabilityItems_if_one_cancelled_conference_and_one_upcoming_conferences_are_registered() {
         ConferenceRoom room = ConferenceRoomFixture.createConferenceRoom();
         List<Conference> conferences = ConferenceFixture.createUpcomingConferences();
         conferences.get(0).setCancelled(true);
@@ -146,7 +146,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     }
 
     @Test
-    public void test_getConferenceRoomAvailabilityItems_if_one_conference_in_past_and_upcoming_conferences_are_registered() {
+    public void test_getConferenceRoomAvailabilityItems_if_one_conference_in_past_and_one_upcoming_conferences_are_registered() {
         ConferenceRoom room = ConferenceRoomFixture.createConferenceRoom();
         List<Conference> conferences = ConferenceFixture.createUpcomingConferences();
         conferences.get(0).setStartDateTime(LocalDateTime.now().minusMinutes(1));
