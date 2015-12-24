@@ -64,8 +64,6 @@ public class ParticipantServiceTest {
 
     @Test
     public void test_removeParticipant_throws_ApplicationException_if_conference_is_not_upcoming() {
-        List<Participant> registeredParticipants = ParticipantFixture.createParticipants(3);
-        Participant participant = registeredParticipants.get(0);
         Conference conference = ConferenceFixture.createOngoingConference();
         when(conferenceService.getConference(anyInt())).thenReturn(conference);
         expectedException.expect(ApplicationException.class);

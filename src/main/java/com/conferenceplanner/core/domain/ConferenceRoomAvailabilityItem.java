@@ -45,10 +45,16 @@ public class ConferenceRoomAvailabilityItem {
     }
 
     public void takeAvailableSeat() {
+        if (availableSeats == 0) {
+            throw new IllegalStateException("Seat can not be taken!");
+        }
         this.availableSeats--;
     }
 
     public void releaseAvailableSeat() {
+        if (availableSeats == conferenceRoom.getMaxSeats()) {
+            throw new IllegalStateException("Seat can not be released!");
+        }
         this.availableSeats++;
     }
 

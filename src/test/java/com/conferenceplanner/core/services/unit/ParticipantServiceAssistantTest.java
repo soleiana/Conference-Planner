@@ -49,19 +49,21 @@ public class ParticipantServiceAssistantTest {
 
     @Test
     public void test_removeParticipant() {
+        final int maxSeats = 100;
         Participant participant = ParticipantFixture.createParticipant();
         Conference conference = ConferenceFixture.createUpcomingConference();
-        List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(2);
+        List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(2, maxSeats);
         List<ConferenceRoomAvailabilityItem> availabilityItems =
-                ConferenceRoomAvailabilityItemFixture.createPartiallyOccupiedConferenceRooms(rooms.size());
+                ConferenceRoomAvailabilityItemFixture.createConferenceRoomsWithAvailableSeats(rooms.size(), maxSeats);
         availabilityItems.get(0).setConferenceRoom(rooms.get(0));
         availabilityItems.get(1).setConferenceRoom(rooms.get(1));
         ConferenceRoomAvailabilityItem availabilityItem = availabilityItems.get(0);
-        assertEquals(0, availabilityItem.getAvailableSeats());
+        availabilityItem.takeAvailableSeat();
+        assertEquals(maxSeats - 1, availabilityItem.getAvailableSeats());
         conference.setConferenceRoomAvailabilityItems(availabilityItems);
         conference.addParticipant(participant);
         serviceAssistant.removeParticipant(participant, conference);
         assertTrue(conference.getParticipants().isEmpty());
-        assertEquals(1, availabilityItem.getAvailableSeats());
+        assertEquals(maxSeats, availabilityItem.getAvailableSeats());
     }
 }

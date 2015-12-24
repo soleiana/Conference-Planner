@@ -40,6 +40,14 @@ public class ConferenceRoomFixture {
         return rooms;
     }
 
+    public static List<ConferenceRoom> createConferenceRooms(int numberOfRooms, int maxSeats) {
+        List<ConferenceRoom> rooms = new ArrayList<>();
+        for (Integer i = 1; i <= numberOfRooms; i++) {
+            rooms.add(new ConferenceRoom("name" + i.toString(), "location", maxSeats));
+        }
+        return rooms;
+    }
+
     public static List<ConferenceRoom> createConferenceRoomsWithId(int numberOfRooms) {
         List<ConferenceRoom> rooms = new ArrayList<>();
         for (Integer i = 1; i <= numberOfRooms; i++) {

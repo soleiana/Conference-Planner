@@ -52,10 +52,13 @@ public class ParticipantServiceTest extends SpringContextTest {
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(3);
         databaseConfigurator.configureWithConferenceRoomAvailability(rooms, conference);
         rooms.get(0).getConferenceRoomAvailabilityItems().get(0).takeAvailableSeat();
+        int availableSeatsBefore =  rooms.get(0).getConferenceRoomAvailabilityItems().get(0).getAvailableSeats();
         databaseConfigurator.configure(conference, participant);
         assertEquals(1, conference.getParticipants().size());
         participantService.removeParticipant(participant.getId(), conference.getId());
         assertTrue(conference.getParticipants().isEmpty());
+        int availableSeatsAfter = rooms.get(0).getConferenceRoomAvailabilityItems().get(0).getAvailableSeats();
+        assertEquals(availableSeatsBefore + 1, availableSeatsAfter);
     }
 
     @Test
