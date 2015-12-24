@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {RestConfig.class, DatasourceConfig.class})
-@Rollback(false)
+@Rollback(true)
 @Transactional(transactionManager = "transactionManager")
 @Ignore
 public class SpringContextTest

@@ -57,7 +57,7 @@ public class ConferenceRoomAvailabilityItemFixture {
                 availabilityItems.add(new ConferenceRoomAvailabilityItem(0));
             }
             else {
-                availabilityItems.add(new ConferenceRoomAvailabilityItem(i*100));
+                availabilityItems.add(new ConferenceRoomAvailabilityItem(100));
             }
         }
         return availabilityItems;

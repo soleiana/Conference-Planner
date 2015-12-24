@@ -3,6 +3,7 @@ package com.conferenceplanner.core.services.integration;
 import com.conferenceplanner.SpringContextTest;
 import com.conferenceplanner.core.domain.Conference;
 import com.conferenceplanner.core.domain.ConferenceRoom;
+import com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem;
 import com.conferenceplanner.core.domain.Participant;
 import com.conferenceplanner.core.repositories.tools.DatabaseCleaner;
 import com.conferenceplanner.core.repositories.tools.DatabaseConfigurator;
@@ -52,12 +53,15 @@ public class ParticipantServiceAssistantTest extends SpringContextTest {
         Conference conference = ConferenceFixture.createUpcomingConference();
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(3);
         databaseConfigurator.configureWithConferenceRoomAvailability(rooms, conference);
-        rooms.get(0).getConferenceRoomAvailabilityItems().get(0).takeAvailableSeat();
+        ConferenceRoom room = rooms.get(0);
+        ConferenceRoomAvailabilityItem availabilityItem =  room.getConferenceRoomAvailabilityItems().get(0);
+        availabilityItem.takeAvailableSeat();
+        assertEquals(room.getMaxSeats() - 1, availabilityItem.getAvailableSeats());
         databaseConfigurator.configure(conference, participant);
         assertEquals(1, conference.getParticipants().size());
         serviceAssistant.removeParticipant(participant, conference);
         assertTrue(conference.getParticipants().isEmpty());
+        assertEquals(room.getMaxSeats(), availabilityItem.getAvailableSeats());
     }
-
 
 }

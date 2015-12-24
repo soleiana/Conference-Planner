@@ -14,9 +14,7 @@ import com.conferenceplanner.core.services.fixtures.ConferenceRoomFixture;
 import com.conferenceplanner.core.services.fixtures.ParticipantFixture;
 import com.conferenceplanner.core.services.unit.helpers.ServiceUnitTestHelper;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -51,9 +49,6 @@ public class ConferenceServiceAssistantTest extends SpringContextTest {
 
     @Autowired
     private ServiceUnitTestHelper testHelper;
-
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
 
 
     @Before

@@ -10,9 +10,7 @@ import com.conferenceplanner.core.services.fixtures.ConferenceFixture;
 import com.conferenceplanner.core.services.fixtures.ConferenceRoomAvailabilityItemFixture;
 import com.conferenceplanner.core.services.fixtures.ConferenceRoomFixture;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -35,9 +33,6 @@ public class ConferenceRoomServiceAssistantTest {
 
     @Mock
     private ConferenceRoomChecker conferenceRoomChecker;
-
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
 
 
     @Before
