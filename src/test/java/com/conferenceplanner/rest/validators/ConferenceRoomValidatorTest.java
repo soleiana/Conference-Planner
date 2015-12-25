@@ -8,9 +8,6 @@ import org.junit.rules.ExpectedException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.Assert.*;
 
 public class ConferenceRoomValidatorTest extends SpringContextTest {
@@ -116,7 +113,7 @@ public class ConferenceRoomValidatorTest extends SpringContextTest {
     }
 
     @Test
-    public void test_validate_conference_room() {
+    public void test_validate_conferenceRoom() {
         ConferenceRoom conferenceRoom = new ConferenceRoom();
         conferenceRoom.setName("A/A aaa conference");
         conferenceRoom.setLocation("A/A  aaa");
