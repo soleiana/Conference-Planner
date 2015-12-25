@@ -1,7 +1,11 @@
 package com.conferenceplanner.rest.parsers;
 
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class ConferenceRoomParser {
 
@@ -37,19 +41,29 @@ public class ConferenceRoomParser {
     }
 
     private static void parseName(String locationString, String nameString) {
-        String[] location = locationString.toLowerCase().trim().split("\\s+");
-        String[] name = nameString.toLowerCase().trim().split("\\s+");
+        List<String> locationWords = Arrays.asList(locationString.toLowerCase().trim().split("\\s+"));
+        List<String> nameWords = Arrays.asList(nameString.toLowerCase().trim().split("\\s+"));
 
-        if (name.length != location.length + 1) {
+        if (nameWords.size() != locationWords.size() + 1) {
             throw new ParserException("Invalid name length");
         }
-        for (int i = 0; i < location.length; i++) {
-            if (!name[i].equals(location[i])) {
-                throw new ParserException("Invalid name or location");
-            }
-        }
-        if (!name[name.length-1].equals(CONFERENCE_ROOM_NAME_SUFFIX)) {
+
+        if (!nameWords.get(nameWords.size()-1).equals(CONFERENCE_ROOM_NAME_SUFFIX)) {
             throw new ParserException("Invalid name format");
         }
+
+        if (!match(locationWords, nameWords)) {
+            throw new ParserException("Invalid name or location");
+        }
     }
+
+    private static boolean match(List<String> locationWords, List<String> nameWords) {
+        String location = locationWords.stream()
+                .collect(Collectors.joining(" "));
+        String name = nameWords.stream()
+                .limit(nameWords.size() - 1)
+                .collect(Collectors.joining(" "));
+        return location.equals(name);
+    }
+
 }
