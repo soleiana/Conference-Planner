@@ -2,10 +2,12 @@ package com.conferenceplanner.core.services.unit;
 
 import com.conferenceplanner.core.domain.Conference;
 import com.conferenceplanner.core.domain.ConferenceParticipants;
+import com.conferenceplanner.core.domain.ConferenceRoom;
 import com.conferenceplanner.core.domain.Participant;
 import com.conferenceplanner.core.repositories.ConferenceRepository;
 import com.conferenceplanner.core.services.*;
 import com.conferenceplanner.core.services.fixtures.ConferenceFixture;
+import com.conferenceplanner.core.services.fixtures.ConferenceRoomFixture;
 import com.conferenceplanner.core.services.fixtures.ParticipantFixture;
 import org.junit.Before;
 import org.junit.Rule;
@@ -154,6 +156,23 @@ public class ConferenceServiceTest {
         ConferenceParticipants conferenceParticipants = conferenceService.getParticipants(id);
         assertEquals(participants.size(), conferenceParticipants.getParticipants().size());
         assertEquals(conference, conferenceParticipants.getConference());
+    }
+
+    @Test
+    public void test_checkIfConferenceIsAvailable_is_true_if_conference_is_available() {
+        List<Conference> conferences = ConferenceFixture.createUpcomingConferences();
+        when(serviceAssistant.getAvailableConferences()).thenReturn(conferences);
+        boolean result = conferenceService.checkIfConferenceIsAvailable(conferences.get(0));
+        assertTrue(result);
+    }
+
+    @Test
+    public void test_checkIfConferenceIsAvailable_is_false_if_conference_is_not_available() {
+        Conference conferenceToCheck = ConferenceFixture.createOngoingConference();
+        List<Conference> conferences = ConferenceFixture.createUpcomingConferences();
+        when(serviceAssistant.getAvailableConferences()).thenReturn(conferences);
+        boolean result = conferenceService.checkIfConferenceIsAvailable(conferenceToCheck);
+        assertFalse(result);
     }
 
 }

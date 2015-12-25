@@ -76,7 +76,7 @@ public class ConferenceServiceTest extends SpringContextTest {
     }
 
     @Test
-    public void test_getUpcomingConferences_if_throws_ApplicationException_if_no_upcoming_conference_exist() {
+    public void test_getUpcomingConferences_throws_ApplicationException_if_no_upcoming_conference_exist() {
         List<Conference> conferences = ConferenceFixture.createCancelledConferences();
         databaseConfigurator.configureConferences(conferences);
         expectedException.expect(ApplicationException.class);
@@ -109,7 +109,7 @@ public class ConferenceServiceTest extends SpringContextTest {
     }
 
     @Test
-    public void test_getAvailableConferences_if_no_available_conference_exist() {
+    public void test_getAvailableConferences_throws_ApplicationException_if_no_available_conference_exist() {
         List<Conference> conferences = ConferenceFixture.createUpcomingConferences();
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(2);
         List<ConferenceRoomAvailabilityItem> availabilityItems =
@@ -191,6 +191,25 @@ public class ConferenceServiceTest extends SpringContextTest {
         databaseConfigurator.configureConference(conference);
         expectedException.expect(ApplicationException.class);
         conferenceService.getParticipants(conference.getId());
+    }
+
+    @Test
+    public void test_checkIfConferenceIsAvailable_is_true_if_conference_is_available() {
+        List<Conference> conferences = ConferenceFixture.createUpcomingConferences();
+        List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(2);
+        databaseConfigurator.configureWithConferenceRoomAvailability(rooms, conferences);
+        boolean result = conferenceService.checkIfConferenceIsAvailable(conferences.get(0));
+        assertTrue(result);
+    }
+
+    @Test
+    public void test_checkIfConferenceIsAvailable_is_false_if_conference_is_not_available() {
+        Conference conferenceToCheck = ConferenceFixture.createOngoingConference();
+        List<Conference> conferences = ConferenceFixture.createUpcomingConferences();
+        List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(2);
+        databaseConfigurator.configureWithConferenceRoomAvailability(rooms, conferences);
+        boolean result = conferenceService.checkIfConferenceIsAvailable(conferenceToCheck);
+        assertFalse(result);
     }
 
 }
