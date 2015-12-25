@@ -4,7 +4,6 @@ import com.conferenceplanner.SpringContextTest;
 import com.conferenceplanner.core.domain.Conference;
 import com.conferenceplanner.core.domain.ConferenceRoom;
 import com.conferenceplanner.core.domain.ConferenceRoomAvailability;
-import com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem;
 import com.conferenceplanner.core.repositories.tools.DatabaseCleaner;
 import com.conferenceplanner.core.repositories.tools.DatabaseConfigurator;
 import com.conferenceplanner.core.services.ApplicationException;
@@ -21,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -113,13 +111,13 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     }
 
     @Test
-    public void test_checkIfConferenceRoomsAvailable_is_true_if_all_checked_rooms_are_available() {
+    public void test_checkIfConferenceRoomsAreAvailable_is_true_if_all_checked_rooms_are_available() {
         Conference plannedConference = ConferenceFixture.createConference();
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms();
         List<Conference> conferences = ConferenceFixture.createNonOverlappingConferences();
         databaseConfigurator.configureWithConferenceRoomAvailability(rooms, conferences);
         List<Integer> roomIds = testHelper.getConferenceRoomIds(rooms);
-        boolean result = conferenceRoomService.checkIfConferenceRoomsAvailable(roomIds, plannedConference);
+        boolean result = conferenceRoomService.checkIfConferenceRoomsAreAvailable(roomIds, plannedConference);
         assertTrue(result);
     }
 

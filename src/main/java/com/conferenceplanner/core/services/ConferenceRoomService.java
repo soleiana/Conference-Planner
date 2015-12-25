@@ -37,7 +37,7 @@ public class ConferenceRoomService {
         return availableRooms;
     }
 
-    public boolean checkIfConferenceRoomsAvailable(List<Integer> conferenceRoomIds, Conference plannedConference) {
+    public boolean checkIfConferenceRoomsAreAvailable(List<Integer> conferenceRoomIds, Conference plannedConference) {
         List<ConferenceRoom> availableRooms = getAvailableConferenceRooms(plannedConference);
 
         List<Integer> availableRoomIds = availableRooms.stream()

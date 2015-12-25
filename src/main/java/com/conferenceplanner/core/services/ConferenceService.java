@@ -45,7 +45,7 @@ public class ConferenceService {
         if (serviceAssistant.checkIfConferenceExists(conference)) {
              throw new ApplicationException("Conference already exists!", ApplicationErrorCode.CONFLICT);
         }
-        if (!conferenceRoomService.checkIfConferenceRoomsAvailable(conferenceRoomIds, conference)) {
+        if (!conferenceRoomService.checkIfConferenceRoomsAreAvailable(conferenceRoomIds, conference)) {
             throw new ApplicationException("Conference room(s) not available!", ApplicationErrorCode.CONFLICT);
         }
         serviceAssistant.createConference(conference);

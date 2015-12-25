@@ -93,7 +93,7 @@ public class ConferenceServiceTest {
     public void test_createConference_throws_ApplicationException_if_conference_rooms_are_not_available() {
         Conference conference = ConferenceFixture.createConference();
         List<Integer> roomIds = Arrays.asList(1, 2, 3);
-        when(conferenceRoomService.checkIfConferenceRoomsAvailable(roomIds, conference)).thenReturn(false);
+        when(conferenceRoomService.checkIfConferenceRoomsAreAvailable(roomIds, conference)).thenReturn(false);
         expectedException.expect(ApplicationException.class);
         conferenceService.createConference(conference, roomIds);
     }
@@ -103,7 +103,7 @@ public class ConferenceServiceTest {
         Conference conference = ConferenceFixture.createUpcomingConference();
         List<Integer> roomIds = Arrays.asList(1, 2, 3);
         when(serviceAssistant.checkIfConferenceExists(conference)).thenReturn(false);
-        when(conferenceRoomService.checkIfConferenceRoomsAvailable(roomIds, conference)).thenReturn(true);
+        when(conferenceRoomService.checkIfConferenceRoomsAreAvailable(roomIds, conference)).thenReturn(true);
         conferenceService.createConference(conference, roomIds);
         verify(serviceAssistant, times(1)).registerConference(conference, roomIds);
     }

@@ -96,23 +96,23 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     }
 
     @Test
-    public void test_checkIfConferenceRoomsAvailable_is_true_if_all_checked_rooms_are_available()  {
+    public void test_checkIfConferenceRoomsAreAvailable_is_true_if_all_checked_rooms_are_available()  {
         Conference plannedConference = ConferenceFixture.createConference();
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRoomsWithId(3);
         List<Integer> roomIds = testHelper.getConferenceRoomIds(rooms);
         when(serviceAssistant.getAvailableConferenceRooms(plannedConference)).thenReturn(rooms);
-        boolean result = conferenceRoomService.checkIfConferenceRoomsAvailable(roomIds, plannedConference);
+        boolean result = conferenceRoomService.checkIfConferenceRoomsAreAvailable(roomIds, plannedConference);
         assertTrue(result);
     }
 
     @Test
-    public void test_checkIfConferenceRoomsAvailable_is_false_if_one_checked_room_is_not_available()  {
+    public void test_checkIfConferenceRoomsAreAvailable_is_false_if_one_checked_room_is_not_available()  {
         Conference plannedConference = ConferenceFixture.createConference();
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRoomsWithId(3);
         List<Integer> roomIds = testHelper.getConferenceRoomIds(rooms);
         rooms.remove(rooms.get(0));
         when(serviceAssistant.getAvailableConferenceRooms(plannedConference)).thenReturn(rooms);
-        boolean result = conferenceRoomService.checkIfConferenceRoomsAvailable(roomIds, plannedConference);
+        boolean result = conferenceRoomService.checkIfConferenceRoomsAreAvailable(roomIds, plannedConference);
         assertFalse(result);
     }
 
