@@ -46,8 +46,51 @@ public class ParticipantServiceTest {
     }
 
     @Test
-    public void  test_addParticipant() {
+    public void  test_addParticipant_if_participant_exists() {
+        Participant participant = ParticipantFixture.createParticipant();
+        Conference conference = ConferenceFixture.createUpcomingConference();
+        when(conferenceService.getConference(anyInt())).thenReturn(conference);
+        when(serviceAssistant.getParticipant(any(Participant.class))).thenReturn(participant);
+        when(conferenceService.checkIfConferenceIsAvailable(conference)).thenReturn(true);
+        when(serviceAssistant.checkIfParticipantIsRegisteredForConference(participant, conference)).thenReturn(false);
+        participantService.addParticipant(participant, 1);
+        verify(serviceAssistant, times(0)).createParticipant(participant);
+        verify(serviceAssistant, times(1)).registerParticipant(participant, conference);
+    }
 
+    @Test
+    public void  test_addParticipant_if_participant_does_not_exist() {
+        Participant participant = ParticipantFixture.createParticipant();
+        Conference conference = ConferenceFixture.createUpcomingConference();
+        when(conferenceService.getConference(anyInt())).thenReturn(conference);
+        when(serviceAssistant.getParticipant(any(Participant.class))).thenReturn(null);
+        when(conferenceService.checkIfConferenceIsAvailable(conference)).thenReturn(true);
+        when(serviceAssistant.checkIfParticipantIsRegisteredForConference(participant, conference)).thenReturn(false);
+        participantService.addParticipant(participant, 1);
+        verify(serviceAssistant, times(1)).createParticipant(participant);
+        verify(serviceAssistant, times(1)).registerParticipant(participant, conference);
+    }
+
+    @Test
+    public void  test_addParticipant_throws_ApplicationException_if_conference_is_not_available() {
+        Participant participant = ParticipantFixture.createParticipant();
+        Conference conference = ConferenceFixture.createUpcomingConference();
+        when(conferenceService.getConference(anyInt())).thenReturn(conference);
+        when(conferenceService.checkIfConferenceIsAvailable(conference)).thenReturn(false);
+        expectedException.expect(ApplicationException.class);
+        participantService.addParticipant(participant, 1);
+    }
+
+    @Test
+    public void  test_addParticipant_throws_ApplicationException_if_participant_is_registered() {
+        Participant participant = ParticipantFixture.createParticipant();
+        Conference conference = ConferenceFixture.createUpcomingConference();
+        when(conferenceService.getConference(anyInt())).thenReturn(conference);
+        when(serviceAssistant.getParticipant(any(Participant.class))).thenReturn(participant);
+        when(conferenceService.checkIfConferenceIsAvailable(conference)).thenReturn(true);
+        when(serviceAssistant.checkIfParticipantIsRegisteredForConference(participant, conference)).thenReturn(true);
+        expectedException.expect(ApplicationException.class);
+        participantService.addParticipant(participant, 1);
     }
 
     @Test
