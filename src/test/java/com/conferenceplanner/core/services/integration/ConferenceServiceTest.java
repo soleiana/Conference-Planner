@@ -80,6 +80,7 @@ public class ConferenceServiceTest extends SpringContextTest {
         List<Conference> conferences = ConferenceFixture.createCancelledConferences();
         databaseConfigurator.configureConferences(conferences);
         expectedException.expect(ApplicationException.class);
+        expectedException.expectMessage("No upcoming conferences!");
         conferenceService.getUpcomingConferences();
     }
 
@@ -116,6 +117,7 @@ public class ConferenceServiceTest extends SpringContextTest {
                 ConferenceRoomAvailabilityItemFixture.createFullyOccupiedConferenceRooms(rooms.size());
         databaseConfigurator.configure(rooms, conferences, availabilityItems);
         expectedException.expect(ApplicationException.class);
+        expectedException.expectMessage("No available conferences!");
         conferenceService.getAvailableConferences();
     }
 
@@ -137,18 +139,32 @@ public class ConferenceServiceTest extends SpringContextTest {
         databaseConfigurator.configureWithConferenceRoomAvailability(rooms, conference1);
         List<Integer> roomIds = testHelper.getConferenceRoomIds(rooms);
         expectedException.expect(ApplicationException.class);
+        expectedException.expectMessage("Conference already exists!");
         conferenceService.createConference(conference2, roomIds);
     }
 
     @Test
-    public void test_createConference_throws_ApplicationException_if_conferenceRoom_is_not_available() {
+    public void test_createConference_throws_ApplicationException_if_no_conferenceRoom_exists() {
         Conference conference1 = ConferenceFixture.createUpcomingConference("Devoxx");
         Conference conference2 = ConferenceFixture.createUpcomingConference("JavaOne");
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(2);
         databaseConfigurator.configureWithConferenceRoomAvailability(rooms, conference1);
         List<Integer> roomIds = testHelper.getConferenceRoomIds(rooms);
         expectedException.expect(ApplicationException.class);
+        expectedException.expectMessage("No conference rooms found for selected conference interval!");
         conferenceService.createConference(conference2, roomIds);
+    }
+
+    @Test
+    public void test_createConference_throws_ApplicationException_if_conferenceRoom_is_not_available() {
+        Conference conference = ConferenceFixture.createUpcomingConference();
+        List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(2);
+        databaseConfigurator.configureConferenceRooms(rooms);
+        List<Integer> roomIds = testHelper.getConferenceRoomIds(rooms);
+        roomIds.add(-1);
+        expectedException.expect(ApplicationException.class);
+        expectedException.expectMessage("Conference room(s) not available!");
+        conferenceService.createConference(conference, roomIds);
     }
 
     @Test
@@ -164,6 +180,7 @@ public class ConferenceServiceTest extends SpringContextTest {
         Conference conference = ConferenceFixture.createCancelledConference();
         databaseConfigurator.configureConference(conference);
         expectedException.expect(ApplicationException.class);
+        expectedException.expectMessage("Conference already cancelled");
         conferenceService.cancelConference(conference.getId());
     }
 
@@ -182,6 +199,7 @@ public class ConferenceServiceTest extends SpringContextTest {
         Conference conference = ConferenceFixture.createOngoingConference();
         databaseConfigurator.configureConference(conference);
         expectedException.expect(ApplicationException.class);
+        expectedException.expectMessage("Conference is not upcoming!");
         conferenceService.getParticipants(conference.getId());
     }
 
@@ -190,6 +208,7 @@ public class ConferenceServiceTest extends SpringContextTest {
         Conference conference = ConferenceFixture.createUpcomingConference();
         databaseConfigurator.configureConference(conference);
         expectedException.expect(ApplicationException.class);
+        expectedException.expectMessage("No participants found!");
         conferenceService.getParticipants(conference.getId());
     }
 

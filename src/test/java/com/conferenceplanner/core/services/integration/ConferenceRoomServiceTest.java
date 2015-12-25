@@ -64,6 +64,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
         assertNotNull(room1);
         ConferenceRoom room2 = ConferenceRoomFixture.createConferenceRoom();
         expectedException.expect(ApplicationException.class);
+        expectedException.expectMessage("Conference room already exists!");
         conferenceRoomService.createConferenceRoom(room2);
     }
 
@@ -107,6 +108,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
         List<Conference> conferences = ConferenceFixture.createMixedConferences();
         databaseConfigurator.configure(rooms, conferences);
         expectedException.expect(ApplicationException.class);
+        expectedException.expectMessage("No conference rooms found for selected conference interval!");
         conferenceRoomService.getAvailableConferenceRooms(plannedConference);
     }
 
@@ -158,6 +160,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     @Test
     public void test_getConferenceRoomAvailabilityItems_throws_ApplicationException_if_conferenceRoom_does_not_exist() {
         expectedException.expect(ApplicationException.class);
+        expectedException.expectMessage("No conference room found for selected id!");
         conferenceRoomService.getConferenceRoomAvailabilityItems(1);
     }
 
@@ -167,6 +170,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
         List<Conference> conferences = ConferenceFixture.createCancelledConferences();
         databaseConfigurator.configureWithConferenceRoomAvailability(room, conferences);
         expectedException.expect(ApplicationException.class);
+        expectedException.expectMessage("No upcoming conferences in this conference room!");
         conferenceRoomService.getConferenceRoomAvailabilityItems(room.getId());
     }
 
