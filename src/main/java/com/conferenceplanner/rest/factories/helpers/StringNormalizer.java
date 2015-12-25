@@ -1,33 +1,39 @@
 package com.conferenceplanner.rest.factories.helpers;
 
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class StringNormalizer {
 
     private static final String CONFERENCE_ROOM_LOCATION_FIRST_WORD_PATTERN = "[a-z]/[a-z]";
+    private static final String CONFERENCE_ROOM_NAME_SUFFIX = "conference";
 
     public static String createNormalizedConferenceRoomLocation(String locationString) {
-        String normalizedString = "";
-        String[] words = locationString.toLowerCase().trim().split("\\s+");
+        List<String> words = Arrays.asList(locationString.toLowerCase().trim().split("\\s+"));
 
-        normalizedString += normalizeFirstWord(words[0]);
+        String head = normalizeFirstWord(words.get(0));
+        String tail = words.stream()
+                .skip(1)
+                .map(StringNormalizer::capitalize)
+                .collect(Collectors.joining(" "));
 
-        for (int i = 1; i < words.length; i++) {
-            normalizedString += " " + capitalize(words[i]);
-        }
-        return normalizedString;
+        return head.concat(" ").concat(tail);
     }
 
     public static String createNormalizedConferenceRoomName(String nameString) {
-        String normalizedString = "";
-        String[] words = nameString.toLowerCase().trim().split("\\s+");
+        List<String> words = Arrays.asList(nameString.toLowerCase().trim().split("\\s+"));
 
-        normalizedString += normalizeFirstWord(words[0]);
+        String head = normalizeFirstWord(words.get(0));
 
-        for (int i = 1; i < words.length - 1; i++) {
-            normalizedString += " " + capitalize(words[i]);
-        }
-        normalizedString += " conference";
-        return normalizedString;
+        String tail = words.stream()
+                .limit(words.size()-1)
+                .skip(1)
+                .map(StringNormalizer::capitalize)
+                .collect(Collectors.joining(" "));
+
+        return head.concat(" ").concat(tail).concat(" ").concat(CONFERENCE_ROOM_NAME_SUFFIX);
     }
 
     public static String createNormalizedConferenceName(String nameString) {
