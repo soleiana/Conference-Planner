@@ -34,4 +34,23 @@ public class ParticipantService {
         serviceAssistant.removeParticipant(participant, conference);
     }
 
+    public void addParticipant(Participant participant, int conferenceId) {
+        Conference conference = conferenceService.getConference(conferenceId);
+
+        if (!conferenceService.checkIfConferenceIsAvailable(conference)) {
+            throw new ApplicationException("Conference is not available for registration!", ApplicationErrorCode.CONFLICT);
+        }
+        Participant registeredParticipant = serviceAssistant.getParticipant(participant);
+
+        if (registeredParticipant != null) {
+            if (serviceAssistant.checkIfParticipantIsRegisteredForConference(participant, conference)) {
+                throw new ApplicationException("Participant already registered for conference!", ApplicationErrorCode.CONFLICT);
+            }
+        } else {
+            serviceAssistant.createParticipant(participant);
+        }
+        serviceAssistant.registerParticipant(participant, conference);
+
+    }
+
 }

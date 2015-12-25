@@ -37,6 +37,10 @@ public class ConferenceService {
         return availableConferences;
     }
 
+    public boolean checkIfConferenceIsAvailable(Conference conference) {
+        return getAvailableConferences().contains(conference);
+    }
+
     public void createConference(Conference conference, List<Integer> conferenceRoomIds) {
         if (serviceAssistant.checkIfConferenceExists(conference)) {
              throw new ApplicationException("Conference already exists!", ApplicationErrorCode.CONFLICT);

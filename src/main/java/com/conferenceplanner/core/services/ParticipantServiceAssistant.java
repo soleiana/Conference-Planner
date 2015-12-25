@@ -16,6 +16,9 @@ public class ParticipantServiceAssistant {
     @Autowired
     private ParticipantRepository participantRepository;
 
+    @Autowired
+    private ParticipantChecker participantChecker;
+
 
     public Participant getParticipant(int participantId) {
         return participantRepository.getById(participantId);
@@ -29,5 +32,30 @@ public class ParticipantServiceAssistant {
                 .findFirst()
                 .get();
         availabilityItem.releaseAvailableSeat();
+    }
+
+    public Participant getParticipant(Participant participant) {
+        return participantRepository.getAll().stream()
+                .filter(p -> participantChecker.compare(p, participant))
+                .findAny()
+                .orElseGet(null);
+    }
+
+    public boolean checkIfParticipantIsRegisteredForConference(Participant participant, Conference conference) {
+        return conference.getParticipants().contains(participant);
+    }
+
+    public void createParticipant(Participant participant) {
+        participantRepository.create(participant);
+    }
+
+    public void registerParticipant(Participant participant, Conference conference) {
+        conference.addParticipant(participant);
+
+        ConferenceRoomAvailabilityItem availabilityItem = conference.getConferenceRoomAvailabilityItems().stream()
+                .filter(ConferenceRoomAvailabilityItem::hasAvailableSeats)
+                .findFirst()
+                .get();
+        availabilityItem.takeAvailableSeat();
     }
 }

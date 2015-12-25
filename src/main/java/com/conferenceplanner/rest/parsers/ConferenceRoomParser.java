@@ -10,7 +10,10 @@ public class ConferenceRoomParser {
 
     private static final int MIN_WORDS_IN_LOCATION = 2;
     private static final int MAX_WORDS_IN_LOCATION = 5;
-    private static final String LOCATION_PATTERN = "([a-z]/[a-z]\\s+)*([a-z]+\\s+)+([a-z]+)*";
+    private static final int MIN_SYMBOLS_IN_LOCATION = 5;
+    private static final int MAX_SYMBOLS_IN_LOCATION = 100;
+    private static final String LOCATION = "([a-z]/[a-z]\\s+)*([a-z]+\\s+)+([a-z]+)*";
+    private static final Pattern LOCATION_PATTERN = Pattern.compile(LOCATION);
 
     public static boolean parse(String locationString, String nameString) {
         parseLocation(locationString);
@@ -19,19 +22,18 @@ public class ConferenceRoomParser {
     }
 
     private static void parseLocation(String locationString) {
-
         String locationStringToParse = locationString.toLowerCase().trim();
-
         String[] location = locationStringToParse.split("\\s+");
+
+        if (locationStringToParse.length() < MIN_SYMBOLS_IN_LOCATION || locationStringToParse.length() > MAX_SYMBOLS_IN_LOCATION) {
+            throw new ParserException("Invalid location length");
+        }
 
         if (location.length < MIN_WORDS_IN_LOCATION || location.length > MAX_WORDS_IN_LOCATION) {
             throw new ParserException("Invalid location length");
         }
 
-        Pattern pattern = Pattern.compile(LOCATION_PATTERN);
-        Matcher matcher = pattern.matcher(locationStringToParse);
-
-        if (!matcher.matches()) {
+        if (!LOCATION_PATTERN.matcher(locationStringToParse).matches()) {
             throw new ParserException("Invalid location format");
         }
     }

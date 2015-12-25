@@ -19,9 +19,7 @@ public class ConferenceValidator {
     private static final int MIN_TIME_BEFORE_CONFERENCE_START_IN_DAYS = 2;
     private static final int MIN_CONFERENCE_DURATION_IN_HOURS = 2;
     private static final int MAX_CONFERENCE_DURATION_IN_DAYS = 7;
-    private static final int MIN_SYMBOLS_IN_CONFERENCE_NAME = 2;
-    private static final int MAX_SYMBOLS_IN_CONFERENCE_NAME =150;
-
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(ConferenceParser.DATE_TIME_FORMAT_PATTERN);
 
     @Autowired
     private ConferenceRoomValidator conferenceRoomValidator;
@@ -61,8 +59,6 @@ public class ConferenceValidator {
     }
 
     private void validate(ConferenceInterval interval) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(ConferenceParser.DATE_TIME_FORMAT_PATTERN);
-
         LocalDateTime startDateTime = interval.getStartDateTime();
         LocalDateTime endDateTime = interval.getEndDateTime();
         LocalDateTime now = LocalDateTime.now();
@@ -70,12 +66,12 @@ public class ConferenceValidator {
         LocalDateTime minStartDateTime = now.plusDays(MIN_TIME_BEFORE_CONFERENCE_START_IN_DAYS);
 
         if (startDateTime.isBefore(minStartDateTime)) {
-            throw new ValidationException(String.format("Conference must start after %s", minStartDateTime.format(formatter)));
+            throw new ValidationException(String.format("Conference must start after %s", minStartDateTime.format(DATE_TIME_FORMATTER)));
         }
 
         if (endDateTime.isBefore(startDateTime)) {
             throw new ValidationException(String.format("Conference end dateTime %s is before start dateTime %s",
-                    endDateTime.format(formatter), startDateTime.format(formatter)));
+                    endDateTime.format(DATE_TIME_FORMATTER), startDateTime.format(DATE_TIME_FORMATTER)));
         }
 
         long hours = startDateTime.until(endDateTime, ChronoUnit.HOURS);
@@ -95,10 +91,10 @@ public class ConferenceValidator {
         if (nameString == null) {
             throw new ValidationException("Name is null");
         }
-
-        int length = nameString.trim().replaceAll("\\s+", " ").length();
-        if (length < MIN_SYMBOLS_IN_CONFERENCE_NAME || length > MAX_SYMBOLS_IN_CONFERENCE_NAME) {
-                throw new ValidationException("Invalid name length");
+        try {
+            ConferenceParser.parse(nameString);
+        } catch (ParserException ex) {
+            throw new ValidationException(ex.getMessage());
         }
     }
 

@@ -34,6 +34,18 @@ public class StringNormalizer {
         return nameString.trim().replaceAll("\\s+", " ");
     }
 
+    public static String createNormalizedParticipantName(String nameString) {
+        return null;
+    }
+
+    public static String createNormalizedParticipantSurname(String surnameString) {
+        return null;
+    }
+
+    public static String createNormalizedParticipantPassportNr(String passportNrString) {
+        return null;
+    }
+
     private static String normalizeFirstWord(String word) {
         if (word.matches(FIRST_WORD_PATTERN)) {
             return word.toUpperCase();

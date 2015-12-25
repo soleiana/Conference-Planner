@@ -4,6 +4,7 @@ import com.conferenceplanner.core.services.ApplicationException;
 import com.conferenceplanner.core.services.ParticipantService;
 import com.conferenceplanner.rest.domain.Participant;
 import com.conferenceplanner.rest.domain.ResourceAccessErrorCode;
+import com.conferenceplanner.rest.factories.ParticipantFactory;
 import com.conferenceplanner.rest.validators.ParticipantValidator;
 import com.conferenceplanner.rest.validators.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +28,31 @@ public class ParticipantController {
     @Autowired
     private ParticipantService participantService;
 
+    @Autowired
+    private ParticipantFactory participantFactory;
+
+
     @RequestMapping(method = RequestMethod.POST, consumes =  "application/json", produces = "application/json")
     public ResponseEntity<String> addParticipant(@RequestBody Participant participant) {
-        return null;
+        try {
+            participantValidator.validate(participant);
+            com.conferenceplanner.core.domain.Participant coreDomainParticipant = participantFactory.create(participant);
+            participantService.addParticipant(coreDomainParticipant, participant.getConferenceId());
 
+        } catch (ValidationException ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+
+        } catch (ApplicationException ex) {
+            HttpStatus httpStatus = ResourceAccessErrorCode.getHttpStatus(ex.getErrorCode());
+            return new ResponseEntity<>(ex.getMessage(), httpStatus);
+        }
+        catch (RuntimeException ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return  new ResponseEntity<>("Participant added.", HttpStatus.OK);
     }
+
+
 
     @RequestMapping(method = RequestMethod.DELETE, consumes =  "application/json", produces = "application/json")
     public ResponseEntity<String> removeParticipant(@RequestBody Participant participant) {
@@ -51,6 +72,4 @@ public class ParticipantController {
         }
         return  new ResponseEntity<>("Participant removed.", HttpStatus.OK);
     }
-
-
 }
