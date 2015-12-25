@@ -64,4 +64,23 @@ public class ParticipantServiceAssistantTest extends SpringContextTest {
         assertEquals(room.getMaxSeats(), availabilityItem.getAvailableSeats());
     }
 
+    @Test
+    public void test_checkIfParticipantIsRegisteredForConference_is_true_if_participant_is_registered() {
+        Participant participant = ParticipantFixture.createParticipant();
+        Conference conference = ConferenceFixture.createUpcomingConference();
+        databaseConfigurator.configure(conference, participant);
+        boolean result = serviceAssistant.checkIfParticipantIsRegisteredForConference(participant, conference);
+        assertTrue(result);
+    }
+
+    @Test
+    public void test_checkIfParticipantIsRegisteredForConference_is_false_if_participant_is_not_registered() {
+        Participant participant = ParticipantFixture.createParticipant();
+        Conference conference = ConferenceFixture.createUpcomingConference();
+        databaseConfigurator.configureConference(conference);
+        databaseConfigurator.configureParticipant(participant);
+        boolean result = serviceAssistant.checkIfParticipantIsRegisteredForConference(participant, conference);
+        assertFalse(result);
+    }
+
 }

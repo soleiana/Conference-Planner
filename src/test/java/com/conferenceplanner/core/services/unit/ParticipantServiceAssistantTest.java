@@ -18,10 +18,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 
@@ -65,5 +62,22 @@ public class ParticipantServiceAssistantTest {
         serviceAssistant.removeParticipant(participant, conference);
         assertTrue(conference.getParticipants().isEmpty());
         assertEquals(maxSeats, availabilityItem.getAvailableSeats());
+    }
+
+    @Test
+    public void test_checkIfParticipantIsRegisteredForConference_is_true_if_participant_is_registered() {
+        Participant participant = ParticipantFixture.createParticipant();
+        Conference conference = ConferenceFixture.createUpcomingConference();
+        conference.addParticipant(participant);
+        boolean result = serviceAssistant.checkIfParticipantIsRegisteredForConference(participant, conference);
+        assertTrue(result);
+    }
+
+    @Test
+    public void test_checkIfParticipantIsRegisteredForConference_is_false_if_participant_is_not_registered() {
+        Participant participant = ParticipantFixture.createParticipant();
+        Conference conference = ConferenceFixture.createUpcomingConference();
+        boolean result = serviceAssistant.checkIfParticipantIsRegisteredForConference(participant, conference);
+        assertFalse(result);
     }
 }
