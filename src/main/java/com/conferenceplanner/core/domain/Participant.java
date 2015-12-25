@@ -28,8 +28,6 @@ public class Participant {
     @Column(name = "PASSPORT_NR", nullable = false)
     private String passportNr;
 
-    @ManyToMany(mappedBy = "participants")
-    private List<Conference> conferences = new ArrayList<>();
 
     public Participant() {}
 
@@ -78,14 +76,6 @@ public class Participant {
 
     public void setPassportNr(String passportNr) {
         this.passportNr = passportNr;
-    }
-
-    public List<Conference> getConferences() {
-        return conferences;
-    }
-
-    public void setConferences(List<Conference> conferences) {
-        this.conferences = conferences;
     }
 
     @Override

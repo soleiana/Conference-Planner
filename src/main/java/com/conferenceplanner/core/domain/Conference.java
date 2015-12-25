@@ -33,14 +33,10 @@ public class Conference {
     @Column(name = "CANCELLED", nullable = false)
     private boolean cancelled;
 
-    @ManyToMany(mappedBy = "conferences")
-    private List<ConferenceRoom> conferenceRooms = new ArrayList<>();
-
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "CONFERENCE_ID")
     @Cascade({org.hibernate.annotations.CascadeType.ALL})
     private List<ConferenceRoomAvailabilityItem> conferenceRoomAvailabilityItems = new ArrayList<>();
-
 
     @ManyToMany
     @JoinTable(name = "CONFERENCE_PARTICIPANT",
@@ -119,14 +115,6 @@ public class Conference {
 
     public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
-    }
-
-    public List<ConferenceRoom> getConferenceRooms() {
-        return conferenceRooms;
-    }
-
-    public void setConferenceRooms(List<ConferenceRoom> conferenceRooms) {
-        this.conferenceRooms = conferenceRooms;
     }
 
     public List<ConferenceRoomAvailabilityItem> getConferenceRoomAvailabilityItems() {
