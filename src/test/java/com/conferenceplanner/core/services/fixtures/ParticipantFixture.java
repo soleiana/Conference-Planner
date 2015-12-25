@@ -17,6 +17,10 @@ public class ParticipantFixture {
         return new Participant(NAME, SURNAME, BIRTH_DATE, PASSPORT_NR);
     }
 
+    public static Participant createParticipant(String name) {
+        return new Participant(name, SURNAME, BIRTH_DATE, PASSPORT_NR);
+    }
+
     public static List<Participant> createParticipants(int number) {
         List<Participant> participants = new ArrayList<>();
         for (Integer i = 1; i <= number; i++) {

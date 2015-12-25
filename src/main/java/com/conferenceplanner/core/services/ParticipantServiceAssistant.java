@@ -38,7 +38,7 @@ public class ParticipantServiceAssistant {
         return participantRepository.getAll().stream()
                 .filter(p -> participantChecker.compare(p, participant))
                 .findAny()
-                .orElseGet(null);
+                .orElse(null);
     }
 
     public boolean checkIfParticipantIsRegisteredForConference(Participant participant, Conference conference) {
