@@ -34,7 +34,7 @@ public class ConferenceValidatorTest extends SpringContextTest {
         String endDateTimeString = "12/12/2015 12:20";
         expectedException.expect(ValidationException.class);
         expectedException.expectMessage("Start date time or end date time are are null");
-        validator.validate(startDateTimeString, endDateTimeString);
+        validator.validateDates(startDateTimeString, endDateTimeString);
     }
 
     @Test
@@ -43,7 +43,7 @@ public class ConferenceValidatorTest extends SpringContextTest {
         String startDateTimeString = "12/12/2015 12:20";
         expectedException.expect(ValidationException.class);
         expectedException.expectMessage("Start date time or end date time are are null");
-        validator.validate(startDateTimeString, endDateTimeString);
+        validator.validateDates(startDateTimeString, endDateTimeString);
     }
 
     @Test
@@ -59,7 +59,7 @@ public class ConferenceValidatorTest extends SpringContextTest {
         String endDateTimeString = "12/12/2015 15:60";
         expectedException.expect(ValidationException.class);
         expectedException.expectMessage("Invalid start dateTime or end dateTime format");
-        validator.validate(startDateTimeString, endDateTimeString);
+        validator.validateDates(startDateTimeString, endDateTimeString);
     }
 
     @Test
@@ -73,7 +73,7 @@ public class ConferenceValidatorTest extends SpringContextTest {
 
         expectedException.expect(ValidationException.class);
         expectedException.expectMessage("Conference must start after " + now.plusDays(2).format(formatter));
-        validator.validate(startDateTimeString, endDateTimeString);
+        validator.validateDates(startDateTimeString, endDateTimeString);
     }
 
     @Test
@@ -89,7 +89,7 @@ public class ConferenceValidatorTest extends SpringContextTest {
         expectedException.expectMessage(String.format("Conference end dateTime %s is before start dateTime %s",
                 endDateTime.format(formatter), startDateTime.format(formatter)));
 
-        validator.validate(startDateTimeString, endDateTimeString);
+        validator.validateDates(startDateTimeString, endDateTimeString);
     }
 
     @Test
@@ -103,7 +103,7 @@ public class ConferenceValidatorTest extends SpringContextTest {
 
         expectedException.expect(ValidationException.class);
         expectedException.expectMessage(String.format("Conference duration is %s hours, less than min of %s hour(s)", 1, 2));
-        validator.validate(startDateTimeString, endDateTimeString);
+        validator.validateDates(startDateTimeString, endDateTimeString);
     }
 
     @Test
@@ -117,7 +117,7 @@ public class ConferenceValidatorTest extends SpringContextTest {
 
         expectedException.expect(ValidationException.class);
         expectedException.expectMessage(String.format(String.format("Conference duration is %s days, more than max of %s day(s)", 8, 7)));
-        validator.validate(startDateTimeString, endDateTimeString);
+        validator.validateDates(startDateTimeString, endDateTimeString);
     }
 
     @Test
@@ -129,7 +129,7 @@ public class ConferenceValidatorTest extends SpringContextTest {
         LocalDateTime endDateTime = startDateTime.plusDays(6);
         String endDateTimeString = endDateTime.format(formatter);
 
-        ConferenceInterval interval = validator.validate(startDateTimeString, endDateTimeString);
+        ConferenceInterval interval = validator.validateDates(startDateTimeString, endDateTimeString);
         assertEquals(startDateTimeString, interval.getStartDateTime().format(formatter));
         assertEquals(endDateTimeString, interval.getEndDateTime().format(formatter));
     }

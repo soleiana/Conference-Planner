@@ -19,23 +19,19 @@ public class ConferenceValidator {
     private static final int MIN_TIME_BEFORE_CONFERENCE_START_IN_DAYS = 2;
     private static final int MIN_CONFERENCE_DURATION_IN_HOURS = 2;
     private static final int MAX_CONFERENCE_DURATION_IN_DAYS = 7;
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(ConferenceParser.DATE_TIME_FORMAT_PATTERN);
+    private static final DateTimeFormatter CONFERENCE_DATE_TIME_FORMATTER =
+            DateTimeFormatter.ofPattern(ConferenceParser.CONFERENCE_DATE_TIME_FORMAT_PATTERN);
 
     @Autowired
     private ConferenceRoomValidator conferenceRoomValidator;
 
     public void validate(Conference conference) {
-        String nameString = conference.getName();
-        String startDateTimeString = conference.getStartDateTime();
-        String endDateTimeString = conference.getEndDateTime();
-        List<Integer> conferenceRoomIds = conference.getConferenceRoomIds();
-
-        conferenceRoomValidator.validateIds(conferenceRoomIds);
-        validate(startDateTimeString, endDateTimeString);
-        validate(nameString);
+        conferenceRoomValidator.validateIds(conference.getConferenceRoomIds());
+        validateDates(conference.getStartDateTime(), conference.getEndDateTime());
+        validateName(conference.getName());
     }
 
-    public ConferenceInterval validate(String startDateTimeString, String endDateTimeString) {
+    public ConferenceInterval validateDates(String startDateTimeString, String endDateTimeString) {
         ConferenceInterval interval;
 
         if (startDateTimeString == null || endDateTimeString == null) {
@@ -59,6 +55,22 @@ public class ConferenceValidator {
     }
 
     private void validate(ConferenceInterval interval) {
+        validateIntervalPosition(interval);
+        validateIntervalDuration(interval);
+    }
+
+    private void validateName(String nameString) {
+        if (nameString == null) {
+            throw new ValidationException("Name is null");
+        }
+        try {
+            ConferenceParser.parse(nameString);
+        } catch (ParserException ex) {
+            throw new ValidationException(ex.getMessage());
+        }
+    }
+
+    private void validateIntervalPosition(ConferenceInterval interval) {
         LocalDateTime startDateTime = interval.getStartDateTime();
         LocalDateTime endDateTime = interval.getEndDateTime();
         LocalDateTime now = LocalDateTime.now();
@@ -66,13 +78,19 @@ public class ConferenceValidator {
         LocalDateTime minStartDateTime = now.plusDays(MIN_TIME_BEFORE_CONFERENCE_START_IN_DAYS);
 
         if (startDateTime.isBefore(minStartDateTime)) {
-            throw new ValidationException(String.format("Conference must start after %s", minStartDateTime.format(DATE_TIME_FORMATTER)));
+            throw new ValidationException(String.format("Conference must start after %s", minStartDateTime.format(CONFERENCE_DATE_TIME_FORMATTER)));
         }
 
         if (endDateTime.isBefore(startDateTime)) {
             throw new ValidationException(String.format("Conference end dateTime %s is before start dateTime %s",
-                    endDateTime.format(DATE_TIME_FORMATTER), startDateTime.format(DATE_TIME_FORMATTER)));
+                    endDateTime.format(CONFERENCE_DATE_TIME_FORMATTER), startDateTime.format(CONFERENCE_DATE_TIME_FORMATTER)));
         }
+
+    }
+
+    private void validateIntervalDuration(ConferenceInterval interval) {
+        LocalDateTime startDateTime = interval.getStartDateTime();
+        LocalDateTime endDateTime = interval.getEndDateTime();
 
         long hours = startDateTime.until(endDateTime, ChronoUnit.HOURS);
 
@@ -84,17 +102,6 @@ public class ConferenceValidator {
 
         if (days > MAX_CONFERENCE_DURATION_IN_DAYS) {
             throw new ValidationException(String.format("Conference duration is %s days, more than max of %s day(s)", days, MAX_CONFERENCE_DURATION_IN_DAYS));
-        }
-    }
-
-    private void validate(String nameString) {
-        if (nameString == null) {
-            throw new ValidationException("Name is null");
-        }
-        try {
-            ConferenceParser.parse(nameString);
-        } catch (ParserException ex) {
-            throw new ValidationException(ex.getMessage());
         }
     }
 

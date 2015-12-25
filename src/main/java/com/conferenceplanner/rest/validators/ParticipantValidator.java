@@ -25,15 +25,10 @@ public class ParticipantValidator {
     }
 
     public void validate(Participant participant) {
-        String nameString = participant.getName();
-        String surnameString = participant.getSurname();
-        String passportNrString = participant.getPassportNr();
-        String birthDateString = participant.getPassportNr();
-
-        validateName(nameString);
-        validateName(surnameString);
-        validatePassportNr(passportNrString);
-        validateBirthDate(birthDateString);
+        validateName(participant.getName());
+        validateSurname(participant.getSurname());
+        validatePassportNr(participant.getPassportNr());
+        validateBirthDate(participant.getBirthDate());
         conferenceValidator.validateId(participant.getConferenceId());
     }
 
@@ -46,6 +41,10 @@ public class ParticipantValidator {
       } catch (ParserException ex) {
           throw new ValidationException(ex.getMessage());
       }
+    }
+
+    private void validateSurname(String surnameString) {
+        validateName(surnameString);
     }
 
     private void validateBirthDate(String birthDateString) {

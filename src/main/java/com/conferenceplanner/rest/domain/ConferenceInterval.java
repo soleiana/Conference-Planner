@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter;
 public class ConferenceInterval {
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER =
-            DateTimeFormatter.ofPattern(ConferenceParser.DATE_TIME_FORMAT_PATTERN);
+            DateTimeFormatter.ofPattern(ConferenceParser.CONFERENCE_DATE_TIME_FORMAT_PATTERN);
 
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;

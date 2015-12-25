@@ -8,18 +8,17 @@ import java.util.regex.Pattern;
 
 public class ParticipantParser {
 
+    public static final String BIRTH_DATE_FORMAT_PATTERN = "dd/MM/yyyy";
+    private static final DateTimeFormatter BIRTH_DATE_FORMATTER = DateTimeFormatter.ofPattern(BIRTH_DATE_FORMAT_PATTERN);
     private static final int MIN_SYMBOLS_IN_PARTICIPANT_NAME = 2;
     private static final int MAX_SYMBOLS_IN_PARTICIPANT_NAME = 100;
     private static final int MIN_SYMBOLS_IN_PASSPORT_NUMBER = 6;
     private static final int MAX_SYMBOLS_IN_PASSPORT_NUMBER = 20;
 
-    private static final String NAME = "([a-z]+\\s+)+([a-z]+)*";
-    private static final String PASSPORT_NUMBER = "([a-z]\\s+)+([0-9a-z]+)*";
-    public static final String BIRTH_DATE_FORMAT_PATTERN = "dd/MM/yyyy";
-
+    private static final String NAME = "[a-z]+";
+    private static final String PASSPORT_NUMBER = "[a-z][0-9a-z]+";
     private static final Pattern NAME_PATTERN = Pattern.compile(NAME);
     private static final Pattern PASSPORT_NUMBER_PATTERN = Pattern.compile(PASSPORT_NUMBER);
-    private static final DateTimeFormatter BIRTH_DATE_FORMATTER = DateTimeFormatter.ofPattern(BIRTH_DATE_FORMAT_PATTERN);
 
 
     public static void parseName(String nameString) {

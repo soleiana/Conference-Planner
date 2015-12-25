@@ -70,7 +70,7 @@ public class ConferenceRoomController {
         AvailableConferenceRooms availableConferenceRooms = new AvailableConferenceRooms();
 
         try {
-            ConferenceInterval interval = conferenceValidator.validate(conferenceStartDateTime, conferenceEndDateTime);
+            ConferenceInterval interval = conferenceValidator.validateDates(conferenceStartDateTime, conferenceEndDateTime);
             com.conferenceplanner.core.domain.Conference coreDomainConference = conferenceFactory.create(interval);
 
             List<com.conferenceplanner.core.domain.ConferenceRoom> coreDomainConferenceRooms = conferenceRoomService.getAvailableConferenceRooms(coreDomainConference);
