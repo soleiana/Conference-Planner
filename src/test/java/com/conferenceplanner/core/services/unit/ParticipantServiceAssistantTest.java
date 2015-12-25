@@ -46,22 +46,22 @@ public class ParticipantServiceAssistantTest {
 
     @Test
     public void test_removeParticipant() {
-        final int maxSeats = 100;
+        final int MAX_SEATS = 100;
         Participant participant = ParticipantFixture.createParticipant();
         Conference conference = ConferenceFixture.createUpcomingConference();
-        List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(2, maxSeats);
+        List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(2, MAX_SEATS);
         List<ConferenceRoomAvailabilityItem> availabilityItems =
-                ConferenceRoomAvailabilityItemFixture.createConferenceRoomsWithAvailableSeats(rooms.size(), maxSeats);
+                ConferenceRoomAvailabilityItemFixture.createConferenceRoomsWithAvailableSeats(rooms.size(), MAX_SEATS);
         availabilityItems.get(0).setConferenceRoom(rooms.get(0));
         availabilityItems.get(1).setConferenceRoom(rooms.get(1));
         ConferenceRoomAvailabilityItem availabilityItem = availabilityItems.get(0);
         availabilityItem.takeAvailableSeat();
-        assertEquals(maxSeats - 1, availabilityItem.getAvailableSeats());
+        assertEquals(MAX_SEATS - 1, availabilityItem.getAvailableSeats());
         conference.setConferenceRoomAvailabilityItems(availabilityItems);
         conference.addParticipant(participant);
         serviceAssistant.removeParticipant(participant, conference);
         assertTrue(conference.getParticipants().isEmpty());
-        assertEquals(maxSeats, availabilityItem.getAvailableSeats());
+        assertEquals(MAX_SEATS, availabilityItem.getAvailableSeats());
     }
 
     @Test
@@ -79,5 +79,20 @@ public class ParticipantServiceAssistantTest {
         Conference conference = ConferenceFixture.createUpcomingConference();
         boolean result = serviceAssistant.checkIfParticipantIsRegisteredForConference(participant, conference);
         assertFalse(result);
+    }
+
+    @Test
+    public void test_registerParticipant() {
+        final int MAX_SEATS = 100;
+        Participant participant = ParticipantFixture.createParticipant();
+        Conference conference = ConferenceFixture.createUpcomingConference();
+        List<ConferenceRoomAvailabilityItem> availabilityItems =
+                ConferenceRoomAvailabilityItemFixture.createConferenceRoomsWithAvailableSeats(2, MAX_SEATS);
+        conference.setConferenceRoomAvailabilityItems(availabilityItems);
+        serviceAssistant.registerParticipant(participant, conference);
+        assertEquals(1, conference.getParticipants().size());
+        assertEquals(participant, conference.getParticipants().get(0));
+        assertEquals(MAX_SEATS - 1, conference.getConferenceRoomAvailabilityItems().get(0).getAvailableSeats());
+
     }
 }

@@ -9,6 +9,7 @@ import com.conferenceplanner.core.repositories.tools.DatabaseCleaner;
 import com.conferenceplanner.core.repositories.tools.DatabaseConfigurator;
 import com.conferenceplanner.core.services.ParticipantServiceAssistant;
 import com.conferenceplanner.core.services.fixtures.ConferenceFixture;
+import com.conferenceplanner.core.services.fixtures.ConferenceRoomAvailabilityItemFixture;
 import com.conferenceplanner.core.services.fixtures.ConferenceRoomFixture;
 import com.conferenceplanner.core.services.fixtures.ParticipantFixture;
 import org.junit.Before;
@@ -81,6 +82,27 @@ public class ParticipantServiceAssistantTest extends SpringContextTest {
         databaseConfigurator.configureParticipant(participant);
         boolean result = serviceAssistant.checkIfParticipantIsRegisteredForConference(participant, conference);
         assertFalse(result);
+    }
+
+    @Test
+    public void test_createParticipant() {
+        Participant participant = ParticipantFixture.createParticipant();
+        serviceAssistant.createParticipant(participant);
+        assertNotNull(participant.getId());
+    }
+
+    @Test
+    public void test_registerParticipant() {
+        final int MAX_SEATS = 100;
+        Participant participant = ParticipantFixture.createParticipant();
+        Conference conference = ConferenceFixture.createUpcomingConference();
+        List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(2, MAX_SEATS);
+        databaseConfigurator.configureWithConferenceRoomAvailability(rooms, conference);
+        databaseConfigurator.configureParticipant(participant);
+        serviceAssistant.registerParticipant(participant, conference);
+        assertEquals(1, conference.getParticipants().size());
+        assertEquals(participant, conference.getParticipants().get(0));
+        assertEquals(MAX_SEATS - 1, conference.getConferenceRoomAvailabilityItems().get(0).getAvailableSeats());
     }
 
 }
