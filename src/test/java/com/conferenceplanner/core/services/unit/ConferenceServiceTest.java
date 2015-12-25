@@ -2,12 +2,10 @@ package com.conferenceplanner.core.services.unit;
 
 import com.conferenceplanner.core.domain.Conference;
 import com.conferenceplanner.core.domain.ConferenceParticipants;
-import com.conferenceplanner.core.domain.ConferenceRoom;
 import com.conferenceplanner.core.domain.Participant;
 import com.conferenceplanner.core.repositories.ConferenceRepository;
 import com.conferenceplanner.core.services.*;
 import com.conferenceplanner.core.services.fixtures.ConferenceFixture;
-import com.conferenceplanner.core.services.fixtures.ConferenceRoomFixture;
 import com.conferenceplanner.core.services.fixtures.ParticipantFixture;
 import org.junit.Before;
 import org.junit.Rule;
