@@ -3,7 +3,7 @@ package com.conferenceplanner.rest.factories.helpers;
 
 public class StringNormalizer {
 
-    private static final String FIRST_WORD_PATTERN = "[a-z]/[a-z]";
+    private static final String CONFERENCE_ROOM_LOCATION_FIRST_WORD_PATTERN = "[a-z]/[a-z]";
 
     public static String createNormalizedConferenceRoomLocation(String locationString) {
         String normalizedString = "";
@@ -35,19 +35,19 @@ public class StringNormalizer {
     }
 
     public static String createNormalizedParticipantName(String nameString) {
-        return null;
+        return capitalize(nameString.trim().toLowerCase());
     }
 
     public static String createNormalizedParticipantSurname(String surnameString) {
-        return null;
+        return createNormalizedParticipantName(surnameString);
     }
 
     public static String createNormalizedParticipantPassportNr(String passportNrString) {
-        return null;
+        return passportNrString.trim().toUpperCase();
     }
 
     private static String normalizeFirstWord(String word) {
-        if (word.matches(FIRST_WORD_PATTERN)) {
+        if (word.matches(CONFERENCE_ROOM_LOCATION_FIRST_WORD_PATTERN)) {
             return word.toUpperCase();
         } else {
             return capitalize(word);
@@ -55,9 +55,7 @@ public class StringNormalizer {
     }
 
     private static String capitalize(String str) {
-        String capitalizedString;
-        char firstCharacter = str.charAt(0);
-        capitalizedString = str.replace(firstCharacter, Character.toUpperCase(firstCharacter));
-        return capitalizedString;
+        String firstCharacter = str.substring(0,1).toUpperCase();
+        return firstCharacter.concat(str.substring(1));
     }
 }

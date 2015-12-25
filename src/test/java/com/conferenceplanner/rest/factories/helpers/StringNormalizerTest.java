@@ -40,4 +40,26 @@ public class StringNormalizerTest {
         String normalisedString = StringNormalizer.createNormalizedConferenceName(nameString);
         assertEquals("Jfokus 2016", normalisedString);
     }
+
+    @Test
+    public void test_createNormalizedParticipantName() {
+        String nameString = " anNA ";
+        String normalizedString = StringNormalizer.createNormalizedParticipantName(nameString);
+        assertEquals("Anna", normalizedString);
+    }
+
+    @Test
+    public void test_createNormalizedParticipantSurname() {
+        String surnameString = " sULeyManova ";
+        String normalizedString = StringNormalizer.createNormalizedParticipantSurname(surnameString);
+        assertEquals("Suleymanova", normalizedString);
+    }
+
+    @Test
+    public void test_createNormalizedParticipantPassportNr() {
+        String  passportNrString = " af123456F ";
+        String normalizedString = StringNormalizer.createNormalizedParticipantPassportNr(passportNrString);
+        assertEquals("AF123456F", normalizedString);
+
+    }
 }

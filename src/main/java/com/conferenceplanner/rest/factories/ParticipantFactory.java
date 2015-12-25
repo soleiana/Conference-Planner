@@ -12,12 +12,14 @@ import java.time.format.DateTimeFormatter;
 @Component
 public class ParticipantFactory {
 
+    private static final DateTimeFormatter BIRTH_DATE_FORMATTER = DateTimeFormatter.ofPattern(ParticipantParser.BIRTH_DATE_FORMAT_PATTERN);
+
     public Participant create(com.conferenceplanner.core.domain.Participant participant) {
         Participant restDomainParticipant = new Participant();
         restDomainParticipant.setId(participant.getId());
         restDomainParticipant.setName(participant.getName());
         restDomainParticipant.setSurname(participant.getSurname());
-        restDomainParticipant.setBirthDate(participant.getBirthDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        restDomainParticipant.setBirthDate(participant.getBirthDate().format(BIRTH_DATE_FORMATTER));
         restDomainParticipant.setPassportNr(participant.getPassportNr());
         return restDomainParticipant;
     }
