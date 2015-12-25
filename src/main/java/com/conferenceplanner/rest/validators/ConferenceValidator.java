@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 
 @Component
 public class ConferenceValidator {
@@ -64,7 +63,7 @@ public class ConferenceValidator {
             throw new ValidationException("Name is null");
         }
         try {
-            ConferenceParser.parse(nameString);
+            ConferenceParser.parseName(nameString);
         } catch (ParserException ex) {
             throw new ValidationException(ex.getMessage());
         }

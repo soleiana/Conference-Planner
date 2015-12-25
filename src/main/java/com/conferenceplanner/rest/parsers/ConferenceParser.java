@@ -25,7 +25,7 @@ public class ConferenceParser {
         }
     }
 
-    public static void parse(String nameString) {
+    public static void parseName(String nameString) {
         int length = nameString.trim().replaceAll("\\s+", " ").length();
         if (length < MIN_SYMBOLS_IN_CONFERENCE_NAME || length > MAX_SYMBOLS_IN_CONFERENCE_NAME) {
             throw new ParserException("Invalid name length");

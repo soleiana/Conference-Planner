@@ -14,11 +14,15 @@ import static org.junit.Assert.*;
 
 public class ConferenceParserTest {
 
+    private static final int MIN_SYMBOLS_IN_CONFERENCE_NAME = 2;
+    private static final int MAX_SYMBOLS_IN_CONFERENCE_NAME = 150;
+    private static final DateTimeFormatter CONFERENCE_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
     @Test
-    public void test_throws_ParserException_if_invalid_start_date_time_format() {
+    public void test_parse_throws_ParserException_if_invalid_start_date_time_format() {
         String endDateTimeString = "12/12/2015 12:20";
         for (String startDateTimeString: geInvalidDateTimeStrings()) {
            try {
@@ -32,7 +36,7 @@ public class ConferenceParserTest {
     }
 
     @Test
-    public void test_throws_ParserException_if_invalid_end_date_time_format() {
+    public void test_parse_throws_ParserException_if_invalid_end_date_time_format() {
         String startDateTimeString = "12/12/2015 12:20";
         for (String endDateTimeString: geInvalidDateTimeStrings()) {
             try {
@@ -46,24 +50,47 @@ public class ConferenceParserTest {
     }
 
     @Test
-    public void test_parse_conference_interval() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-        String startDateTimeString = " 12/12/2015 12:20 ";
-        for (String dateTimeString : geValidDateTimeStrings()) {
-
-            ConferenceInterval interval = ConferenceParser.parse(startDateTimeString, dateTimeString);
-            assertEquals("12/12/2015 12:20", interval.getStartDateTime().format(formatter));
-            assertEquals(dateTimeString.trim(), interval.getEndDateTime().format(formatter));
-        }
-
+    public void test_parse_conference_startDateTime() {
         String endDateTimeString = " 12/12/2015 12:20 ";
-        for (String dateTimeString : geValidDateTimeStrings()) {
-
-            ConferenceInterval interval = ConferenceParser.parse(dateTimeString, endDateTimeString);
-            assertEquals("12/12/2015 12:20", interval.getEndDateTime().format(formatter));
-            assertEquals(dateTimeString.trim(), interval.getStartDateTime().format(formatter));
+        for (String startDateTimeString : geValidDateTimeStrings()) {
+            ConferenceInterval interval = ConferenceParser.parse(startDateTimeString, endDateTimeString);
+            assertEquals(startDateTimeString.trim(), interval.getStartDateTime().format(CONFERENCE_DATE_TIME_FORMATTER));
         }
     }
+
+    @Test
+    public void test_parse_conference_endDateTime() {
+        String startDateTimeString = " 12/12/2015 12:20 ";
+        for (String endDateTimeString : geValidDateTimeStrings()) {
+            ConferenceInterval interval = ConferenceParser.parse(startDateTimeString, endDateTimeString);
+            assertEquals(endDateTimeString.trim(), interval.getEndDateTime().format(CONFERENCE_DATE_TIME_FORMATTER));
+        }
+    }
+
+    @Test
+    public void test_parseName_throws_ParserException() {
+        for (String nameString: getInvalidLengthNameStrings()) {
+            try {
+                ConferenceParser.parseName(nameString);
+            } catch (ParserException ex) {
+                assertEquals("Invalid name length", ex.getMessage());
+                continue;
+            }
+            fail();
+        }
+    }
+
+    @Test
+    public void test_parseName() {
+        for (String nameString: getValidNameStrings()) {
+            try {
+                ConferenceParser.parseName(nameString);
+            } catch (ParserException ex) {
+               fail();
+            }
+        }
+    }
+
 
     private List<String> geInvalidDateTimeStrings(){
         List<String> strings = new ArrayList<>();
@@ -76,7 +103,6 @@ public class ConferenceParserTest {
         strings.add("32/12/2015 12:20");
         strings.add("12/12/2015 25:20");
         strings.add("12/12/2015 20:60");
-        strings.add("");
         return strings;
     }
 
@@ -89,6 +115,42 @@ public class ConferenceParserTest {
         strings.add("12/01/2015 12:25");
         strings.add("12/01/2015 00:00");
         return strings;
+    }
+
+    private List<String> getInvalidLengthNameStrings() {
+        List<String> strings = new ArrayList<>();
+        strings.add("");
+        strings.add("  ");
+        strings.add("a");
+        strings.add("0");
+        strings.add(" a ");
+        strings.add(" % ");
+        strings.add(getTooLongName());
+        return strings;
+    }
+
+    private List<String> getValidNameStrings() {
+        List<String> names = new ArrayList<>();
+        names.add(getValidName(MIN_SYMBOLS_IN_CONFERENCE_NAME));
+        names.add(getValidName(MAX_SYMBOLS_IN_CONFERENCE_NAME));
+        names.add(getValidName(MAX_SYMBOLS_IN_CONFERENCE_NAME-1));
+        return names;
+    }
+
+    private String getTooLongName() {
+        String tooLongName = "";
+        for (int i = 0; i <= MAX_SYMBOLS_IN_CONFERENCE_NAME; i++) {
+            tooLongName += "a";
+        }
+        return tooLongName;
+    }
+
+    private String getValidName(int symbolsInName) {
+        String name = "";
+        for (int i = 0; i < symbolsInName; i++) {
+            name += "a";
+        }
+        return " " + name + " ";
     }
 
 }
