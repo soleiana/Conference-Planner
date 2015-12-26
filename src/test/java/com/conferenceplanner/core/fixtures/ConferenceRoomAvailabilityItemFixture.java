@@ -28,7 +28,7 @@ public class ConferenceRoomAvailabilityItemFixture {
         List<ConferenceRoomAvailabilityItem> availabilityItems = new ArrayList<>();
         for (int i = 1; i <= numberOfRooms; i++) {
             ConferenceRoomAvailabilityItem item = new ConferenceRoomAvailabilityItem(i*100);
-            item.setConference(conference);
+            conference.addConferenceRoomAvailabilityItem(item);
             availabilityItems.add(item);
         }
         return availabilityItems;

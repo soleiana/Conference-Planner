@@ -55,7 +55,7 @@ public class ParticipantServiceAssistantTest extends SpringContextTest {
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(3);
         databaseConfigurator.configureWithConferenceRoomAvailability(rooms, conference);
         ConferenceRoom room = rooms.get(0);
-        ConferenceRoomAvailabilityItem availabilityItem =  room.getConferenceRoomAvailabilityItems().get(0);
+        ConferenceRoomAvailabilityItem availabilityItem =  room.getConferences().get(0).getConferenceRoomAvailabilityItems().get(0);
         availabilityItem.takeAvailableSeat();
         assertEquals(room.getMaxSeats() - 1, availabilityItem.getAvailableSeats());
         databaseConfigurator.configure(conference, participant);

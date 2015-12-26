@@ -47,10 +47,10 @@ public class ParticipantServiceTest extends SpringContextTest {
         Conference conference = ConferenceFixture.createUpcomingConference();
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(3);
         databaseConfigurator.configureWithConferenceRoomAvailability(rooms, conference);
-        int availableSeatsBefore =  rooms.get(0).getConferenceRoomAvailabilityItems().get(0).getAvailableSeats();
+        int availableSeatsBefore =  rooms.get(0).getConferences().get(0).getConferenceRoomAvailabilityItems().get(0).getAvailableSeats();
         participantService.addParticipant(participant, conference.getId());
         assertTrue(conference.getParticipants().contains(participant));
-        int availableSeatsAfter = rooms.get(0).getConferenceRoomAvailabilityItems().get(0).getAvailableSeats();
+        int availableSeatsAfter = rooms.get(0).getConferences().get(0).getConferenceRoomAvailabilityItems().get(0).getAvailableSeats();
         assertEquals(availableSeatsBefore - 1, availableSeatsAfter);
     }
 
@@ -61,10 +61,10 @@ public class ParticipantServiceTest extends SpringContextTest {
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(3);
         databaseConfigurator.configureWithConferenceRoomAvailability(rooms, conference);
         databaseConfigurator.configureParticipant(participant);
-        int availableSeatsBefore =  rooms.get(0).getConferenceRoomAvailabilityItems().get(0).getAvailableSeats();
+        int availableSeatsBefore =  rooms.get(0).getConferences().get(0).getConferenceRoomAvailabilityItems().get(0).getAvailableSeats();
         participantService.addParticipant(participant, conference.getId());
         assertTrue(conference.getParticipants().contains(participant));
-        int availableSeatsAfter = rooms.get(0).getConferenceRoomAvailabilityItems().get(0).getAvailableSeats();
+        int availableSeatsAfter = rooms.get(0).getConferences().get(0).getConferenceRoomAvailabilityItems().get(0).getAvailableSeats();
         assertEquals(availableSeatsBefore - 1, availableSeatsAfter);
     }
 
@@ -110,13 +110,13 @@ public class ParticipantServiceTest extends SpringContextTest {
         Conference conference = ConferenceFixture.createUpcomingConference();
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(3);
         databaseConfigurator.configureWithConferenceRoomAvailability(rooms, conference);
-        rooms.get(0).getConferenceRoomAvailabilityItems().get(0).takeAvailableSeat();
-        int availableSeatsBefore =  rooms.get(0).getConferenceRoomAvailabilityItems().get(0).getAvailableSeats();
+        rooms.get(0).getConferences().get(0).getConferenceRoomAvailabilityItems().get(0).takeAvailableSeat();
+        int availableSeatsBefore =  rooms.get(0).getConferences().get(0).getConferenceRoomAvailabilityItems().get(0).getAvailableSeats();
         databaseConfigurator.configure(conference, participant);
         assertEquals(1, conference.getParticipants().size());
         participantService.removeParticipant(participant.getId(), conference.getId());
         assertTrue(conference.getParticipants().isEmpty());
-        int availableSeatsAfter = rooms.get(0).getConferenceRoomAvailabilityItems().get(0).getAvailableSeats();
+        int availableSeatsAfter = rooms.get(0).getConferences().get(0).getConferenceRoomAvailabilityItems().get(0).getAvailableSeats();
         assertEquals(availableSeatsBefore + 1, availableSeatsAfter);
     }
 

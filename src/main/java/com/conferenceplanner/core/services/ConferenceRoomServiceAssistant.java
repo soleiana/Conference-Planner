@@ -42,9 +42,10 @@ public class ConferenceRoomServiceAssistant {
     }
 
     public List<ConferenceRoomAvailabilityItem> getConferenceRoomAvailabilityItems(ConferenceRoom conferenceRoom) {
-            return conferenceRoom.getConferenceRoomAvailabilityItems().stream()
-                .filter(item -> item.getConference().isUpcoming())
-                .collect(Collectors.toList());
+            return conferenceRoom.getConferences().stream()
+                    .filter(Conference::isUpcoming)
+                    .flatMap(conference -> conference.getConferenceRoomAvailabilityItems().stream())
+                    .collect(Collectors.toList());
     }
 
 }

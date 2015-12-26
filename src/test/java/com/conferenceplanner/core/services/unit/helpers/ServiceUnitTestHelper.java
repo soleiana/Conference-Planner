@@ -36,7 +36,7 @@ public class ServiceUnitTestHelper {
     private void assertConferenceRoom(ConferenceRoom room, Conference conference) {
         assertTrue(room.getConferences().contains(conference));
         assertEquals(1, room.getConferences().size());
-        assertEquals(1, room.getConferenceRoomAvailabilityItems().size());
+        assertEquals(1, room.getConferences().get(0).getConferenceRoomAvailabilityItems().size());
     }
 
     private void assertConferenceRoomAvailabilityItem(ConferenceRoomAvailabilityItem item, Conference conference, List<ConferenceRoom> rooms) {

@@ -73,7 +73,6 @@ public class ConferenceServiceAssistant {
         ConferenceRoomAvailabilityItem availabilityItem = new ConferenceRoomAvailabilityItem(room.getMaxSeats());
         availabilityItem.setConference(conference);
         availabilityItem.setConferenceRoom(room);
-        room.addConferenceRoomAvailabilityItem(availabilityItem);
         conference.addConferenceRoomAvailabilityItem(availabilityItem);
         conferenceRoomAvailabilityItemRepository.create(availabilityItem);
         room.addConference(conference);

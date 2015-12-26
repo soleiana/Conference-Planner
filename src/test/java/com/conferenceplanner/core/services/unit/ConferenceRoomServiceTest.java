@@ -139,9 +139,9 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     public void test_getConferenceRoomAvailabilityItems()  {
         int id = 1;
         ConferenceRoom conferenceRoom = ConferenceRoomFixture.createConferenceRoom();
+        Conference conference = ConferenceFixture.createConference();
         List<ConferenceRoomAvailabilityItem> availabilityItems =
-                ConferenceRoomAvailabilityItemFixture.createConferenceRoomsWithAvailableSeats(2);
-        conferenceRoom.setConferenceRoomAvailabilityItems(availabilityItems);
+                ConferenceRoomAvailabilityItemFixture.createConferenceRoomsWithAvailableSeats(conference,2);
         when(serviceAssistant.getConferenceRoom(id)).thenReturn(conferenceRoom);
         when(serviceAssistant.getConferenceRoomAvailabilityItems(conferenceRoom)).thenReturn(availabilityItems);
         ConferenceRoomAvailability availability = conferenceRoomService.getConferenceRoomAvailabilityItems(id);

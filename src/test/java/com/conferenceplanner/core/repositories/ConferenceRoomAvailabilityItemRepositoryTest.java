@@ -40,7 +40,6 @@ public class ConferenceRoomAvailabilityItemRepositoryTest extends SpringContextT
     @Test
     public void test_create() {
         ConferenceRoomAvailabilityItem conferenceRoomAvailabilityItem = new ConferenceRoomAvailabilityItem(conferenceRoom.getMaxSeats());
-        conferenceRoom.addConferenceRoomAvailabilityItem(conferenceRoomAvailabilityItem);
         conference.addConferenceRoomAvailabilityItem(conferenceRoomAvailabilityItem);
         conferenceRoomAvailabilityItem.setConferenceRoom(conferenceRoom);
         conferenceRoomAvailabilityItem.setConference(conference);
