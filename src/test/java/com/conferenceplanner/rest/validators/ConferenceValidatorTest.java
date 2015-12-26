@@ -1,6 +1,7 @@
 package com.conferenceplanner.rest.validators;
 
 import com.conferenceplanner.SpringContextTest;
+import com.conferenceplanner.rest.TestHelper;
 import com.conferenceplanner.rest.domain.Conference;
 import com.conferenceplanner.rest.domain.ConferenceInterval;
 import org.junit.Rule;
@@ -25,6 +26,9 @@ public class ConferenceValidatorTest extends SpringContextTest {
 
     @Autowired
     private ConferenceValidator validator;
+
+    @Autowired
+    private TestHelper testHelper;
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
@@ -185,7 +189,7 @@ public class ConferenceValidatorTest extends SpringContextTest {
     public void test_throws_ValidationException_if_too_long_conference_name() {
         expectedException.expect(ValidationException.class);
         expectedException.expectMessage("Invalid name length");
-        validator.validate(createConference(getTooLongName()));
+        validator.validate(createConference(testHelper.getTooLongNameString(MAX_SYMBOLS_IN_CONFERENCE_NAME)));
     }
 
     @Test
@@ -229,27 +233,11 @@ public class ConferenceValidatorTest extends SpringContextTest {
         return strings;
     }
 
-    private String getTooLongName() {
-        String tooLongName = "";
-        for (int i = 0; i <= MAX_SYMBOLS_IN_CONFERENCE_NAME; i++) {
-            tooLongName += "a";
-        }
-        return tooLongName;
-    }
-
     private List<String> getValidNames() {
         List<String> names = new ArrayList<>();
-        names.add(getValidName(MIN_SYMBOLS_IN_CONFERENCE_NAME));
-        names.add(getValidName(MAX_SYMBOLS_IN_CONFERENCE_NAME));
-        names.add(getValidName(MAX_SYMBOLS_IN_CONFERENCE_NAME-1));
+        names.add(testHelper.getValidNameString((MIN_SYMBOLS_IN_CONFERENCE_NAME)));
+        names.add(testHelper.getValidNameString(MAX_SYMBOLS_IN_CONFERENCE_NAME));
+        names.add(testHelper.getValidNameString(MAX_SYMBOLS_IN_CONFERENCE_NAME - 1));
         return names;
-    }
-
-    private String getValidName(int symbolsInName) {
-        String name = "";
-        for (int i = 0; i < symbolsInName; i++) {
-            name += "a";
-        }
-        return " " + name + " ";
     }
 }

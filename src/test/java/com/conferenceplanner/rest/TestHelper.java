@@ -1,4 +1,4 @@
-package com.conferenceplanner.rest.parsers;
+package com.conferenceplanner.rest;
 
 import org.springframework.stereotype.Component;
 
@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Component
-public class ParserTestHelper {
+public class TestHelper {
 
     public String getTooLongNameString(int maxSymbolsInName) {
         return Stream.iterate(0, i -> i++)

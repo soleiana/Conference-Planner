@@ -1,6 +1,7 @@
 package com.conferenceplanner.rest.validators;
 
 import com.conferenceplanner.SpringContextTest;
+import com.conferenceplanner.rest.TestHelper;
 import com.conferenceplanner.rest.domain.Participant;
 import org.junit.Rule;
 import org.junit.Test;
@@ -23,6 +24,9 @@ public class ParticipantValidatorTest extends SpringContextTest {
 
     @Autowired
     private ParticipantValidator validator;
+
+    @Autowired
+    private TestHelper testHelper;
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -69,7 +73,7 @@ public class ParticipantValidatorTest extends SpringContextTest {
     @Test
     public void test_validate_throws_ValidationException_if_too_long_participant_name() {
         Participant participant = new Participant();
-        participant.setName(getTooLongNameString());
+        participant.setName(testHelper.getTooLongNameString(MAX_SYMBOLS_IN_PARTICIPANT_NAME));
         expectedException.expect(ValidationException.class);
         expectedException.expectMessage("Invalid name length");
         validator.validate(participant);
@@ -157,11 +161,4 @@ public class ParticipantValidatorTest extends SpringContextTest {
         }
     }
 
-    private String getTooLongNameString() {
-        String tooLongName = "";
-        for (int i = 0; i <= MAX_SYMBOLS_IN_PARTICIPANT_NAME; i++) {
-            tooLongName += "a";
-        }
-        return tooLongName;
-    }
 }

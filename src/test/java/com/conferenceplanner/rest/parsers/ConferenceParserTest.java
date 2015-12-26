@@ -2,6 +2,7 @@ package com.conferenceplanner.rest.parsers;
 
 
 import com.conferenceplanner.SpringContextTest;
+import com.conferenceplanner.rest.TestHelper;
 import com.conferenceplanner.rest.domain.ConferenceInterval;
 import org.junit.Rule;
 import org.junit.Test;
@@ -22,7 +23,7 @@ public class ConferenceParserTest extends SpringContextTest{
     private static final DateTimeFormatter CONFERENCE_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     @Autowired
-    private ParserTestHelper testHelper;
+    private TestHelper testHelper;
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();

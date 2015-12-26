@@ -1,6 +1,7 @@
 package com.conferenceplanner.rest.parsers;
 
 import com.conferenceplanner.SpringContextTest;
+import com.conferenceplanner.rest.TestHelper;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -17,7 +18,7 @@ public class ParticipantParserTest extends SpringContextTest {
     private static final int MIN_SYMBOLS_IN_PARTICIPANT_NAME = 2;
 
     @Autowired
-    private ParserTestHelper testHelper;
+    private TestHelper testHelper;
 
 
     @Rule
