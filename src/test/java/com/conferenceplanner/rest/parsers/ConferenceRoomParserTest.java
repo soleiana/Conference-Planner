@@ -44,7 +44,7 @@ public class ConferenceRoomParserTest {
         String nameString = "";
         String locationString = "A/A  aaa  aaa";
         expectedException.expect(ParserException.class);
-        expectedException.expectMessage("Invalid name length");
+        expectedException.expectMessage("Invalid name format");
         ConferenceRoomParser.parse(locationString, nameString);
     }
 
@@ -53,7 +53,7 @@ public class ConferenceRoomParserTest {
         String nameString = " ";
         String locationString = "A/A  aaa  aaa";
         expectedException.expect(ParserException.class);
-        expectedException.expectMessage("Invalid name length");
+        expectedException.expectMessage("Invalid name format");
         ConferenceRoomParser.parse(locationString, nameString);
     }
 
@@ -62,7 +62,7 @@ public class ConferenceRoomParserTest {
         String nameString = "A/A aaa conference";
         String locationString = "A/A  aaa  aaa";
         expectedException.expect(ParserException.class);
-        expectedException.expectMessage("Invalid name length");
+        expectedException.expectMessage("Invalid name or location");
         ConferenceRoomParser.parse(locationString, nameString);
     }
 
@@ -71,7 +71,7 @@ public class ConferenceRoomParserTest {
         String nameString = "A/A aaa aaa aaa conference";
         String locationString = "A/A  aaa  aaa";
         expectedException.expect(ParserException.class);
-        expectedException.expectMessage("Invalid name length");
+        expectedException.expectMessage("Invalid name or location");
         ConferenceRoomParser.parse(locationString, nameString);
     }
 

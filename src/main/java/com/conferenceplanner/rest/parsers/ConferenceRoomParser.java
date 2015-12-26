@@ -44,10 +44,6 @@ public class ConferenceRoomParser {
         List<String> locationWords = Arrays.asList(locationString.toLowerCase().trim().split("\\s+"));
         List<String> nameWords = Arrays.asList(nameString.toLowerCase().trim().split("\\s+"));
 
-        if (nameWords.size() != locationWords.size() + 1) {
-            throw new ParserException("Invalid name length");
-        }
-
         if (!nameWords.get(nameWords.size()-1).equals(CONFERENCE_ROOM_NAME_SUFFIX)) {
             throw new ParserException("Invalid name format");
         }
