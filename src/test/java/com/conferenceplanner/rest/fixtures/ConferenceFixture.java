@@ -5,6 +5,8 @@ import com.conferenceplanner.rest.domain.Conference;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ConferenceFixture {
 
@@ -14,6 +16,10 @@ public class ConferenceFixture {
     private static final LocalDateTime START_DATE_TIME = NOW.plusDays(3);
     private static final LocalDateTime END_DATE_TIME = START_DATE_TIME.plusDays(1);
     private static final String NAME = "Devoxx 2016";
+
+    public static Conference createConference() {
+       return new Conference(NAME, getFormattedDateTime(START_DATE_TIME), getFormattedDateTime(END_DATE_TIME));
+    }
 
     public static Conference createConference(List<Integer> conferenceRoomIds) {
         Conference conference = new Conference(NAME, getFormattedDateTime(START_DATE_TIME), getFormattedDateTime(END_DATE_TIME));
@@ -26,6 +32,14 @@ public class ConferenceFixture {
         conference.setConferenceRoomIds(conferenceRoomIds);
         return conference;
     }
+
+    public static List<Conference> createConferences(int number) {
+        return Stream.iterate(1, i -> i++)
+                .limit(number)
+                .map(i -> new Conference())
+                .collect(Collectors.toList());
+    }
+
 
     public static String getStartDateTime() {
         return NOW.plusDays(3).format(CONFERENCE_DATE_TIME_FORMATTER);
