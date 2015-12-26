@@ -24,8 +24,8 @@ public class ParticipantFixture {
     public static List<Participant> createParticipants(int number) {
         List<Participant> participants = new ArrayList<>();
         for (Integer i = 1; i <= number; i++) {
-            String name = "name" + i.toString();
-            String surname = "surname" + i.toString();
+            String name = "name";
+            String surname = "surname";
             String passportNumber = PASSPORT_NR + i.toString();
             LocalDate birthDate = BIRTH_DATE.plusYears(1);
             participants.add(new Participant(name, surname, birthDate, passportNumber));

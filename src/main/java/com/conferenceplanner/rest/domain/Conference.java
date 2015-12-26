@@ -14,6 +14,12 @@ public class Conference {
 
     public Conference() {}
 
+    public Conference(String name, String startDateTime, String endDateTime) {
+        this.name = name;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
+    }
+
     public Integer getId() {
         return id;
     }

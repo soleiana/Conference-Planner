@@ -49,9 +49,8 @@ public class ParticipantController {
         catch (RuntimeException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return  new ResponseEntity<>("Participant added.", HttpStatus.OK);
+        return  new ResponseEntity<>("Participant added.", HttpStatus.CREATED);
     }
-
 
 
     @RequestMapping(method = RequestMethod.DELETE, consumes =  "application/json", produces = "application/json")

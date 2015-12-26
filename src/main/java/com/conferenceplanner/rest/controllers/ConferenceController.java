@@ -51,7 +51,7 @@ public class ConferenceController {
         catch (RuntimeException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return  new ResponseEntity<>("Conference created.", HttpStatus.OK);
+        return new ResponseEntity<>("Conference created.", HttpStatus.CREATED);
     }
 
 
