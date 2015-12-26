@@ -5,6 +5,7 @@ import com.conferenceplanner.core.domain.*;
 import com.conferenceplanner.core.repositories.fixtures.ConferenceFixture;
 import com.conferenceplanner.core.repositories.fixtures.ConferenceRoomFixture;
 import com.conferenceplanner.core.repositories.tools.DatabaseCleaner;
+import com.conferenceplanner.core.repositories.tools.DatabaseConfigurator;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +19,7 @@ public class ConferenceRoomAvailabilityItemRepositoryTest extends SpringContextT
     private DatabaseCleaner databaseCleaner;
 
     @Autowired
-    private ConferenceRoomRepository conferenceRoomRepository;
-
-    @Autowired
-    private ConferenceRepository conferenceRepository;
+    private DatabaseConfigurator databaseConfigurator;
 
     @Autowired
     private ConferenceRoomAvailabilityItemRepository conferenceRoomAvailabilityItemRepository;
@@ -35,19 +33,17 @@ public class ConferenceRoomAvailabilityItemRepositoryTest extends SpringContextT
         databaseCleaner.clear();
         conferenceRoom = ConferenceRoomFixture.createConferenceRoom("University");
         conference = ConferenceFixture.createConference("Devoxx 2016");
-        conferenceRoomRepository.create(conferenceRoom);
-        conferenceRepository.create(conference);
+        databaseConfigurator.configureConferenceRoom(conferenceRoom);
+        databaseConfigurator.configureConference(conference);
     }
 
     @Test
-    public void testCreate() throws Exception {
+    public void test_create() throws Exception {
         ConferenceRoomAvailabilityItem conferenceRoomAvailabilityItem = new ConferenceRoomAvailabilityItem(conferenceRoom.getMaxSeats());
-
         conferenceRoom.addConferenceRoomAvailabilityItem(conferenceRoomAvailabilityItem);
         conference.addConferenceRoomAvailabilityItem(conferenceRoomAvailabilityItem);
         conferenceRoomAvailabilityItem.setConferenceRoom(conferenceRoom);
         conferenceRoomAvailabilityItem.setConference(conference);
-
         conferenceRoomAvailabilityItemRepository.create(conferenceRoomAvailabilityItem);
         assertNotNull(conferenceRoomAvailabilityItem.getId());
     }

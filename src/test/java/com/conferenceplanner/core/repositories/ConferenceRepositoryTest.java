@@ -4,6 +4,7 @@ import com.conferenceplanner.SpringContextTest;
 import com.conferenceplanner.core.domain.Conference;
 import com.conferenceplanner.core.repositories.fixtures.ConferenceFixture;
 import com.conferenceplanner.core.repositories.tools.DatabaseCleaner;
+import com.conferenceplanner.core.repositories.tools.DatabaseConfigurator;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class ConferenceRepositoryTest extends SpringContextTest {
     private DatabaseCleaner databaseCleaner;
 
     @Autowired
+    private DatabaseConfigurator databaseConfigurator;
+
+    @Autowired
     private ConferenceRepository conferenceRepository;
 
     private Conference conference;
@@ -33,44 +37,29 @@ public class ConferenceRepositoryTest extends SpringContextTest {
     }
 
     @Test
-    public void testCreate() throws Exception {
+    public void test_create() {
         conferenceRepository.create(conference);
         assertNotNull(conference.getId());
     }
 
     @Test
-    public void testGetById() throws Exception {
+    public void test_getById() {
         conferenceRepository.create(conference);
         int id = conference.getId();
         assertEquals(conference, conferenceRepository.getById(id));
     }
 
     @Test
-    public void testGetUpcoming() throws Exception {
+    public void test_getUpcoming() {
         List<Conference> conferences = ConferenceFixture.createInputData();
-        persistConferences(conferences);
+        databaseConfigurator.configureConferences(conferences);
         List<Conference> actualConferences = conferenceRepository.getUpcoming();
         List<Conference> expectedConferences = ConferenceFixture.createExpectedData();
-        assertEquals(expectedConferences.size(), actualConferences.size());
         assertEqualData(expectedConferences, actualConferences);
     }
 
-    private void persistConferences(List<Conference> conferences) {
-        for (Conference conference: conferences) {
-            conferenceRepository.create(conference);
-        }
-    }
-
     private static void assertEqualData(List<Conference> expectedConferences, List<Conference> actualConferences) {
-        int dataSize = expectedConferences.size();
-        int hitCount = 0;
-        for (Conference actualConference: actualConferences) {
-            for (Conference expectedConference: expectedConferences) {
-                if (actualConference.equals(expectedConference)) {
-                    hitCount++;
-                }
-            }
-        }
-        assertEquals(dataSize, hitCount);
+        assertTrue(expectedConferences.containsAll(actualConferences));
+        assertEquals(expectedConferences.size(), actualConferences.size());
     }
 }

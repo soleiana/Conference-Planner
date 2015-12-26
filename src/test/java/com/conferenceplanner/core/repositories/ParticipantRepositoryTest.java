@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -32,27 +33,30 @@ public class ParticipantRepositoryTest extends SpringContextTest {
     }
 
     @Test
-    public void testCreate() throws Exception {
+    public void test_create() {
         participantRepository.create(participant);
         assertNotNull(participant.getId());
     }
 
     @Test
-    public void testGetById() throws Exception {
+    public void test_getById() {
         participantRepository.create(participant);
         int id = participant.getId();
         assertEquals(participant, participantRepository.getById(id));
     }
 
     @Test
-    public void testGetAll() throws Exception {
+    public void test_getAll() {
         Participant participant1 = ParticipantFixture.createParticipant(SURNAME);
         Participant participant2 = ParticipantFixture.createParticipant(ANOTHER_SURNAME);
         participantRepository.create(participant1);
         participantRepository.create(participant2);
         List<Participant> participants = participantRepository.getAll();
-        assertEquals(2, participants.size());
-        assertEquals(participant1, participants.get(0));
-        assertEquals(participant2, participants.get(1));
+        assertEqualData(Arrays.asList(participant1, participant2), participants);
+    }
+
+    private static void assertEqualData(List<Participant> expectedParticipants, List<Participant> actualParticipants) {
+        assertTrue(expectedParticipants.containsAll(actualParticipants));
+        assertEquals(expectedParticipants.size(), actualParticipants.size());
     }
 }

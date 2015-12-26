@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -33,27 +34,30 @@ public class ConferenceRoomRepositoryTest extends SpringContextTest {
     }
 
     @Test
-    public void testCreate() throws Exception {
+    public void test_create() {
         conferenceRoomRepository.create(conferenceRoom);
         assertNotNull(conferenceRoom.getId());
     }
 
     @Test
-    public void testGetById() throws Exception {
+    public void test_getById() {
         conferenceRoomRepository.create(conferenceRoom);
         int id = conferenceRoom.getId();
         assertEquals(conferenceRoom, conferenceRoomRepository.getById(id));
     }
 
     @Test
-    public void testGetAll() throws Exception {
+    public void test_getAll() {
         ConferenceRoom room1 = ConferenceRoomFixture.createConferenceRoom(NAME);
         ConferenceRoom room2 = ConferenceRoomFixture.createConferenceRoom(ANOTHER_NAME);
         conferenceRoomRepository.create(room1);
         conferenceRoomRepository.create(room2);
         List<ConferenceRoom> rooms = conferenceRoomRepository.getAll();
-        assertEquals(2, rooms.size());
-        assertEquals(room1, rooms.get(0));
-        assertEquals(room2, rooms.get(1));
+        assertEqualData(Arrays.asList(room1, room2), rooms);
+    }
+
+    private static void assertEqualData(List<ConferenceRoom> expectedConferenceRooms, List<ConferenceRoom> actualConferenceRooms) {
+        assertTrue(expectedConferenceRooms.containsAll(actualConferenceRooms));
+        assertEquals(expectedConferenceRooms.size(), actualConferenceRooms.size());
     }
 }
