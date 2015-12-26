@@ -1,15 +1,14 @@
 package com.conferenceplanner.core.services.unit;
 
 import com.conferenceplanner.core.domain.Conference;
-import com.conferenceplanner.core.domain.ConferenceRoom;
 import com.conferenceplanner.core.domain.Participant;
 import com.conferenceplanner.core.services.ApplicationException;
 import com.conferenceplanner.core.services.ConferenceService;
 import com.conferenceplanner.core.services.ParticipantService;
 import com.conferenceplanner.core.services.ParticipantServiceAssistant;
-import com.conferenceplanner.core.services.fixtures.ConferenceFixture;
-import com.conferenceplanner.core.services.fixtures.ConferenceRoomFixture;
-import com.conferenceplanner.core.services.fixtures.ParticipantFixture;
+import com.conferenceplanner.core.fixtures.ConferenceFixture;
+import com.conferenceplanner.core.fixtures.ConferenceRoomFixture;
+import com.conferenceplanner.core.fixtures.ParticipantFixture;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

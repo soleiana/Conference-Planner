@@ -8,9 +8,9 @@ import com.conferenceplanner.core.repositories.tools.DatabaseCleaner;
 import com.conferenceplanner.core.repositories.tools.DatabaseConfigurator;
 import com.conferenceplanner.core.services.ApplicationException;
 import com.conferenceplanner.core.services.ParticipantService;
-import com.conferenceplanner.core.services.fixtures.ConferenceFixture;
-import com.conferenceplanner.core.services.fixtures.ConferenceRoomFixture;
-import com.conferenceplanner.core.services.fixtures.ParticipantFixture;
+import com.conferenceplanner.core.fixtures.ConferenceFixture;
+import com.conferenceplanner.core.fixtures.ConferenceRoomFixture;
+import com.conferenceplanner.core.fixtures.ParticipantFixture;
 
 import org.junit.Before;
 import org.junit.Rule;

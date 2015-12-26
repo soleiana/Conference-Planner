@@ -2,8 +2,8 @@ package com.conferenceplanner.core.services;
 
 import com.conferenceplanner.core.domain.Conference;
 import com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem;
-import com.conferenceplanner.core.services.fixtures.ConferenceFixture;
-import com.conferenceplanner.core.services.fixtures.ConferenceRoomAvailabilityItemFixture;
+import com.conferenceplanner.core.fixtures.ConferenceFixture;
+import com.conferenceplanner.core.fixtures.ConferenceRoomAvailabilityItemFixture;
 import org.junit.Before;
 import org.junit.Test;
 

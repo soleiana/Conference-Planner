@@ -1,4 +1,4 @@
-package com.conferenceplanner.core.services.fixtures;
+package com.conferenceplanner.core.fixtures;
 
 import com.conferenceplanner.core.domain.ConferenceRoom;
 

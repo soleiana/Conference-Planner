@@ -5,7 +5,7 @@ import com.conferenceplanner.core.domain.ConferenceRoom;
 import com.conferenceplanner.core.repositories.tools.DatabaseCleaner;
 import com.conferenceplanner.core.repositories.tools.DatabaseConfigurator;
 import com.conferenceplanner.core.services.ConferenceRoomServiceAssistant;
-import com.conferenceplanner.core.services.fixtures.ConferenceRoomFixture;
+import com.conferenceplanner.core.fixtures.ConferenceRoomFixture;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

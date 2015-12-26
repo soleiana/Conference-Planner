@@ -9,9 +9,9 @@ import com.conferenceplanner.core.repositories.ConferenceRoomAvailabilityItemRep
 import com.conferenceplanner.core.repositories.ConferenceRoomRepository;
 import com.conferenceplanner.core.services.ConferenceChecker;
 import com.conferenceplanner.core.services.ConferenceServiceAssistant;
-import com.conferenceplanner.core.services.fixtures.ConferenceFixture;
-import com.conferenceplanner.core.services.fixtures.ConferenceRoomFixture;
-import com.conferenceplanner.core.services.fixtures.ParticipantFixture;
+import com.conferenceplanner.core.fixtures.ConferenceFixture;
+import com.conferenceplanner.core.fixtures.ConferenceRoomFixture;
+import com.conferenceplanner.core.fixtures.ParticipantFixture;
 import com.conferenceplanner.core.services.unit.helpers.ServiceUnitTestHelper;
 import org.junit.Before;
 import org.junit.Test;
