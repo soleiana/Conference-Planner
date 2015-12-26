@@ -9,6 +9,12 @@ public class ConferenceRoom {
 
     public ConferenceRoom() {}
 
+    public ConferenceRoom(String name, String location, Integer maxSeats) {
+        this.name = name;
+        this.location = location;
+        this.maxSeats = maxSeats;
+    }
+
     public Integer getId() {
         return id;
     }
