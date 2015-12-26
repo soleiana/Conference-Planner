@@ -11,6 +11,13 @@ public class Participant {
 
     public Participant() {}
 
+    public Participant(String name, String surname, String birthDate, String passportNr) {
+        this.name = name;
+        this.surname = surname;
+        this.birthDate = birthDate;
+        this.passportNr = passportNr;
+    }
+
     public Integer getId() {
         return id;
     }

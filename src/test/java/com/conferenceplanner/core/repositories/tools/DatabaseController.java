@@ -94,12 +94,26 @@ public class DatabaseController {
         conferenceRooms.stream().forEach(room -> setupRelationship(room, conference, new ConferenceRoomAvailabilityItem(room.getMaxSeats())));
     }
 
+    public void setupRelationshipWithAvailability(ConferenceRoom conferenceRoom, Conference conference) {
+        setupRelationship(conferenceRoom, conference, new ConferenceRoomAvailabilityItem(conferenceRoom.getMaxSeats()));
+    }
+
     public void setupRelationship(Conference conference, List<Participant> participants) {
         participants.stream().forEach(participant ->  setupRelationship(conference, participant));
     }
 
     public void setupRelationship(Conference conference, Participant participant) {
         conference.addParticipant(participant);
+    }
+
+    public void setupRelationshipAndTakeAvailableSeat(Conference conference, Participant participant) {
+        conference.addParticipant(participant);
+
+        ConferenceRoomAvailabilityItem availabilityItem = conference.getConferenceRoomAvailabilityItems().stream()
+                .filter(ConferenceRoomAvailabilityItem::hasAvailableSeats)
+                .findFirst()
+                .get();
+        availabilityItem.takeAvailableSeat();
     }
 
     private void setupRelationship(ConferenceRoom conferenceRoom, Conference conference) {

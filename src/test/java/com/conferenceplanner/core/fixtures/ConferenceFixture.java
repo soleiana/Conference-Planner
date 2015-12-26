@@ -8,8 +8,8 @@ import java.util.List;
 
 public class ConferenceFixture {
 
-    private static final LocalDateTime PLANNED_START = LocalDateTime.now().plusHours(4);
-    private static final LocalDateTime PLANNED_END = PLANNED_START.plusHours(6);
+    private static final LocalDateTime PLANNED_START = LocalDateTime.now().plusDays(2);
+    private static final LocalDateTime PLANNED_END = PLANNED_START.plusHours(2);
     private static final LocalDateTime START_IN_PAST = LocalDateTime.now().minusHours(1);
 
     public static Conference createConference() {

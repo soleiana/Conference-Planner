@@ -49,6 +49,12 @@ public class DatabaseConfigurator {
         databaseController.setupRelationship(conference, participant);
     }
 
+    public void configureWithConferenceRoomAvailability(Conference conference, Participant participant) {
+        databaseController.persistConference(conference);
+        databaseController.persistParticipant(participant);
+        databaseController.setupRelationshipAndTakeAvailableSeat(conference, participant);
+    }
+
     public void configure(List<ConferenceRoom> conferenceRooms, List<Conference> conferences) {
         databaseController.persistConferences(conferences);
         databaseController.persistConferenceRooms(conferenceRooms);
@@ -77,5 +83,11 @@ public class DatabaseConfigurator {
         databaseController.persistConference(conference);
         databaseController.persistConferenceRooms(conferenceRooms);
         databaseController.setupRelationshipWithAvailability(conferenceRooms, conference);
+    }
+
+    public void configureWithConferenceRoomAvailability(ConferenceRoom conferenceRoom, Conference conference) {
+        databaseController.persistConference(conference);
+        databaseController.persistConferenceRoom(conferenceRoom);
+        databaseController.setupRelationshipWithAvailability(conferenceRoom, conference);
     }
 }

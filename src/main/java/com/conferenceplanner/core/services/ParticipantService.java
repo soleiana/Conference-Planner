@@ -29,7 +29,7 @@ public class ParticipantService {
         List<Participant> registeredParticipants = conferenceService.getParticipants(conference);
 
         if (!registeredParticipants.contains(participant)) {
-            throw new ApplicationException("No participant with selected id registered in conference!", ApplicationErrorCode.NOT_FOUND);
+            throw new ApplicationException("No participant with selected id is registered for conference!", ApplicationErrorCode.NOT_FOUND);
         }
         serviceAssistant.removeParticipant(participant, conference);
     }

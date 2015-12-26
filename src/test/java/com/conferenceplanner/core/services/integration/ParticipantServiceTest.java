@@ -159,7 +159,7 @@ public class ParticipantServiceTest extends SpringContextTest {
         Conference conference = ConferenceFixture.createUpcomingConference();
         databaseConfigurator.configure(conference, participant1);
         expectedException.expect(ApplicationException.class);
-        expectedException.expectMessage("No participant with selected id registered in conference!");
+        expectedException.expectMessage("No participant with selected id is registered for conference!");
         participantService.removeParticipant(participant2.getId(), conference.getId());
     }
 
