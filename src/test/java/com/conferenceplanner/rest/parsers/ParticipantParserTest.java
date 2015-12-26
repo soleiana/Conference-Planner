@@ -1,18 +1,24 @@
 package com.conferenceplanner.rest.parsers;
 
+import com.conferenceplanner.SpringContextTest;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class ParticipantParserTest {
+public class ParticipantParserTest extends SpringContextTest {
 
     private static final int MAX_SYMBOLS_IN_PARTICIPANT_NAME = 100;
     private static final int MIN_SYMBOLS_IN_PARTICIPANT_NAME = 2;
+
+    @Autowired
+    private ParserTestHelper testHelper;
+
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -175,7 +181,7 @@ public class ParticipantParserTest {
         strings.add(" ");
         strings.add("a");
         strings.add(" a ");
-        strings.add(getTooLongNameString());
+        strings.add(testHelper.getTooLongNameString(MAX_SYMBOLS_IN_PARTICIPANT_NAME));
         return strings;
     }
 
@@ -190,25 +196,9 @@ public class ParticipantParserTest {
 
     private List<String> getValidNameStrings() {
         List<String> names = new ArrayList<>();
-        names.add(getValidNameString(MIN_SYMBOLS_IN_PARTICIPANT_NAME));
-        names.add(getValidNameString(MAX_SYMBOLS_IN_PARTICIPANT_NAME));
-        names.add(getValidNameString(MAX_SYMBOLS_IN_PARTICIPANT_NAME-1));
+        names.add(testHelper.getValidNameString(MIN_SYMBOLS_IN_PARTICIPANT_NAME));
+        names.add(testHelper.getValidNameString(MAX_SYMBOLS_IN_PARTICIPANT_NAME));
+        names.add(testHelper.getValidNameString(MAX_SYMBOLS_IN_PARTICIPANT_NAME - 1));
         return names;
-    }
-
-    private String getTooLongNameString() {
-        String tooLongName = "";
-        for (int i = 0; i <= MAX_SYMBOLS_IN_PARTICIPANT_NAME; i++) {
-            tooLongName += "a";
-        }
-        return tooLongName;
-    }
-
-    private String getValidNameString(int symbolsInName) {
-        String name = "";
-        for (int i = 0; i < symbolsInName; i++) {
-            name += "a";
-        }
-        return " " + name + " ";
     }
 }

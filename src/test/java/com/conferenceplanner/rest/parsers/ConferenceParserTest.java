@@ -1,22 +1,28 @@
 package com.conferenceplanner.rest.parsers;
 
 
+import com.conferenceplanner.SpringContextTest;
 import com.conferenceplanner.rest.domain.ConferenceInterval;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import static org.junit.Assert.*;
 
-public class ConferenceParserTest {
+public class ConferenceParserTest extends SpringContextTest{
 
     private static final int MIN_SYMBOLS_IN_CONFERENCE_NAME = 2;
     private static final int MAX_SYMBOLS_IN_CONFERENCE_NAME = 150;
     private static final DateTimeFormatter CONFERENCE_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+    @Autowired
+    private ParserTestHelper testHelper;
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -91,7 +97,6 @@ public class ConferenceParserTest {
         }
     }
 
-
     private List<String> geInvalidDateTimeStrings(){
         List<String> strings = new ArrayList<>();
         strings.add("");
@@ -125,32 +130,15 @@ public class ConferenceParserTest {
         strings.add("0");
         strings.add(" a ");
         strings.add(" % ");
-        strings.add(getTooLongName());
+        strings.add(testHelper.getTooLongNameString(MAX_SYMBOLS_IN_CONFERENCE_NAME));
         return strings;
     }
 
     private List<String> getValidNameStrings() {
         List<String> names = new ArrayList<>();
-        names.add(getValidName(MIN_SYMBOLS_IN_CONFERENCE_NAME));
-        names.add(getValidName(MAX_SYMBOLS_IN_CONFERENCE_NAME));
-        names.add(getValidName(MAX_SYMBOLS_IN_CONFERENCE_NAME-1));
+        names.add(testHelper.getValidNameString(MIN_SYMBOLS_IN_CONFERENCE_NAME));
+        names.add(testHelper.getValidNameString(MAX_SYMBOLS_IN_CONFERENCE_NAME));
+        names.add(testHelper.getValidNameString(MAX_SYMBOLS_IN_CONFERENCE_NAME - 1));
         return names;
     }
-
-    private String getTooLongName() {
-        String tooLongName = "";
-        for (int i = 0; i <= MAX_SYMBOLS_IN_CONFERENCE_NAME; i++) {
-            tooLongName += "a";
-        }
-        return tooLongName;
-    }
-
-    private String getValidName(int symbolsInName) {
-        String name = "";
-        for (int i = 0; i < symbolsInName; i++) {
-            name += "a";
-        }
-        return " " + name + " ";
-    }
-
 }
