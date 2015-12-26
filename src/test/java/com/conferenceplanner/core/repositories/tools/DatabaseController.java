@@ -10,10 +10,10 @@ import com.conferenceplanner.core.repositories.ConferenceRoomRepository;
 import com.conferenceplanner.core.repositories.ParticipantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.List;
-import java.util.Stack;
+
 
 @Component
 public class DatabaseController {
@@ -31,51 +31,39 @@ public class DatabaseController {
     private ParticipantRepository participantRepository;
 
 
-    @Transactional
     public void persistConferences(List<Conference> conferences) {
-        for (Conference conference: conferences) {
-            conferenceRepository.create(conference);
-        }
+        conferences.stream().forEach(conferenceRepository::create);
     }
 
-    @Transactional
     public void persistConference(Conference conference) {
         conferenceRepository.create(conference);
     }
 
-    @Transactional
     public void persistConferenceRooms(List<ConferenceRoom> conferenceRooms) {
-        for (ConferenceRoom room: conferenceRooms) {
-            conferenceRoomRepository.create(room);
-        }
+        conferenceRooms.stream().forEach(conferenceRoomRepository::create);
     }
 
-    @Transactional
     public void persistConferenceRoom(ConferenceRoom conferenceRoom) {
         conferenceRoomRepository.create(conferenceRoom);
     }
 
-    @Transactional
     public void persistParticipants(List<Participant> participants) {
-        for (Participant participant: participants) {
-            participantRepository.create(participant);
-        }
+       participants.stream().forEach(participantRepository::create);
     }
 
-    @Transactional
     public void persistParticipant(Participant participant) {
         participantRepository.create(participant);
     }
 
-    @Transactional
+
     public void setupRelationship(List<ConferenceRoom> conferenceRooms, List<Conference> conferences) {
-        for(ConferenceRoom room: conferenceRooms) {
-            for (Conference conference: conferences)
-                setupRelationship(room, conference);
-        }
+        conferenceRooms.stream()
+                .forEach(room -> conferences.stream()
+                        .forEach(conference -> setupRelationship(room, conference)
+                        )
+                );
     }
 
-    @Transactional
     public void setupRelationship(List<ConferenceRoom> conferenceRooms, List<Conference> conferences,
                                   List<ConferenceRoomAvailabilityItem> availabilityItems) {
 
@@ -83,47 +71,33 @@ public class DatabaseController {
             throw new IllegalArgumentException("Number of rooms should be equal to number of availability items!");
         }
 
-        for(Conference conference: conferences) {
-            Stack<ConferenceRoomAvailabilityItem> availabilityItemStack = new Stack<>();
-            availabilityItemStack.addAll(availabilityItems);
-
-            for (ConferenceRoom room: conferenceRooms) {
-                ConferenceRoomAvailabilityItem availabilityItem = availabilityItemStack.pop();
-                setupRelationship(room, conference, availabilityItem);
+        for (int i = 0; i < conferenceRooms.size(); i++) {
+            for (Conference conference: conferences) {
+                setupRelationship(conferenceRooms.get(i), conference, availabilityItems.get(i));
             }
         }
     }
 
-    @Transactional
     public void setupRelationshipWithAvailability(List<ConferenceRoom> conferenceRooms, List<Conference> conferences) {
-        for(ConferenceRoom room: conferenceRooms) {
-            for (Conference conference: conferences)
-                setupRelationship(room, conference, new ConferenceRoomAvailabilityItem(room.getMaxSeats()));
-        }
+        conferenceRooms.stream()
+                .forEach(room -> conferences.stream()
+                        .forEach(conference -> setupRelationship(room, conference, new ConferenceRoomAvailabilityItem(room.getMaxSeats()))
+                        )
+                );
     }
 
-    @Transactional
     public void setupRelationshipWithAvailability(ConferenceRoom conferenceRoom, List<Conference> conferences) {
-        for (Conference conference: conferences) {
-            setupRelationship(conferenceRoom, conference, new ConferenceRoomAvailabilityItem(conferenceRoom.getMaxSeats()));
-        }
+        conferences.stream().forEach(conference -> setupRelationship(conferenceRoom, conference, new ConferenceRoomAvailabilityItem(conferenceRoom.getMaxSeats())));
     }
 
-    @Transactional
     public void setupRelationshipWithAvailability(List<ConferenceRoom> conferenceRooms, Conference conference) {
-        for(ConferenceRoom room: conferenceRooms) {
-            setupRelationship(room, conference, new ConferenceRoomAvailabilityItem(room.getMaxSeats()));
-        }
+        conferenceRooms.stream().forEach(room -> setupRelationship(room, conference, new ConferenceRoomAvailabilityItem(room.getMaxSeats())));
     }
 
-    @Transactional
     public void setupRelationship(Conference conference, List<Participant> participants) {
-        for (Participant participant: participants) {
-            setupRelationship(conference, participant);
-        }
+        participants.stream().forEach(participant ->  setupRelationship(conference, participant));
     }
 
-    @Transactional
     public void setupRelationship(Conference conference, Participant participant) {
         conference.addParticipant(participant);
     }
