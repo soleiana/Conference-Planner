@@ -80,7 +80,7 @@ public class ConferenceControllerTest extends SpringContextTest {
                 com.conferenceplanner.core.fixtures.ConferenceFixture.createUpcomingConferences();
         ConferenceRoom coreDomainRoom = ConferenceRoomFixture.createConferenceRoom();
         databaseConfigurator.configureWithConferenceRoomAvailability(coreDomainRoom, coreDomainConferences);
-        ResponseEntity<Conferences> response = controller.getUpcomingConferences("upcoming");
+        ResponseEntity<Conferences> response = controller.getUpcomingConferences();
         assertEquals(coreDomainConferences.size(), response.getBody().getConferences().size());
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
@@ -91,7 +91,7 @@ public class ConferenceControllerTest extends SpringContextTest {
                 com.conferenceplanner.core.fixtures.ConferenceFixture.createCancelledConferences();
         ConferenceRoom coreDomainRoom = ConferenceRoomFixture.createConferenceRoom();
         databaseConfigurator.configureWithConferenceRoomAvailability(coreDomainRoom, coreDomainConferences);
-        ResponseEntity<Conferences> response = controller.getUpcomingConferences("upcoming");
+        ResponseEntity<Conferences> response = controller.getUpcomingConferences();
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
@@ -101,7 +101,7 @@ public class ConferenceControllerTest extends SpringContextTest {
                 com.conferenceplanner.core.fixtures.ConferenceFixture.createUpcomingConferences();
         ConferenceRoom coreDomainRoom = ConferenceRoomFixture.createConferenceRoom();
         databaseConfigurator.configureWithConferenceRoomAvailability(coreDomainRoom, coreDomainConferences);
-        ResponseEntity<Conferences> response = controller.getAvailableConferences("available");
+        ResponseEntity<Conferences> response = controller.getAvailableConferences();
         assertEquals(coreDomainConferences.size(), response.getBody().getConferences().size());
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
@@ -112,7 +112,7 @@ public class ConferenceControllerTest extends SpringContextTest {
                 com.conferenceplanner.core.fixtures.ConferenceFixture.createCancelledConferences();
         ConferenceRoom coreDomainRoom = ConferenceRoomFixture.createConferenceRoom();
         databaseConfigurator.configureWithConferenceRoomAvailability(coreDomainRoom, coreDomainConferences);
-        ResponseEntity<Conferences> response = controller.getAvailableConferences("available");
+        ResponseEntity<Conferences> response = controller.getAvailableConferences();
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 

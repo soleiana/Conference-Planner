@@ -32,7 +32,7 @@ public class ConferenceFactory {
         restDomainConference.setName(conference.getName());
         restDomainConference.setStartDateTime(startDateTime);
         restDomainConference.setEndDateTime(endDateTime);
-
+        restDomainConference.setId(conference.getId());
         return restDomainConference;
     }
 

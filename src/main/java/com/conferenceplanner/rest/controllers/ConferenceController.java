@@ -17,6 +17,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 @Controller
 @RequestMapping(value = "/conferences")
@@ -33,6 +36,8 @@ public class ConferenceController {
 
     @Autowired
     private ConferenceParticipantFactory conferenceParticipantFactory;
+
+    private static final Logger logger = Logger.getLogger(ConferenceController.class.getName());
 
 
     @RequestMapping(method = RequestMethod.POST, consumes =  "application/json", produces = "application/json" )
@@ -55,8 +60,8 @@ public class ConferenceController {
     }
 
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{upcoming}", produces = "application/json")
-    public ResponseEntity<Conferences> getUpcomingConferences(@PathVariable String upcoming) {
+    @RequestMapping(method = RequestMethod.GET, value = "/upcoming", produces = "application/json")
+    public ResponseEntity<Conferences> getUpcomingConferences() {
         Conferences conferences = new Conferences();
         try {
             List<com.conferenceplanner.core.domain.Conference> coreDomainConferences = conferenceService.getUpcomingConferences();
@@ -68,6 +73,7 @@ public class ConferenceController {
             return new ResponseEntity<>(conferences, HttpStatus.NOT_FOUND);
 
         } catch (RuntimeException ex) {
+            logger.log(Level.SEVERE, ex.getMessage()+ ex.getStackTrace());
             conferences.setErrorMessage(ex.getMessage());
             return new ResponseEntity<>(conferences, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -75,8 +81,8 @@ public class ConferenceController {
     }
 
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{available}", produces = "application/json")
-    public ResponseEntity<Conferences> getAvailableConferences(@PathVariable String available) {
+    @RequestMapping(method = RequestMethod.GET, value = "/available", produces = "application/json")
+    public ResponseEntity<Conferences> getAvailableConferences() {
         Conferences conferences = new Conferences();
         try {
             List<com.conferenceplanner.core.domain.Conference> coreDomainConferences = conferenceService.getAvailableConferences();
@@ -135,6 +141,7 @@ public class ConferenceController {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 
         } catch (RuntimeException ex) {
+            logger.log(Level.SEVERE, ex.getMessage()+ ex.getStackTrace());
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>("Conference cancelled.", HttpStatus.OK);

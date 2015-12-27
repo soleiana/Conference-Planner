@@ -21,6 +21,10 @@ public class ConferenceFixture {
        return new Conference(NAME, getFormattedDateTime(START_DATE_TIME), getFormattedDateTime(END_DATE_TIME));
     }
 
+    public static Conference createAnotherConference() {
+        return new Conference("name", getFormattedDateTime(START_DATE_TIME.plusDays(6)), getFormattedDateTime(END_DATE_TIME.plusDays(7)));
+    }
+
     public static Conference createConference(List<Integer> conferenceRoomIds) {
         Conference conference = createConference();
         conference.setConferenceRoomIds(conferenceRoomIds);

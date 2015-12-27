@@ -80,7 +80,7 @@ public class ConferenceControllerTest {
     public void test_getUpcomingConferences_returns_OK() {
         List<Conference> conferences = ConferenceFixture.createConferences(2);
         when(conferenceFactory.create(anyList())).thenReturn(conferences);
-        ResponseEntity<Conferences> response = controller.getUpcomingConferences("upcoming");
+        ResponseEntity<Conferences> response = controller.getUpcomingConferences();
         assertEquals(conferences.size(), response.getBody().getConferences().size());
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
@@ -89,7 +89,7 @@ public class ConferenceControllerTest {
     public void test_getUpcomingConferences_returns_NOT_FOUND() {
         doThrow(new ApplicationException("", ApplicationErrorCode.NOT_FOUND))
                 .when(conferenceService).getUpcomingConferences();
-        ResponseEntity<Conferences> response = controller.getUpcomingConferences("upcoming");
+        ResponseEntity<Conferences> response = controller.getUpcomingConferences();
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
@@ -97,7 +97,7 @@ public class ConferenceControllerTest {
     public void test_getAvailableConferences_returns_OK() {
         List<Conference> conferences = ConferenceFixture.createConferences(2);
         when(conferenceFactory.create(anyList())).thenReturn(conferences);
-        ResponseEntity<Conferences> response = controller.getAvailableConferences("available");
+        ResponseEntity<Conferences> response = controller.getAvailableConferences();
         assertEquals(conferences.size(), response.getBody().getConferences().size());
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
@@ -106,7 +106,7 @@ public class ConferenceControllerTest {
     public void test_getAvailableConferences_returns_NOT_FOUND() {
         doThrow(new ApplicationException("", ApplicationErrorCode.NOT_FOUND))
                 .when(conferenceService).getAvailableConferences();
-        ResponseEntity<Conferences> response = controller.getAvailableConferences("available");
+        ResponseEntity<Conferences> response = controller.getAvailableConferences();
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
