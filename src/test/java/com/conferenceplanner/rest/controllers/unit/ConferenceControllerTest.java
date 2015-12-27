@@ -70,7 +70,8 @@ public class ConferenceControllerTest {
     @Test
     public void test_createConference_returns_CONFLICT() {
         Conference conference = ConferenceFixture.createConference();
-        doThrow(new ApplicationException("", ApplicationErrorCode.CONFLICT)).when(conferenceService).createConference(any(com.conferenceplanner.core.domain.Conference.class), anyList());
+        doThrow(new ApplicationException("", ApplicationErrorCode.CONFLICT))
+                .when(conferenceService).createConference(any(com.conferenceplanner.core.domain.Conference.class), anyList());
         ResponseEntity<String> response = controller.createConference(conference);
         assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
     }
@@ -103,7 +104,8 @@ public class ConferenceControllerTest {
 
     @Test
     public void test_getAvailableConferences_returns_NOT_FOUND() {
-        doThrow(new ApplicationException("", ApplicationErrorCode.NOT_FOUND)).when(conferenceService).getAvailableConferences();
+        doThrow(new ApplicationException("", ApplicationErrorCode.NOT_FOUND))
+                .when(conferenceService).getAvailableConferences();
         ResponseEntity<Conferences> response = controller.getAvailableConferences("available");
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
@@ -112,7 +114,8 @@ public class ConferenceControllerTest {
     public void test_getParticipants_returns_OK() {
         List<Participant> participants = ParticipantFixture.createParticipants(2);
         Conference conference = ConferenceFixture.createConference();
-        com.conferenceplanner.rest.domain.ConferenceParticipants conferenceParticipants = new com.conferenceplanner.rest.domain.ConferenceParticipants();
+        com.conferenceplanner.rest.domain.ConferenceParticipants conferenceParticipants =
+                new com.conferenceplanner.rest.domain.ConferenceParticipants();
         conferenceParticipants.setConference(conference);
         conferenceParticipants.setParticipants(participants);
         when(conferenceParticipantFactory.create(any(ConferenceParticipants.class))).thenReturn(conferenceParticipants);
