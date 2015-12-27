@@ -31,15 +31,14 @@ public class Application
     public ServletRegistrationBean dispatcherRegistration(DispatcherServlet dispatcherServlet)
     {
         ServletRegistrationBean registration = new ServletRegistrationBean(dispatcherServlet);
-        registration.addUrlMappings("/rest/*");
+        registration.addUrlMappings("/conference-planner/*");
         return registration;
     }
 
     @Bean
     public EmbeddedServletContainerFactory servletContainer()
     {
-        TomcatEmbeddedServletContainerFactory factory = new TomcatEmbeddedServletContainerFactory();
-        return factory;
+        return new TomcatEmbeddedServletContainerFactory();
     }
 
 }
