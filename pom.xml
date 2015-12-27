@@ -69,6 +69,7 @@
         <junit.version>4.12</junit.version>
         <mockito-all.version>1.10.19</mockito-all.version>
         <spring-test.version>4.2.3.RELEASE</spring-test.version>
+        <restassured.version>2.8.0</restassured.version>
 
         <!-- Plugins dependencies -->
         <spring-plugin-core.version>1.2.0.RELEASE</spring-plugin-core.version>
@@ -104,6 +105,20 @@
             <artifactId>spring-test</artifactId>
             <version>${spring-test.version}</version>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jayway.restassured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>${restassured.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!--JSON path -->
+        <dependency>
+            <groupId>com.jayway.restassured</groupId>
+            <artifactId>json-path</artifactId>
+            <version>${restassured.version}</version>
         </dependency>
 
         <!-- MySQL dependency -->
