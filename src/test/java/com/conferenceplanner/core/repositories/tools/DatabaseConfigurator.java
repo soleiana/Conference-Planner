@@ -6,11 +6,13 @@ import com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem;
 import com.conferenceplanner.core.domain.Participant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
 
 @Component
+@Transactional
 public class DatabaseConfigurator {
 
     @Autowired
@@ -84,6 +86,7 @@ public class DatabaseConfigurator {
         databaseController.persistConferenceRooms(conferenceRooms);
         databaseController.setupRelationshipWithAvailability(conferenceRooms, conference);
     }
+
 
     public void configureWithConferenceRoomAvailability(ConferenceRoom conferenceRoom, Conference conference) {
         databaseController.persistConference(conference);
