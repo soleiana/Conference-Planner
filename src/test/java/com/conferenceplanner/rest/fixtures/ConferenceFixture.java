@@ -22,7 +22,7 @@ public class ConferenceFixture {
     }
 
     public static Conference createConference(List<Integer> conferenceRoomIds) {
-        Conference conference = new Conference(NAME, getFormattedDateTime(START_DATE_TIME), getFormattedDateTime(END_DATE_TIME));
+        Conference conference = createConference();
         conference.setConferenceRoomIds(conferenceRoomIds);
         return conference;
     }
