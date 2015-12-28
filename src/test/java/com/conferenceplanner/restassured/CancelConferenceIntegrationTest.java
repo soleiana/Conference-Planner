@@ -12,6 +12,7 @@ import java.util.List;
 
 import static com.jayway.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 
 public class CancelConferenceIntegrationTest {
 
@@ -21,13 +22,14 @@ public class CancelConferenceIntegrationTest {
         delete("/conference-planner/test-util/clean-database");
         setupResources();
     }
-
-
+    
     @Test
     public void test_cancelConference() throws Exception {
         List<Integer> upcomingConferenceIds = ResourceManager.getUpcomingConferenceIds();
+        assertEquals(2, upcomingConferenceIds.size());
+
         String url = "/conference-planner/conferences/"
-                .concat(upcomingConferenceIds.get(0).toString());
+                .concat(upcomingConferenceIds.get(1).toString());
         given().
                 contentType("application/json").
                 when().
@@ -43,7 +45,9 @@ public class CancelConferenceIntegrationTest {
         ConferenceRoom conferenceRoom = ConferenceRoomFixture.createConferenceRoom();
         ResourceManager.createConferenceRoom(conferenceRoom);
         List<Integer> roomIds = ResourceManager.getAvailableConferenceRoomIds();
-        Conference conference = ConferenceFixture.createConference();
-        ResourceManager.createConference(conference, roomIds);
+        Conference conference1 = ConferenceFixture.createConference();
+        Conference conference2 = ConferenceFixture.createAnotherConference();
+        ResourceManager.createConference(conference1, roomIds);
+        ResourceManager.createConference(conference2, roomIds);
     }
 }
