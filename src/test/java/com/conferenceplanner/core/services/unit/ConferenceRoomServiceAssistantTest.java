@@ -91,9 +91,9 @@ public class ConferenceRoomServiceAssistantTest {
     public void test_getConferenceRoomAvailabilityItems_if_conference_is_upcoming()  {
         ConferenceRoom conferenceRoom = ConferenceRoomFixture.createConferenceRoom();
         Conference conference = ConferenceFixture.createUpcomingConference();
-        conferenceRoom.addConference(conference);
         List<ConferenceRoomAvailabilityItem> availabilityItems =
                 ConferenceRoomAvailabilityItemFixture.createConferenceRoomsWithAvailableSeats(conference, 3);
+        conferenceRoom.setConferenceRoomAvailabilityItems(availabilityItems);
         List<ConferenceRoomAvailabilityItem> actualAvailabilityItems = serviceAssistant.getConferenceRoomAvailabilityItems(conferenceRoom);
         assertEquals(availabilityItems.size(), actualAvailabilityItems.size());
     }
@@ -102,8 +102,9 @@ public class ConferenceRoomServiceAssistantTest {
     public void test_getConferenceRoomAvailabilityItems_if_conference_is_cancelled()  {
         ConferenceRoom conferenceRoom = ConferenceRoomFixture.createConferenceRoom();
         Conference conference = ConferenceFixture.createCancelledConference();
-        conferenceRoom.addConference(conference);
-        ConferenceRoomAvailabilityItemFixture.createConferenceRoomsWithAvailableSeats(conference, 3);
+        List<ConferenceRoomAvailabilityItem> availabilityItems =
+                ConferenceRoomAvailabilityItemFixture.createConferenceRoomsWithAvailableSeats(conference, 3);
+        conferenceRoom.setConferenceRoomAvailabilityItems(availabilityItems);
         List<ConferenceRoomAvailabilityItem> actualAvailabilityItems = serviceAssistant.getConferenceRoomAvailabilityItems(conferenceRoom);
         assertTrue(actualAvailabilityItems.isEmpty());
     }

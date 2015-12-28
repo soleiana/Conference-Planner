@@ -3,6 +3,7 @@ package com.conferenceplanner.core.services;
 import com.conferenceplanner.core.domain.Conference;
 import com.conferenceplanner.core.domain.ConferenceInterval;
 import com.conferenceplanner.core.domain.ConferenceRoom;
+import com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -13,7 +14,8 @@ import java.util.List;
 public class ConferenceRoomChecker {
 
     public boolean isAvailable(ConferenceRoom conferenceRoom, Conference plannedConference) {
-        return !conferenceRoom.getConferences().stream()
+        return !conferenceRoom.getConferenceRoomAvailabilityItems().stream()
+                .map(ConferenceRoomAvailabilityItem::getConference)
                 .anyMatch(c -> !c.isCancelled() && this.overlap(c, plannedConference));
     }
 

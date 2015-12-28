@@ -2,7 +2,9 @@ package com.conferenceplanner.core.services;
 
 import com.conferenceplanner.core.domain.Conference;
 import com.conferenceplanner.core.domain.ConferenceRoom;
+import com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem;
 import com.conferenceplanner.core.fixtures.ConferenceFixture;
+import com.conferenceplanner.core.fixtures.ConferenceRoomAvailabilityItemFixture;
 import com.conferenceplanner.core.fixtures.ConferenceRoomFixture;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +36,9 @@ public class ConferenceRoomCheckerTest {
     @Test
     public void test_isAvailable_is_true_if_only_cancelled_conferences_in_conference_room(){
         List<Conference> conferences = ConferenceFixture.createCancelledConferences();
-        conferenceRoom.setConferences(conferences);
+        List<ConferenceRoomAvailabilityItem> availabilityItems =
+                ConferenceRoomAvailabilityItemFixture.createConferenceRoomsWithAvailableSeats(conferences);
+        conferenceRoom.setConferenceRoomAvailabilityItems(availabilityItems);
         boolean result = checker.isAvailable(conferenceRoom, plannedConference);
         assertTrue(result);
     }
@@ -42,7 +46,9 @@ public class ConferenceRoomCheckerTest {
     @Test
     public void test_isAvailable_is_true_if_no_overlapping_conferences_in_conference_room() {
         List<Conference> conferences = ConferenceFixture.createNonOverlappingConferences();
-        conferenceRoom.setConferences(conferences);
+        List<ConferenceRoomAvailabilityItem> availabilityItems =
+                ConferenceRoomAvailabilityItemFixture.createConferenceRoomsWithAvailableSeats(conferences);
+        conferenceRoom.setConferenceRoomAvailabilityItems(availabilityItems);
         boolean result = checker.isAvailable(conferenceRoom, plannedConference);
         assertTrue(result);
     }
@@ -50,7 +56,9 @@ public class ConferenceRoomCheckerTest {
     @Test
     public void test_isAvailable_is_false_if_an_overlapping_conference_in_conference_room() {
         List<Conference> conferences = ConferenceFixture.createMixedConferences();
-        conferenceRoom.setConferences(conferences);
+        List<ConferenceRoomAvailabilityItem> availabilityItems =
+                ConferenceRoomAvailabilityItemFixture.createConferenceRoomsWithAvailableSeats(conferences);
+        conferenceRoom.setConferenceRoomAvailabilityItems(availabilityItems);
         boolean result = checker.isAvailable(conferenceRoom, plannedConference);
         assertFalse(result);
     }

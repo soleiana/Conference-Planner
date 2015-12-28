@@ -74,8 +74,8 @@ public class ConferenceServiceAssistant {
         availabilityItem.setConference(conference);
         availabilityItem.setConferenceRoom(room);
         conference.addConferenceRoomAvailabilityItem(availabilityItem);
+        room.addConferenceRoomAvailabilityItem(availabilityItem);
         conferenceRoomAvailabilityItemRepository.create(availabilityItem);
-        room.addConference(conference);
     }
 
 }

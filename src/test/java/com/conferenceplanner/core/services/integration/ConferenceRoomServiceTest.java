@@ -117,7 +117,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
         Conference plannedConference = ConferenceFixture.createConference();
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms();
         List<Conference> conferences = ConferenceFixture.createNonOverlappingConferences();
-        databaseConfigurator.configureWithConferenceRoomAvailability(rooms, conferences);
+        databaseConfigurator.configure(rooms, conferences);
         List<Integer> roomIds = testHelper.getConferenceRoomIds(rooms);
         boolean result = conferenceRoomService.checkIfConferenceRoomsAreAvailable(roomIds, plannedConference);
         assertTrue(result);

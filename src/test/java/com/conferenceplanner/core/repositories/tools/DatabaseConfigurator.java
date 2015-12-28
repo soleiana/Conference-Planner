@@ -60,19 +60,14 @@ public class DatabaseConfigurator {
     public void configure(List<ConferenceRoom> conferenceRooms, List<Conference> conferences) {
         databaseController.persistConferences(conferences);
         databaseController.persistConferenceRooms(conferenceRooms);
-        databaseController.setupRelationship(conferenceRooms, conferences);
+        databaseController.setupRelationshipWithAvailability(conferenceRooms, conferences);
+
     }
 
     public void configure(List<ConferenceRoom> conferenceRooms, List<Conference> conferences, List<ConferenceRoomAvailabilityItem> availabilityItems) {
         databaseController.persistConferences(conferences);
         databaseController.persistConferenceRooms(conferenceRooms);
         databaseController.setupRelationship(conferenceRooms, conferences, availabilityItems);
-    }
-
-    public void configureWithConferenceRoomAvailability(List<ConferenceRoom> conferenceRooms, List<Conference> conferences) {
-        databaseController.persistConferences(conferences);
-        databaseController.persistConferenceRooms(conferenceRooms);
-        databaseController.setupRelationshipWithAvailability(conferenceRooms, conferences);
     }
 
     public void configureWithConferenceRoomAvailability(ConferenceRoom conferenceRoom, List<Conference> conferences) {

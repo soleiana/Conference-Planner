@@ -216,7 +216,7 @@ public class ConferenceServiceTest extends SpringContextTest {
     public void test_checkIfConferenceIsAvailable_is_true_if_conference_is_available() {
         List<Conference> conferences = ConferenceFixture.createUpcomingConferences();
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(2);
-        databaseConfigurator.configureWithConferenceRoomAvailability(rooms, conferences);
+        databaseConfigurator.configure(rooms, conferences);
         boolean result = conferenceService.checkIfConferenceIsAvailable(conferences.get(0));
         assertTrue(result);
     }
@@ -226,7 +226,7 @@ public class ConferenceServiceTest extends SpringContextTest {
         Conference conferenceToCheck = ConferenceFixture.createOngoingConference();
         List<Conference> conferences = ConferenceFixture.createUpcomingConferences();
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(2);
-        databaseConfigurator.configureWithConferenceRoomAvailability(rooms, conferences);
+        databaseConfigurator.configure(rooms, conferences);
         boolean result = conferenceService.checkIfConferenceIsAvailable(conferenceToCheck);
         assertFalse(result);
     }

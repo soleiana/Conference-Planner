@@ -5,6 +5,7 @@ import com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ConferenceRoomAvailabilityItemFixture {
 
@@ -24,11 +25,21 @@ public class ConferenceRoomAvailabilityItemFixture {
         return availabilityItems;
     }
 
+    public static List<ConferenceRoomAvailabilityItem> createConferenceRoomsWithAvailableSeats(List<Conference> conferences){
+        List<ConferenceRoomAvailabilityItem> availabilityItems = new ArrayList<>();
+        for (Conference conference: conferences) {
+            List<ConferenceRoomAvailabilityItem> items = createConferenceRoomsWithAvailableSeats(conference, 1);
+            availabilityItems.addAll(items);
+        }
+        return availabilityItems;
+
+    }
+
     public static List<ConferenceRoomAvailabilityItem> createConferenceRoomsWithAvailableSeats(Conference conference, int numberOfRooms){
         List<ConferenceRoomAvailabilityItem> availabilityItems = new ArrayList<>();
         for (int i = 1; i <= numberOfRooms; i++) {
             ConferenceRoomAvailabilityItem item = new ConferenceRoomAvailabilityItem(i*100);
-            conference.addConferenceRoomAvailabilityItem(item);
+            item.setConference(conference);
             availabilityItems.add(item);
         }
         return availabilityItems;

@@ -26,13 +26,11 @@ public class ConferenceRoom {
     @Column(name = "MAX_SEATS", nullable = false)
     private int maxSeats;
 
-    @ManyToMany
-    @JoinTable(name = "CONFERENCE_ROOM_CONFERENCE",
-            joinColumns = @JoinColumn(name = "CONFERENCE_ROOM_ID", referencedColumnName = "ID"),
-            inverseJoinColumns = @JoinColumn(name = "CONFERENCE_ID", referencedColumnName = "ID")
-    )
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CONFERENCE_ROOM_ID")
     @Cascade({org.hibernate.annotations.CascadeType.ALL})
-    private List<Conference> conferences = new ArrayList<>();
+    private List<ConferenceRoomAvailabilityItem> conferenceRoomAvailabilityItems = new ArrayList<>();
+
 
     public ConferenceRoom() {}
 
@@ -42,10 +40,9 @@ public class ConferenceRoom {
         this.maxSeats = maxSeats;
     }
 
-    public void addConference(Conference conference) {
-        getConferences().add(conference);
+    public void addConferenceRoomAvailabilityItem(ConferenceRoomAvailabilityItem item) {
+        getConferenceRoomAvailabilityItems().add(item);
     }
-
 
     public Integer getId() {
         return id;
@@ -79,12 +76,12 @@ public class ConferenceRoom {
         this.maxSeats = maxSeats;
     }
 
-    public List<Conference> getConferences() {
-        return conferences;
+    public List<ConferenceRoomAvailabilityItem> getConferenceRoomAvailabilityItems() {
+        return conferenceRoomAvailabilityItems;
     }
 
-    public void setConferences(List<Conference> conferences) {
-        this.conferences = conferences;
+    public void setConferenceRoomAvailabilityItems(List<ConferenceRoomAvailabilityItem> conferenceRoomAvailabilityItems) {
+        this.conferenceRoomAvailabilityItems = conferenceRoomAvailabilityItems;
     }
 
     @Override

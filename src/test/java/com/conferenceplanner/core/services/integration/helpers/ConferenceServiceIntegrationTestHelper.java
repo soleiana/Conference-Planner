@@ -55,17 +55,15 @@ public class ConferenceServiceIntegrationTestHelper {
         availabilityItems.stream()
                 .forEach(item -> assertConferenceRoomAvailabilityItem(item, conference, rooms));
         rooms.stream()
-                .forEach(room -> assertConferenceRoom(room, conference));
+                .forEach(this::assertConferenceRoom);
     }
 
     public List<Integer> getConferenceRoomIds(List<ConferenceRoom> conferenceRooms) {
         return commonTestHelper.getConferenceRoomIds(conferenceRooms);
     }
 
-    private void assertConferenceRoom(ConferenceRoom room, Conference conference) {
-        assertTrue(room.getConferences().contains(conference));
-        assertEquals(1, room.getConferences().size());
-        assertEquals(1, room.getConferences().get(0).getConferenceRoomAvailabilityItems().size());
+    private void assertConferenceRoom(ConferenceRoom room) {
+        assertEquals(1, room.getConferenceRoomAvailabilityItems().size());
     }
 
     private void assertConferenceRoomAvailabilityItem(ConferenceRoomAvailabilityItem item, Conference conference, List<ConferenceRoom> rooms) {

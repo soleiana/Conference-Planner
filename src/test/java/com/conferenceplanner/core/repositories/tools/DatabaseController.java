@@ -56,14 +56,6 @@ public class DatabaseController {
     }
 
 
-    public void setupRelationship(List<ConferenceRoom> conferenceRooms, List<Conference> conferences) {
-        conferenceRooms.stream()
-                .forEach(room -> conferences.stream()
-                        .forEach(conference -> setupRelationship(room, conference)
-                        )
-                );
-    }
-
     public void setupRelationship(List<ConferenceRoom> conferenceRooms, List<Conference> conferences,
                                   List<ConferenceRoomAvailabilityItem> availabilityItems) {
 
@@ -116,15 +108,11 @@ public class DatabaseController {
         availabilityItem.takeAvailableSeat();
     }
 
-    private void setupRelationship(ConferenceRoom conferenceRoom, Conference conference) {
-        conferenceRoom.addConference(conference);
-    }
-
     private void setupRelationship(ConferenceRoom conferenceRoom, Conference conference, ConferenceRoomAvailabilityItem availabilityItem) {
         conference.addConferenceRoomAvailabilityItem(availabilityItem);
+        conferenceRoom.addConferenceRoomAvailabilityItem(availabilityItem);
         availabilityItem.setConferenceRoom(conferenceRoom);
         availabilityItem.setConference(conference);
-        conferenceRoom.addConference(conference);
         conferenceRoomAvailabilityItemRepository.create(availabilityItem);
     }
 }
