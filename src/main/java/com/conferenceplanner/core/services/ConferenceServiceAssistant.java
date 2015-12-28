@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -42,7 +44,8 @@ public class ConferenceServiceAssistant {
     }
 
     public void registerConference(Conference conference, List<Integer> conferenceRoomIds) {
-      conferenceRoomIds.stream().
+        Set<Integer> roomIdsSet = new HashSet<>(conferenceRoomIds);
+        roomIdsSet.stream().
               forEach(roomId -> registerConference(conference, roomId));
     }
 

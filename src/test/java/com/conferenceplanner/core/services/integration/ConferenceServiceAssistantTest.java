@@ -119,6 +119,19 @@ public class ConferenceServiceAssistantTest extends SpringContextTest {
     }
 
     @Test
+    public void test_registerConference_with_duplicate_conference_room_ids() {
+        List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(2);
+        databaseConfigurator.configureConferenceRooms(rooms);
+        List<Integer> roomIds = testHelper.getConferenceRoomIds(rooms);
+        List<Integer> duplicateRoomIds = testHelper.getConferenceRoomIds(rooms);
+        roomIds.addAll(duplicateRoomIds);
+        Conference conference = ConferenceFixture.createUpcomingConference();
+        databaseConfigurator.configureConference(conference);
+        serviceAssistant.registerConference(conference, roomIds);
+        testHelper.assertRegisterConferenceResult(conference, rooms);
+    }
+
+    @Test
     public void test_getUpcomingConferences_if_upcoming_conferences_exist() {
         List<Conference> conferences = ConferenceFixture.createUpcomingConferences();
         databaseConfigurator.configureConferences(conferences);
