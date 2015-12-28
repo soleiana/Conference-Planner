@@ -35,6 +35,11 @@ public class ConferenceRoomServiceAssistant {
         return conferenceRoomRepository.getById(id);
     }
 
+    public List<ConferenceRoom> getConferenceRooms() {
+        return conferenceRoomRepository.getAll().stream()
+                .collect(Collectors.toList());
+    }
+
     public List<ConferenceRoom> getAvailableConferenceRooms(Conference plannedConference) {
         return conferenceRoomRepository.getAll().stream()
                 .filter(room -> conferenceRoomChecker.isAvailable(room, plannedConference))

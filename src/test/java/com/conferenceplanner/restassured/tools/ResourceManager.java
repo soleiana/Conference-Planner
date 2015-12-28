@@ -44,7 +44,7 @@ public class ResourceManager {
                 assertThat().
                 body(notNullValue()).
                 extract().
-                path("availableConferenceRooms");
+                path("conferenceRooms");
         return extractIds(availableConferenceRooms, "id");
     }
 
@@ -123,7 +123,7 @@ public class ResourceManager {
     }
 
     private static String buildGetAvailableConferenceRoomsUrlString() {
-        return  "/conference-planner/conference-rooms?"
+        return  "/conference-planner/conference-rooms/available?"
                 .concat("conferenceStartDateTime=")
                 .concat(CONFERENCE_START_DATE_TIME)
                 .concat("&")

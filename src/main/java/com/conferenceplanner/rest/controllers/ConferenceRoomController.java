@@ -64,10 +64,10 @@ public class ConferenceRoomController {
     }
 
 
-    @RequestMapping(method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<AvailableConferenceRooms> getAvailableConferenceRooms(@RequestParam String conferenceStartDateTime,
-                                                                                @RequestParam String conferenceEndDateTime) {
-        AvailableConferenceRooms availableConferenceRooms = new AvailableConferenceRooms();
+    @RequestMapping(method = RequestMethod.GET, value = "/available", produces = "application/json")
+    public ResponseEntity<ConferenceRooms> getAvailableConferenceRooms(@RequestParam String conferenceStartDateTime,
+                                                                       @RequestParam String conferenceEndDateTime) {
+        ConferenceRooms availableConferenceRooms = new ConferenceRooms();
 
         try {
             ConferenceInterval interval = conferenceValidator.validateDates(conferenceStartDateTime, conferenceEndDateTime);
@@ -75,7 +75,7 @@ public class ConferenceRoomController {
 
             List<com.conferenceplanner.core.domain.ConferenceRoom> coreDomainConferenceRooms = conferenceRoomService.getAvailableConferenceRooms(coreDomainConference);
             List<ConferenceRoom> conferenceRooms = conferenceRoomFactory.create(coreDomainConferenceRooms);
-            availableConferenceRooms.setAvailableConferenceRooms(conferenceRooms);
+            availableConferenceRooms.setConferenceRooms(conferenceRooms);
 
             availableConferenceRooms.setConferenceStartDateTime(interval.getFormattedStartDateTimeString());
             availableConferenceRooms.setConferenceEndDateTime(interval.getFormattedEndDateTimeString());
@@ -93,6 +93,25 @@ public class ConferenceRoomController {
             return new ResponseEntity<>(availableConferenceRooms, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(availableConferenceRooms, HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<ConferenceRooms> getConferenceRooms() {
+        ConferenceRooms allConferenceRooms = new ConferenceRooms();
+        try {
+            List<com.conferenceplanner.core.domain.ConferenceRoom> coreDomainConferenceRooms = conferenceRoomService.getConferenceRooms();
+            List<ConferenceRoom> conferenceRooms = conferenceRoomFactory.create(coreDomainConferenceRooms);
+            allConferenceRooms.setConferenceRooms(conferenceRooms);
+
+        } catch (ApplicationException ex) {
+            allConferenceRooms.setErrorMessage(ex.getMessage());
+            return new ResponseEntity<>(allConferenceRooms, HttpStatus.NOT_FOUND);
+
+        } catch (RuntimeException ex) {
+            allConferenceRooms.setErrorMessage(ex.getMessage());
+            return new ResponseEntity<>(allConferenceRooms, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(allConferenceRooms, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}/conference-room-availability", produces = "application/json")

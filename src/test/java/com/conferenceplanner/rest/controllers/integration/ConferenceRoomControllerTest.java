@@ -5,7 +5,7 @@ import com.conferenceplanner.core.domain.Conference;
 import com.conferenceplanner.core.repositories.tools.DatabaseCleaner;
 import com.conferenceplanner.core.repositories.tools.DatabaseConfigurator;
 import com.conferenceplanner.rest.controllers.ConferenceRoomController;
-import com.conferenceplanner.rest.domain.AvailableConferenceRooms;
+import com.conferenceplanner.rest.domain.ConferenceRooms;
 import com.conferenceplanner.rest.domain.ConferenceRoom;
 import com.conferenceplanner.rest.domain.ConferenceRoomAvailability;
 import com.conferenceplanner.rest.fixtures.ConferenceFixture;
@@ -69,8 +69,8 @@ public class ConferenceRoomControllerTest extends SpringContextTest {
         controller.createConferenceRoom(room2);
         String conferenceStartDateTime = ConferenceFixture.getStartDateTime();
         String conferenceEndDateTime = ConferenceFixture.getEndDateTime();
-        ResponseEntity<AvailableConferenceRooms> response = controller.getAvailableConferenceRooms(conferenceStartDateTime, conferenceEndDateTime);
-        assertEquals(2, response.getBody().getAvailableConferenceRooms().size());
+        ResponseEntity<ConferenceRooms> response = controller.getAvailableConferenceRooms(conferenceStartDateTime, conferenceEndDateTime);
+        assertEquals(2, response.getBody().getConferenceRooms().size());
         assertEquals(conferenceStartDateTime, response.getBody().getConferenceStartDateTime());
         assertEquals(conferenceEndDateTime, response.getBody().getConferenceEndDateTime());
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -79,7 +79,7 @@ public class ConferenceRoomControllerTest extends SpringContextTest {
     @Test
     public void test_getAvailableConferenceRooms_returns_BAD_REQUEST() {
         String conferenceEndDateTime = ConferenceFixture.getEndDateTime();
-        ResponseEntity<AvailableConferenceRooms> response = controller.getAvailableConferenceRooms(null, conferenceEndDateTime);
+        ResponseEntity<ConferenceRooms> response = controller.getAvailableConferenceRooms(null, conferenceEndDateTime);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
@@ -87,7 +87,7 @@ public class ConferenceRoomControllerTest extends SpringContextTest {
     public void test_getAvailableConferenceRooms_returns_NOT_FOUND() {
         String conferenceStartDateTime = ConferenceFixture.getStartDateTime();
         String conferenceEndDateTime = ConferenceFixture.getEndDateTime();
-        ResponseEntity<AvailableConferenceRooms> response = controller.getAvailableConferenceRooms(conferenceStartDateTime, conferenceEndDateTime);
+        ResponseEntity<ConferenceRooms> response = controller.getAvailableConferenceRooms(conferenceStartDateTime, conferenceEndDateTime);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 

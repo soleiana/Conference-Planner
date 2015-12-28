@@ -28,6 +28,14 @@ public class ConferenceRoomService {
        serviceAssistant.createConferenceRoom(conferenceRoom);
     }
 
+    public List<ConferenceRoom> getConferenceRooms() {
+        List<ConferenceRoom> conferenceRooms = serviceAssistant.getConferenceRooms();
+        if (conferenceRooms.isEmpty()) {
+            throw new ApplicationException("No conference rooms found!", ApplicationErrorCode.NOT_FOUND);
+        }
+        return conferenceRooms;
+    }
+
 
     public List<ConferenceRoom> getAvailableConferenceRooms(Conference plannedConference) {
         List<ConferenceRoom> availableRooms = serviceAssistant.getAvailableConferenceRooms(plannedConference);

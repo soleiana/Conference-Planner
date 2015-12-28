@@ -3,14 +3,14 @@ package com.conferenceplanner.rest.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AvailableConferenceRooms {
+public class ConferenceRooms {
 
     private String errorMessage;
     private String conferenceStartDateTime;
     private String conferenceEndDateTime;
-    List<ConferenceRoom> availableConferenceRooms = new ArrayList<>();
+    List<ConferenceRoom> conferenceRooms = new ArrayList<>();
 
-    public AvailableConferenceRooms() {
+    public ConferenceRooms() {
     }
 
     public String getErrorMessage() {
@@ -37,11 +37,11 @@ public class AvailableConferenceRooms {
         this.conferenceEndDateTime = conferenceEndDateTime;
     }
 
-    public List<ConferenceRoom> getAvailableConferenceRooms() {
-        return availableConferenceRooms;
+    public List<ConferenceRoom> getConferenceRooms() {
+        return conferenceRooms;
     }
 
-    public void setAvailableConferenceRooms(List<ConferenceRoom> availableConferenceRooms) {
-        this.availableConferenceRooms = availableConferenceRooms;
+    public void setConferenceRooms(List<ConferenceRoom> conferenceRooms) {
+        this.conferenceRooms = conferenceRooms;
     }
 }

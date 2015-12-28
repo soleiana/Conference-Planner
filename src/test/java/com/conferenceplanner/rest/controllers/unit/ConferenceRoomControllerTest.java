@@ -5,7 +5,7 @@ import com.conferenceplanner.core.services.ApplicationErrorCode;
 import com.conferenceplanner.core.services.ApplicationException;
 import com.conferenceplanner.core.services.ConferenceRoomService;
 import com.conferenceplanner.rest.controllers.ConferenceRoomController;
-import com.conferenceplanner.rest.domain.AvailableConferenceRooms;
+import com.conferenceplanner.rest.domain.ConferenceRooms;
 import com.conferenceplanner.rest.domain.ConferenceInterval;
 import com.conferenceplanner.rest.domain.ConferenceRoom;
 import com.conferenceplanner.rest.domain.ConferenceRoomAvailability;
@@ -90,15 +90,15 @@ public class ConferenceRoomControllerTest {
         when(conferenceValidator.validateDates(anyString(), anyString())).thenReturn(interval);
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(2);
         when(conferenceRoomFactory.create(anyList())).thenReturn(rooms);
-        ResponseEntity<AvailableConferenceRooms> response = controller.getAvailableConferenceRooms("26/12/2015 12:00", "28/12/2015 12:00");
-        assertEquals(rooms.size(), response.getBody().getAvailableConferenceRooms().size());
+        ResponseEntity<ConferenceRooms> response = controller.getAvailableConferenceRooms("26/12/2015 12:00", "28/12/2015 12:00");
+        assertEquals(rooms.size(), response.getBody().getConferenceRooms().size());
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
     public void test_getAvailableConferenceRooms_returns_BAD_REQUEST() {
         doThrow(new ValidationException("")).when(conferenceValidator).validateDates(anyString(), anyString());
-        ResponseEntity<AvailableConferenceRooms> response = controller.getAvailableConferenceRooms("26/12/2015 12:00", "28/12/2015 12:00");
+        ResponseEntity<ConferenceRooms> response = controller.getAvailableConferenceRooms("26/12/2015 12:00", "28/12/2015 12:00");
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
@@ -106,7 +106,7 @@ public class ConferenceRoomControllerTest {
     public void test_getAvailableConferenceRooms_returns_NOT_FOUND() {
         doThrow(new ApplicationException("", ApplicationErrorCode.NOT_FOUND))
                 .when(conferenceRoomService).getAvailableConferenceRooms(any(Conference.class));
-        ResponseEntity<AvailableConferenceRooms> response = controller.getAvailableConferenceRooms("26/12/2015 12:00", "28/12/2015 12:00");
+        ResponseEntity<ConferenceRooms> response = controller.getAvailableConferenceRooms("26/12/2015 12:00", "28/12/2015 12:00");
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
