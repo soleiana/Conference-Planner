@@ -3,7 +3,6 @@ package com.conferenceplanner.rest.factories;
 import com.conferenceplanner.rest.domain.Participant;
 import com.conferenceplanner.rest.factories.helpers.StringNormalizer;
 import com.conferenceplanner.rest.parsers.ParticipantParser;
-import org.springframework.format.datetime.DateFormatter;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;

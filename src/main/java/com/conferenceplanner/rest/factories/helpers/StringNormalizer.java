@@ -61,7 +61,7 @@ public class StringNormalizer {
     }
 
     private static String capitalize(String str) {
-        String firstCharacter = str.substring(0,1).toUpperCase();
+        String firstCharacter = str.substring(0, 1).toUpperCase();
         return firstCharacter.concat(str.substring(1));
     }
 }

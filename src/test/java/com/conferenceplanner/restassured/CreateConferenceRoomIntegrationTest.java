@@ -2,7 +2,6 @@ package com.conferenceplanner.restassured;
 
 import com.conferenceplanner.rest.domain.ConferenceRoom;
 import com.conferenceplanner.rest.fixtures.ConferenceRoomFixture;
-import com.conferenceplanner.restassured.tools.ResourceManager;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -4,7 +4,6 @@ import com.conferenceplanner.core.domain.ConferenceRoom;
 import com.conferenceplanner.rest.factories.helpers.StringNormalizer;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

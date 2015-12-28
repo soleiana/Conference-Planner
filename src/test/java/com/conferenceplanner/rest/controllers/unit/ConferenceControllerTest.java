@@ -125,7 +125,6 @@ public class ConferenceControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
-
     @Test
     public void test_getParticipants_returns_NOT_FOUND() {
         doThrow(new ApplicationException("", ApplicationErrorCode.NOT_FOUND)).when(conferenceService).getParticipants(anyInt());

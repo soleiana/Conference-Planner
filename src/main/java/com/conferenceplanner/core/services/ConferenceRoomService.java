@@ -36,7 +36,6 @@ public class ConferenceRoomService {
         return conferenceRooms;
     }
 
-
     public List<ConferenceRoom> getAvailableConferenceRooms(Conference plannedConference) {
         List<ConferenceRoom> availableRooms = serviceAssistant.getAvailableConferenceRooms(plannedConference);
         if (availableRooms.isEmpty()) {

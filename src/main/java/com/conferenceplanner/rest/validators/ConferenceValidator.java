@@ -84,7 +84,6 @@ public class ConferenceValidator {
             throw new ValidationException(String.format("Conference end dateTime %s is before start dateTime %s",
                     endDateTime.format(CONFERENCE_DATE_TIME_FORMATTER), startDateTime.format(CONFERENCE_DATE_TIME_FORMATTER)));
         }
-
     }
 
     private void validateIntervalDuration(ConferenceInterval interval) {

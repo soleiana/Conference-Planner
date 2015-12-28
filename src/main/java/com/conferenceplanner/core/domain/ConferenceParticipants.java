@@ -7,8 +7,7 @@ public class ConferenceParticipants {
     private Conference conference;
     private List<Participant> participants;
 
-    public ConferenceParticipants() {
-    }
+    public ConferenceParticipants() {}
 
     public Conference getConference() {
         return conference;

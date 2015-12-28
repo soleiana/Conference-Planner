@@ -89,7 +89,6 @@ public class Participant {
         if (!surname.equals(that.surname)) return false;
         if (!birthDate.equals(that.birthDate)) return false;
         return passportNr.equals(that.passportNr);
-
     }
 
     @Override

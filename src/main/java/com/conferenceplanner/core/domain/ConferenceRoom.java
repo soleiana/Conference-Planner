@@ -94,7 +94,6 @@ public class ConferenceRoom {
         if (maxSeats != that.maxSeats) return false;
         if (!name.equals(that.name)) return false;
         return location.equals(that.location);
-
     }
 
     @Override

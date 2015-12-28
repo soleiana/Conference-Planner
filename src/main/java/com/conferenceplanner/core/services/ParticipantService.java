@@ -50,7 +50,6 @@ public class ParticipantService {
             serviceAssistant.createParticipant(participant);
         }
         serviceAssistant.registerParticipant(participant, conference);
-
     }
 
 }

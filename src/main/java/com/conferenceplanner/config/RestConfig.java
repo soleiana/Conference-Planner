@@ -11,5 +11,4 @@ import org.springframework.context.annotation.Import;
 @ComponentScan(basePackages = {"com.conferenceplanner"},
                excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = {Application.class})})
 @Import({DatasourceConfig.class})
-public class RestConfig
-{}
+public class RestConfig {}

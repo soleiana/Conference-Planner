@@ -25,8 +25,7 @@ public class DatasourceConfig
     private Environment env;
 
     @Bean
-    public DataSource dataSource()
-    {
+    public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(env.getProperty("database.driverClassName"));
         dataSource.setUrl(env.getProperty("database.jdbcUrl"));
@@ -36,8 +35,7 @@ public class DatasourceConfig
     }
 
     @Bean(name = "sessionFactory")
-    public LocalSessionFactoryBean sessionFactory()
-    {
+    public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
         sessionFactory.setPackagesToScan(new String[] { "com.conferenceplanner.core.domain" });
@@ -47,23 +45,19 @@ public class DatasourceConfig
 
     @Bean(name = "transactionManager")
     @Autowired
-    public HibernateTransactionManager transactionManager(SessionFactory sessionFactory)
-    {
+    public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
         HibernateTransactionManager txManager = new HibernateTransactionManager();
         txManager.setSessionFactory(sessionFactory);
-
         return txManager;
     }
 
     @Bean
-    public PersistenceExceptionTranslationPostProcessor exceptionTranslation()
-    {
+    public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
         return new PersistenceExceptionTranslationPostProcessor();
     }
-    Properties hibernateProperties()
-    {
-        return new Properties() {
-            {
+
+    Properties hibernateProperties() {
+        return new Properties() {{
                 setProperty("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
                 setProperty("hibernate.dialect", env.getProperty("hibernate.dialect"));
                 setProperty("hibernate.show_sql", env.getProperty("hibernate.show_sql"));

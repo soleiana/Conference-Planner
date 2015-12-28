@@ -12,8 +12,6 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 @Component
 public class ConferenceRoomServiceIntegrationTestHelper {
@@ -48,7 +46,6 @@ public class ConferenceRoomServiceIntegrationTestHelper {
                 .map(Conference::getStartDateTime)
                 .map(date -> date.isAfter(now))
                 .forEach(Assert::assertTrue);
-
     }
 
     public List<Integer> getConferenceRoomIds(List<ConferenceRoom> conferenceRooms) {

@@ -62,11 +62,7 @@ public class Conference {
 
     public boolean isUpcoming() {
         LocalDateTime now = LocalDateTime.now();
-
-        if (startDateTime.isBefore(now) || cancelled) {
-            return false;
-        }
-        return true;
+        return startDateTime.isAfter(now) && !cancelled;
     }
 
     public void addConferenceRoomAvailabilityItem(ConferenceRoomAvailabilityItem item) {

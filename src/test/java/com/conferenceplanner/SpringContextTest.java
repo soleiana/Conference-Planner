@@ -16,5 +16,4 @@ import org.springframework.transaction.annotation.Transactional;
 @Rollback(true)
 @Transactional(transactionManager = "transactionManager")
 @Ignore
-public class SpringContextTest
-{}
+public class SpringContextTest {}

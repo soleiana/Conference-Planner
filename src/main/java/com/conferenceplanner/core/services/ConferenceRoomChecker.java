@@ -7,7 +7,6 @@ import com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 
 @Component
@@ -39,7 +38,6 @@ public class ConferenceRoomChecker {
                 || plannedInterval.contains(actualEndDateTime)
                 || scheduledInterval.contains(plannedStart)
                 || scheduledInterval.contains(plannedEnd);
-
     }
 
 }

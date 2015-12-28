@@ -16,28 +16,24 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @ComponentScan(basePackages = {"com.conferenceplanner"})
 public class Application
 {
-   public static void main(String[] args)
-    {
+   public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
-    }
+   }
 
     @Bean
-    public DispatcherServlet dispatcherServlet()
-    {
+    public DispatcherServlet dispatcherServlet() {
         return new DispatcherServlet();
     }
 
     @Bean
-    public ServletRegistrationBean dispatcherRegistration(DispatcherServlet dispatcherServlet)
-    {
+    public ServletRegistrationBean dispatcherRegistration(DispatcherServlet dispatcherServlet) {
         ServletRegistrationBean registration = new ServletRegistrationBean(dispatcherServlet);
         registration.addUrlMappings("/conference-planner/*");
         return registration;
     }
 
     @Bean
-    public EmbeddedServletContainerFactory servletContainer()
-    {
+    public EmbeddedServletContainerFactory servletContainer() {
         return new TomcatEmbeddedServletContainerFactory();
     }
 
