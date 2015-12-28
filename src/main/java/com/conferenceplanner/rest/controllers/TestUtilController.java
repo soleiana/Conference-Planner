@@ -15,7 +15,7 @@ public class TestUtilController {
     @Autowired
     private DatabaseCleaner databaseCleaner;
 
-    @RequestMapping(method = RequestMethod.DELETE, value ="/clean-database", produces = "application/json")
+    @RequestMapping(method = RequestMethod.DELETE, value ="/clean-database", produces = "text/plain")
     public ResponseEntity<String> cleanUpDatabase() {
         try {
             databaseCleaner.clear();

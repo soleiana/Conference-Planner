@@ -36,6 +36,7 @@ public class AddParticipantIntegrationTest {
                 when().
                 post("/conference-planner/participants").
                 then().
+                contentType("text/plain").
                 assertThat().
                 statusCode(201).
                 assertThat().

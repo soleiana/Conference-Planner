@@ -33,6 +33,7 @@ public class CreateConferenceIntegrationTest {
                 when().
                 post("/conference-planner/conferences").
                 then().
+                contentType("text/plain").
                 assertThat().
                 statusCode(201).
                 assertThat().

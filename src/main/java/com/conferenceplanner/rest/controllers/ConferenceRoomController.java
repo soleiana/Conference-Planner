@@ -44,7 +44,7 @@ public class ConferenceRoomController {
     private ConferenceRoomService conferenceRoomService;
 
 
-    @RequestMapping(method = RequestMethod.POST, consumes =  "application/json", produces = "application/json")
+    @RequestMapping(method = RequestMethod.POST, consumes =  "application/json", produces = "text/plain")
     public ResponseEntity<String> createConferenceRoom(@RequestBody ConferenceRoom conferenceRoom) {
         try {
             conferenceRoomValidator.validate(conferenceRoom);

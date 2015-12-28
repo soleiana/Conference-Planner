@@ -34,6 +34,7 @@ public class CancelConferenceIntegrationTest {
                 when().
                 put(url).
                 then().
+                contentType("text/plain").
                 assertThat().
                 statusCode(200).
                 assertThat().

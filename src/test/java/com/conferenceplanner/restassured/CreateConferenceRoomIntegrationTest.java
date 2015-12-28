@@ -8,6 +8,7 @@ import org.junit.Test;
 
 
 import static com.jayway.restassured.RestAssured.*;
+import static org.hamcrest.Matchers.equalTo;
 
 public class CreateConferenceRoomIntegrationTest {
 
@@ -19,6 +20,16 @@ public class CreateConferenceRoomIntegrationTest {
     @Test
     public void test_createConferenceRoom() {
         ConferenceRoom conferenceRoom = ConferenceRoomFixture.createConferenceRoom();
-        ResourceManager.createConferenceRoom(conferenceRoom);
+        given().
+                contentType("application/json").
+                body(conferenceRoom).
+                when().
+                post("/conference-planner/conference-rooms").
+                then().
+                contentType("text/plain").
+                assertThat().
+                statusCode(201).
+                assertThat().
+                body(equalTo("Conference room created."));
     }
 }

@@ -30,7 +30,7 @@ public class ParticipantController {
     private ParticipantFactory participantFactory;
 
 
-    @RequestMapping(method = RequestMethod.POST, consumes =  "application/json", produces = "application/json")
+    @RequestMapping(method = RequestMethod.POST, consumes =  "application/json", produces = "text/plain")
     public ResponseEntity<String> addParticipant(@RequestBody Participant participant) {
         try {
             participantValidator.validate(participant);
@@ -51,7 +51,7 @@ public class ParticipantController {
     }
 
 
-    @RequestMapping(method = RequestMethod.DELETE, consumes =  "application/json", produces = "application/json")
+    @RequestMapping(method = RequestMethod.DELETE, consumes =  "application/json", produces = "text/plain")
     public ResponseEntity<String> removeParticipant(@RequestBody Participant participant) {
         try {
             participantValidator.validateIds(participant);

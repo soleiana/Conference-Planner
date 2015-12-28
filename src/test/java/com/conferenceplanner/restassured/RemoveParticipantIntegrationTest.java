@@ -39,6 +39,7 @@ public class RemoveParticipantIntegrationTest {
                 when().
                 delete("/conference-planner/participants").
                 then().
+                contentType("text/plain").
                 assertThat().
                 statusCode(200).
                 assertThat().
