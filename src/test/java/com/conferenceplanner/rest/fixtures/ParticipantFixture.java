@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 public class ParticipantFixture {
 
     private static final String NAME = "Ivo";
+    private static final String ANOTHER_NAME = "Maris";
     private static final String SURNAME = "Star";
     private static final DateTimeFormatter BIRTH_DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private static final String BIRTH_DATE = LocalDate.of(1980, 1, 1).format(BIRTH_DATE_FORMATTER);
@@ -19,6 +20,12 @@ public class ParticipantFixture {
 
     public static Participant createParticipant(Integer conferenceId) {
         Participant participant =  new Participant(NAME, SURNAME, BIRTH_DATE, PASSPORT_NR);
+        participant.setConferenceId(conferenceId);
+        return participant;
+    }
+
+    public static Participant createAnotherParticipant(Integer conferenceId) {
+        Participant participant =  new Participant(ANOTHER_NAME, SURNAME, BIRTH_DATE, PASSPORT_NR);
         participant.setConferenceId(conferenceId);
         return participant;
     }
