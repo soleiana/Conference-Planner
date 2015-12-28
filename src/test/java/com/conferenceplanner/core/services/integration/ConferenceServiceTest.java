@@ -136,7 +136,7 @@ public class ConferenceServiceTest extends SpringContextTest {
         Conference conference1 = ConferenceFixture.createUpcomingConference();
         Conference conference2 = ConferenceFixture.cloneConference(conference1);
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(2);
-        databaseConfigurator.configureWithConferenceRoomAvailability(rooms, conference1);
+        databaseConfigurator.configure(rooms, conference1);
         List<Integer> roomIds = testHelper.getConferenceRoomIds(rooms);
         expectedException.expect(ApplicationException.class);
         expectedException.expectMessage("Conference already exists!");
@@ -148,7 +148,7 @@ public class ConferenceServiceTest extends SpringContextTest {
         Conference conference1 = ConferenceFixture.createUpcomingConference("Devoxx");
         Conference conference2 = ConferenceFixture.createUpcomingConference("JavaOne");
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(2);
-        databaseConfigurator.configureWithConferenceRoomAvailability(rooms, conference1);
+        databaseConfigurator.configure(rooms, conference1);
         List<Integer> roomIds = testHelper.getConferenceRoomIds(rooms);
         expectedException.expect(ApplicationException.class);
         expectedException.expectMessage("No conference rooms found for selected conference interval!");

@@ -9,7 +9,6 @@ import com.conferenceplanner.core.repositories.tools.DatabaseCleaner;
 import com.conferenceplanner.core.repositories.tools.DatabaseConfigurator;
 import com.conferenceplanner.core.services.ParticipantServiceAssistant;
 import com.conferenceplanner.core.fixtures.ConferenceFixture;
-import com.conferenceplanner.core.fixtures.ConferenceRoomAvailabilityItemFixture;
 import com.conferenceplanner.core.fixtures.ConferenceRoomFixture;
 import com.conferenceplanner.core.fixtures.ParticipantFixture;
 import org.junit.Before;
@@ -53,7 +52,7 @@ public class ParticipantServiceAssistantTest extends SpringContextTest {
         Participant participant = ParticipantFixture.createParticipant();
         Conference conference = ConferenceFixture.createUpcomingConference();
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(3);
-        databaseConfigurator.configureWithConferenceRoomAvailability(rooms, conference);
+        databaseConfigurator.configure(rooms, conference);
         ConferenceRoom room = rooms.get(0);
         ConferenceRoomAvailabilityItem availabilityItem =  room.getConferenceRoomAvailabilityItems().get(0);
         availabilityItem.takeAvailableSeat();
@@ -97,7 +96,7 @@ public class ParticipantServiceAssistantTest extends SpringContextTest {
         Participant participant = ParticipantFixture.createParticipant();
         Conference conference = ConferenceFixture.createUpcomingConference();
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(2, MAX_SEATS);
-        databaseConfigurator.configureWithConferenceRoomAvailability(rooms, conference);
+        databaseConfigurator.configure(rooms, conference);
         databaseConfigurator.configureParticipant(participant);
         serviceAssistant.registerParticipant(participant, conference);
         assertEquals(1, conference.getParticipants().size());

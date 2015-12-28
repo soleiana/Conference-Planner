@@ -96,7 +96,7 @@ public class ConferenceRoomControllerTest extends SpringContextTest {
         com.conferenceplanner.core.domain.ConferenceRoom coreDomainRoom =
                 com.conferenceplanner.core.repositories.fixtures.ConferenceRoomFixture.createConferenceRoom("name");
         List<Conference> coreDomainConferences = com.conferenceplanner.core.fixtures.ConferenceFixture.createUpcomingConferences();
-        databaseConfigurator.configureWithConferenceRoomAvailability(coreDomainRoom, coreDomainConferences);
+        databaseConfigurator.configure(coreDomainRoom, coreDomainConferences);
         ResponseEntity<ConferenceRoomAvailability> response = controller.getConferenceRoomAvailability(coreDomainRoom.getId());
         assertEquals(coreDomainConferences.size(), response.getBody().getConferenceRoomAvailabilityItems().size());
         assertNotNull(response.getBody().getConferenceRoom());
@@ -110,7 +110,7 @@ public class ConferenceRoomControllerTest extends SpringContextTest {
         com.conferenceplanner.core.domain.ConferenceRoom coreDomainRoom2 =
                 com.conferenceplanner.core.repositories.fixtures.ConferenceRoomFixture.createConferenceRoom("name2");
         List<Conference> coreDomainConferences = com.conferenceplanner.core.fixtures.ConferenceFixture.createUpcomingConferences();
-        databaseConfigurator.configureWithConferenceRoomAvailability(coreDomainRoom1, coreDomainConferences);
+        databaseConfigurator.configure(coreDomainRoom1, coreDomainConferences);
         databaseConfigurator.configureConferenceRoom(coreDomainRoom2);
         ResponseEntity<ConferenceRoomAvailability> response = controller.getConferenceRoomAvailability(coreDomainRoom2.getId());
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());

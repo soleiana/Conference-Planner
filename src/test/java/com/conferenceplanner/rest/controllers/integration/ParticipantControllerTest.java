@@ -38,7 +38,7 @@ public class ParticipantControllerTest extends SpringContextTest {
         com.conferenceplanner.core.domain.Conference coreDomainConference =
                 com.conferenceplanner.core.fixtures.ConferenceFixture.createUpcomingConference();
         ConferenceRoom coreDomainRoom = ConferenceRoomFixture.createConferenceRoom();
-        databaseConfigurator.configureWithConferenceRoomAvailability(coreDomainRoom, coreDomainConference);
+        databaseConfigurator.configure(coreDomainRoom, coreDomainConference);
         Participant participant = ParticipantFixture.createParticipant(coreDomainConference.getId());
         ResponseEntity<String> response = controller.addParticipant(participant);
         assertEquals("Participant added.", response.getBody());
@@ -64,7 +64,7 @@ public class ParticipantControllerTest extends SpringContextTest {
     public void test_addParticipant_returns_NOT_FOUND_if_no_available_conference_exist() {
         com.conferenceplanner.core.domain.Conference coreDomainConference = com.conferenceplanner.core.fixtures.ConferenceFixture.createOngoingConference();
         ConferenceRoom coreDomainRoom = ConferenceRoomFixture.createConferenceRoom();
-        databaseConfigurator.configureWithConferenceRoomAvailability(coreDomainRoom, coreDomainConference);
+        databaseConfigurator.configure(coreDomainRoom, coreDomainConference);
         Participant participant = ParticipantFixture.createParticipant(coreDomainConference.getId());
         ResponseEntity<String> response = controller.addParticipant(participant);
         assertEquals("No available conferences!", response.getBody());
@@ -75,7 +75,7 @@ public class ParticipantControllerTest extends SpringContextTest {
     public void test_addParticipant_returns_CONFLICT_if_participant_is_registered_for_conference() {
         com.conferenceplanner.core.domain.Conference coreDomainConference = com.conferenceplanner.core.fixtures.ConferenceFixture.createUpcomingConference();
         ConferenceRoom coreDomainRoom = ConferenceRoomFixture.createConferenceRoom();
-        databaseConfigurator.configureWithConferenceRoomAvailability(coreDomainRoom, coreDomainConference);
+        databaseConfigurator.configure(coreDomainRoom, coreDomainConference);
         Participant participant1 = ParticipantFixture.createParticipant(coreDomainConference.getId());
         Participant participant2 = ParticipantFixture.createParticipant(coreDomainConference.getId());
         controller.addParticipant(participant1);
@@ -89,8 +89,8 @@ public class ParticipantControllerTest extends SpringContextTest {
         com.conferenceplanner.core.domain.Conference coreDomainConference = com.conferenceplanner.core.fixtures.ConferenceFixture.createUpcomingConference();
         ConferenceRoom coreDomainRoom = ConferenceRoomFixture.createConferenceRoom();
         com.conferenceplanner.core.domain.Participant coreDomainParticipant = com.conferenceplanner.core.fixtures.ParticipantFixture.createParticipant();
-        databaseConfigurator.configureWithConferenceRoomAvailability(coreDomainRoom, coreDomainConference);
-        databaseConfigurator.configureWithConferenceRoomAvailability(coreDomainConference, coreDomainParticipant);
+        databaseConfigurator.configure(coreDomainRoom, coreDomainConference);
+        databaseConfigurator.configureAndTakeAvailableSeat(coreDomainConference, coreDomainParticipant);
         Participant participant = ParticipantFixture.createParticipant(coreDomainConference.getId(), coreDomainParticipant.getId());
         ResponseEntity<String> response = controller.removeParticipant(participant);
         assertEquals("Participant removed.", response.getBody());
@@ -117,7 +117,7 @@ public class ParticipantControllerTest extends SpringContextTest {
         com.conferenceplanner.core.domain.Conference coreDomainConference = com.conferenceplanner.core.fixtures.ConferenceFixture.createUpcomingConference();
         ConferenceRoom coreDomainRoom = ConferenceRoomFixture.createConferenceRoom();
         com.conferenceplanner.core.domain.Participant coreDomainParticipant = com.conferenceplanner.core.fixtures.ParticipantFixture.createParticipant();
-        databaseConfigurator.configureWithConferenceRoomAvailability(coreDomainRoom, coreDomainConference);
+        databaseConfigurator.configure(coreDomainRoom, coreDomainConference);
         databaseConfigurator.configureParticipant(coreDomainParticipant);
         Participant participant = ParticipantFixture.createParticipant(coreDomainConference.getId(), coreDomainParticipant.getId());
         ResponseEntity<String> response = controller.removeParticipant(participant);
@@ -131,8 +131,8 @@ public class ParticipantControllerTest extends SpringContextTest {
         ConferenceRoom coreDomainRoom = ConferenceRoomFixture.createConferenceRoom();
         com.conferenceplanner.core.domain.Participant coreDomainParticipant1 = com.conferenceplanner.core.fixtures.ParticipantFixture.createParticipant("Anna");
         com.conferenceplanner.core.domain.Participant coreDomainParticipant2 = com.conferenceplanner.core.fixtures.ParticipantFixture.createParticipant("Victory");
-        databaseConfigurator.configureWithConferenceRoomAvailability(coreDomainRoom, coreDomainConference);
-        databaseConfigurator.configureWithConferenceRoomAvailability(coreDomainConference, coreDomainParticipant1);
+        databaseConfigurator.configure(coreDomainRoom, coreDomainConference);
+        databaseConfigurator.configureAndTakeAvailableSeat(coreDomainConference, coreDomainParticipant1);
         databaseConfigurator.configureParticipant(coreDomainParticipant2);
         Participant participant = ParticipantFixture.createParticipant(coreDomainConference.getId(), coreDomainParticipant2.getId());
         ResponseEntity<String> response = controller.removeParticipant(participant);

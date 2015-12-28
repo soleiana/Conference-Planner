@@ -51,7 +51,7 @@ public class TestUtilControllerTest {
         com.conferenceplanner.core.domain.Conference coreDomainConference = com.conferenceplanner.core.fixtures.ConferenceFixture.createUpcomingConference();
         ConferenceRoom coreDomainRoom = ConferenceRoomFixture.createConferenceRoom();
         com.conferenceplanner.core.domain.Participant coreDomainParticipant = com.conferenceplanner.core.fixtures.ParticipantFixture.createParticipant();
-        databaseConfigurator.configureWithConferenceRoomAvailability(coreDomainRoom, coreDomainConference);
-        databaseConfigurator.configureWithConferenceRoomAvailability(coreDomainConference, coreDomainParticipant);
+        databaseConfigurator.configure(coreDomainRoom, coreDomainConference);
+        databaseConfigurator.configureAndTakeAvailableSeat(coreDomainConference, coreDomainParticipant);
     }
 }

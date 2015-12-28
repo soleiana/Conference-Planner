@@ -127,7 +127,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     public void test_getConferenceRoomAvailabilityItems_if_upcoming_conferences_are_registered() {
         ConferenceRoom room = ConferenceRoomFixture.createConferenceRoom();
         List<Conference> conferences = ConferenceFixture.createUpcomingConferences();
-        databaseConfigurator.configureWithConferenceRoomAvailability(room, conferences);
+        databaseConfigurator.configure(room, conferences);
         ConferenceRoomAvailability availability = conferenceRoomService.getConferenceRoomAvailabilityItems(room.getId());
         assertEquals(conferences.size(), availability.getAvailabilityItems().size());
         testHelper.assertGetConferenceRoomAvailabilityItemsResult(availability.getAvailabilityItems());
@@ -138,7 +138,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
         ConferenceRoom room = ConferenceRoomFixture.createConferenceRoom();
         List<Conference> conferences = ConferenceFixture.createUpcomingConferences();
         conferences.get(0).setCancelled(true);
-        databaseConfigurator.configureWithConferenceRoomAvailability(room,conferences);
+        databaseConfigurator.configure(room,conferences);
         ConferenceRoomAvailability availability = conferenceRoomService.getConferenceRoomAvailabilityItems(room.getId());
         assertEquals(conferences.size()-1, availability.getAvailabilityItems().size());
         assertNotNull(availability.getConferenceRoom());
@@ -150,7 +150,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
         ConferenceRoom room = ConferenceRoomFixture.createConferenceRoom();
         List<Conference> conferences = ConferenceFixture.createUpcomingConferences();
         conferences.get(0).setStartDateTime(LocalDateTime.now().minusMinutes(1));
-        databaseConfigurator.configureWithConferenceRoomAvailability(room, conferences);
+        databaseConfigurator.configure(room, conferences);
         ConferenceRoomAvailability availability = conferenceRoomService.getConferenceRoomAvailabilityItems(room.getId());
         assertEquals(conferences.size()-1, availability.getAvailabilityItems().size());
         assertNotNull(availability.getConferenceRoom());
@@ -168,7 +168,7 @@ public class ConferenceRoomServiceTest extends SpringContextTest {
     public void test_getConferenceRoomAvailabilityItems_throws_ApplicationException_if_no_upcoming_conference_is_registered() {
         ConferenceRoom room = ConferenceRoomFixture.createConferenceRoom();
         List<Conference> conferences = ConferenceFixture.createCancelledConferences();
-        databaseConfigurator.configureWithConferenceRoomAvailability(room, conferences);
+        databaseConfigurator.configure(room, conferences);
         expectedException.expect(ApplicationException.class);
         expectedException.expectMessage("No upcoming conferences in this conference room!");
         conferenceRoomService.getConferenceRoomAvailabilityItems(room.getId());

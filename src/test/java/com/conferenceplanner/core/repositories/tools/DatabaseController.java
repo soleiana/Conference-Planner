@@ -70,7 +70,7 @@ public class DatabaseController {
         }
     }
 
-    public void setupRelationshipWithAvailability(List<ConferenceRoom> conferenceRooms, List<Conference> conferences) {
+    public void setupRelationship(List<ConferenceRoom> conferenceRooms, List<Conference> conferences) {
         conferenceRooms.stream()
                 .forEach(room -> conferences.stream()
                         .forEach(conference -> setupRelationship(room, conference, new ConferenceRoomAvailabilityItem(room.getMaxSeats()))
@@ -78,15 +78,15 @@ public class DatabaseController {
                 );
     }
 
-    public void setupRelationshipWithAvailability(ConferenceRoom conferenceRoom, List<Conference> conferences) {
+    public void setupRelationship(ConferenceRoom conferenceRoom, List<Conference> conferences) {
         conferences.stream().forEach(conference -> setupRelationship(conferenceRoom, conference, new ConferenceRoomAvailabilityItem(conferenceRoom.getMaxSeats())));
     }
 
-    public void setupRelationshipWithAvailability(List<ConferenceRoom> conferenceRooms, Conference conference) {
+    public void setupRelationship(List<ConferenceRoom> conferenceRooms, Conference conference) {
         conferenceRooms.stream().forEach(room -> setupRelationship(room, conference, new ConferenceRoomAvailabilityItem(room.getMaxSeats())));
     }
 
-    public void setupRelationshipWithAvailability(ConferenceRoom conferenceRoom, Conference conference) {
+    public void setupRelationship(ConferenceRoom conferenceRoom, Conference conference) {
         setupRelationship(conferenceRoom, conference, new ConferenceRoomAvailabilityItem(conferenceRoom.getMaxSeats()));
     }
 

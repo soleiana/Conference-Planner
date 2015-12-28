@@ -46,7 +46,7 @@ public class ParticipantServiceTest extends SpringContextTest {
         Participant participant = ParticipantFixture.createParticipant();
         Conference conference = ConferenceFixture.createUpcomingConference();
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(3);
-        databaseConfigurator.configureWithConferenceRoomAvailability(rooms, conference);
+        databaseConfigurator.configure(rooms, conference);
         int availableSeatsBefore =  rooms.get(0).getConferenceRoomAvailabilityItems().get(0).getAvailableSeats();
         participantService.addParticipant(participant, conference.getId());
         assertTrue(conference.getParticipants().contains(participant));
@@ -59,7 +59,7 @@ public class ParticipantServiceTest extends SpringContextTest {
         Participant participant = ParticipantFixture.createParticipant();
         Conference conference = ConferenceFixture.createUpcomingConference();
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(3);
-        databaseConfigurator.configureWithConferenceRoomAvailability(rooms, conference);
+        databaseConfigurator.configure(rooms, conference);
         databaseConfigurator.configureParticipant(participant);
         int availableSeatsBefore =  rooms.get(0).getConferenceRoomAvailabilityItems().get(0).getAvailableSeats();
         participantService.addParticipant(participant, conference.getId());
@@ -73,7 +73,7 @@ public class ParticipantServiceTest extends SpringContextTest {
         Participant participant = ParticipantFixture.createParticipant();
         Conference conference = ConferenceFixture.createOngoingConference();
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(3);
-        databaseConfigurator.configureWithConferenceRoomAvailability(rooms, conference);
+        databaseConfigurator.configure(rooms, conference);
         expectedException.expect(ApplicationException.class);
         expectedException.expectMessage("No available conferences!");
         participantService.addParticipant(participant, conference.getId());
@@ -85,8 +85,8 @@ public class ParticipantServiceTest extends SpringContextTest {
         Conference conference1 = ConferenceFixture.createCancelledConference();
         Conference conference2 = ConferenceFixture.createUpcomingConference();
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(3);
-        databaseConfigurator.configureWithConferenceRoomAvailability(rooms, conference1);
-        databaseConfigurator.configureWithConferenceRoomAvailability(rooms, conference2);
+        databaseConfigurator.configure(rooms, conference1);
+        databaseConfigurator.configure(rooms, conference2);
         expectedException.expect(ApplicationException.class);
         expectedException.expectMessage("Conference is not available for registration!");
         participantService.addParticipant(participant, conference1.getId());
@@ -97,7 +97,7 @@ public class ParticipantServiceTest extends SpringContextTest {
         Participant participant = ParticipantFixture.createParticipant();
         Conference conference = ConferenceFixture.createUpcomingConference();
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(3);
-        databaseConfigurator.configureWithConferenceRoomAvailability(rooms, conference);
+        databaseConfigurator.configure(rooms, conference);
         databaseConfigurator.configure(conference, participant);
         expectedException.expect(ApplicationException.class);
         expectedException.expectMessage("Participant already registered for conference!");
@@ -109,7 +109,7 @@ public class ParticipantServiceTest extends SpringContextTest {
         Participant participant = ParticipantFixture.createParticipant();
         Conference conference = ConferenceFixture.createUpcomingConference();
         List<ConferenceRoom> rooms = ConferenceRoomFixture.createConferenceRooms(3);
-        databaseConfigurator.configureWithConferenceRoomAvailability(rooms, conference);
+        databaseConfigurator.configure(rooms, conference);
         rooms.get(0).getConferenceRoomAvailabilityItems().get(0).takeAvailableSeat();
         int availableSeatsBefore =  rooms.get(0).getConferenceRoomAvailabilityItems().get(0).getAvailableSeats();
         databaseConfigurator.configure(conference, participant);

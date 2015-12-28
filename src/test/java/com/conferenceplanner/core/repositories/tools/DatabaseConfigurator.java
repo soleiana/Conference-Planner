@@ -51,7 +51,7 @@ public class DatabaseConfigurator {
         databaseController.setupRelationship(conference, participant);
     }
 
-    public void configureWithConferenceRoomAvailability(Conference conference, Participant participant) {
+    public void configureAndTakeAvailableSeat(Conference conference, Participant participant) {
         databaseController.persistConference(conference);
         databaseController.persistParticipant(participant);
         databaseController.setupRelationshipAndTakeAvailableSeat(conference, participant);
@@ -60,8 +60,7 @@ public class DatabaseConfigurator {
     public void configure(List<ConferenceRoom> conferenceRooms, List<Conference> conferences) {
         databaseController.persistConferences(conferences);
         databaseController.persistConferenceRooms(conferenceRooms);
-        databaseController.setupRelationshipWithAvailability(conferenceRooms, conferences);
-
+        databaseController.setupRelationship(conferenceRooms, conferences);
     }
 
     public void configure(List<ConferenceRoom> conferenceRooms, List<Conference> conferences, List<ConferenceRoomAvailabilityItem> availabilityItems) {
@@ -70,22 +69,21 @@ public class DatabaseConfigurator {
         databaseController.setupRelationship(conferenceRooms, conferences, availabilityItems);
     }
 
-    public void configureWithConferenceRoomAvailability(ConferenceRoom conferenceRoom, List<Conference> conferences) {
+    public void configure(ConferenceRoom conferenceRoom, List<Conference> conferences) {
         databaseController.persistConferences(conferences);
         databaseController.persistConferenceRoom(conferenceRoom);
-        databaseController.setupRelationshipWithAvailability(conferenceRoom, conferences);
+        databaseController.setupRelationship(conferenceRoom, conferences);
     }
 
-    public void configureWithConferenceRoomAvailability(List<ConferenceRoom> conferenceRooms, Conference conference) {
+    public void configure(List<ConferenceRoom> conferenceRooms, Conference conference) {
         databaseController.persistConference(conference);
         databaseController.persistConferenceRooms(conferenceRooms);
-        databaseController.setupRelationshipWithAvailability(conferenceRooms, conference);
+        databaseController.setupRelationship(conferenceRooms, conference);
     }
 
-
-    public void configureWithConferenceRoomAvailability(ConferenceRoom conferenceRoom, Conference conference) {
+    public void configure(ConferenceRoom conferenceRoom, Conference conference) {
         databaseController.persistConference(conference);
         databaseController.persistConferenceRoom(conferenceRoom);
-        databaseController.setupRelationshipWithAvailability(conferenceRoom, conference);
+        databaseController.setupRelationship(conferenceRoom, conference);
     }
 }
