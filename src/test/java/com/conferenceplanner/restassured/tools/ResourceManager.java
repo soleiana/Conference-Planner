@@ -33,6 +33,20 @@ public class ResourceManager {
                 statusCode(201);
     }
 
+    public static List<Integer> getAllConferenceRoomIds() {
+        List<Map<String, Object>> allConferenceRooms = when().
+                get("/conference-planner/conference-rooms").
+                then().
+                contentType("application/json").
+                assertThat().
+                statusCode(200).
+                assertThat().
+                body(notNullValue()).
+                extract().
+                path("conferenceRooms");
+        return extractIds(allConferenceRooms, "id");
+    }
+
     public static List<Integer> getAvailableConferenceRoomIds() {
         String url = buildGetAvailableConferenceRoomsUrlString();
         List<Map<String, Object>> availableConferenceRooms =  when().

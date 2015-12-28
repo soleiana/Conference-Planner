@@ -16,13 +16,14 @@ public class ConferenceFixture {
     private static final LocalDateTime START_DATE_TIME = NOW.plusDays(3);
     private static final LocalDateTime END_DATE_TIME = START_DATE_TIME.plusDays(1);
     private static final String NAME = "Devoxx 2016";
+    private static final String ANOTHER_NAME = "JavaOne";
 
     public static Conference createConference() {
        return new Conference(NAME, getFormattedDateTime(START_DATE_TIME), getFormattedDateTime(END_DATE_TIME));
     }
 
     public static Conference createAnotherConference() {
-        return new Conference("name", getFormattedDateTime(START_DATE_TIME.plusDays(6)), getFormattedDateTime(END_DATE_TIME.plusDays(7)));
+        return new Conference(ANOTHER_NAME, getFormattedDateTime(START_DATE_TIME.plusDays(6)), getFormattedDateTime(END_DATE_TIME.plusDays(7)));
     }
 
     public static Conference createConference(List<Integer> conferenceRoomIds) {
@@ -32,7 +33,7 @@ public class ConferenceFixture {
     }
 
     public static Conference createAnotherConference(List<Integer> conferenceRoomIds) {
-        Conference conference = new Conference("name", getFormattedDateTime(START_DATE_TIME.plusDays(6)), getFormattedDateTime(END_DATE_TIME.plusDays(7)));
+        Conference conference = new Conference(ANOTHER_NAME, getFormattedDateTime(START_DATE_TIME.plusDays(6)), getFormattedDateTime(END_DATE_TIME.plusDays(7)));
         conference.setConferenceRoomIds(conferenceRoomIds);
         return conference;
     }
