@@ -10,13 +10,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-/**
- * Created by Ann on 26/10/14.
- */
+
 @ControllerAdvice
 public class AppRestExceptionHandler  extends ResponseEntityExceptionHandler
 {
-   /* private static final Logger log = LoggerFactory.getLogger(AppRestExceptionHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(AppRestExceptionHandler.class);
 
     @ExceptionHandler({Exception.class})
     protected ResponseEntity<Object> handleInvalidRequest(RuntimeException e, WebRequest request)
@@ -26,5 +24,5 @@ public class AppRestExceptionHandler  extends ResponseEntityExceptionHandler
         String bodyOfResponse = "Internal server error";
         return handleExceptionInternal(e, bodyOfResponse, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
 
-    }*/
+    }
 }
