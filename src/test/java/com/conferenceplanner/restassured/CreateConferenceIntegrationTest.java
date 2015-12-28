@@ -11,10 +11,10 @@ import org.junit.Test;
 import java.util.List;
 
 import static com.jayway.restassured.RestAssured.*;
+import static org.hamcrest.Matchers.equalTo;
 
 
 public class CreateConferenceIntegrationTest {
-
 
     @Before
     public void setUp() {
@@ -27,7 +27,16 @@ public class CreateConferenceIntegrationTest {
         Conference conference = ConferenceFixture.createConference();
         List<Integer> roomIds = ResourceManager.getAvailableConferenceRoomIds();
         conference.setConferenceRoomIds(roomIds);
-        ResourceManager.createConference(conference);
+        given().
+                contentType("application/json").
+                body(conference).
+                when().
+                post("/conference-planner/conferences").
+                then().
+                assertThat().
+                statusCode(201).
+                assertThat().
+                body(equalTo("Conference created."));
     }
 
     private void setupResources() {

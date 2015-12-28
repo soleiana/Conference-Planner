@@ -2,8 +2,6 @@ package com.conferenceplanner.restassured.tools;
 
 import com.conferenceplanner.rest.domain.Conference;
 import com.conferenceplanner.rest.domain.ConferenceRoom;
-import com.conferenceplanner.rest.fixtures.ConferenceFixture;
-import com.conferenceplanner.rest.fixtures.ConferenceRoomFixture;
 
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -87,6 +85,24 @@ public class ResourceManager {
                 path("conferences");
 
         return upcomingConferences.stream()
+                .map(e -> e.get("id"))
+                .map(e -> (Integer)e)
+                .collect(Collectors.toList());
+    }
+
+    public static List<Integer> getAvailableConferenceIds() {
+        List<Map<String, Object>> availableConferences = when().
+                get("/conference-planner/conferences/available").
+                then().
+                contentType("application/json").
+                assertThat().
+                statusCode(200).
+                assertThat().
+                body(notNullValue()).
+                extract().
+                path("conferences");
+
+        return availableConferences.stream()
                 .map(e -> e.get("id"))
                 .map(e -> (Integer)e)
                 .collect(Collectors.toList());

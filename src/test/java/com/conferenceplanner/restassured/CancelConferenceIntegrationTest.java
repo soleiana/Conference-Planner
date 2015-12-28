@@ -16,15 +16,14 @@ import static org.junit.Assert.*;
 
 public class CancelConferenceIntegrationTest {
 
-
     @Before
     public void setUp() throws Exception {
         delete("/conference-planner/test-util/clean-database");
         setupResources();
     }
-    
+
     @Test
-    public void test_cancelConference() throws Exception {
+    public void test_cancelConference() {
         List<Integer> upcomingConferenceIds = ResourceManager.getUpcomingConferenceIds();
         assertEquals(2, upcomingConferenceIds.size());
 
