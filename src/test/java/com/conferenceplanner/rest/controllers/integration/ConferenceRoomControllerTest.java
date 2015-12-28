@@ -104,12 +104,6 @@ public class ConferenceRoomControllerTest extends SpringContextTest {
     }
 
     @Test
-    public void test_getConferenceRoomAvailability_returns_BAD_REQUEST() {
-        ResponseEntity<ConferenceRoomAvailability> response = controller.getConferenceRoomAvailability(null);
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-    }
-
-    @Test
     public void test_getConferenceRoomAvailability_returns_NOT_FOUND() {
         com.conferenceplanner.core.domain.ConferenceRoom coreDomainRoom1 =
                 com.conferenceplanner.core.repositories.fixtures.ConferenceRoomFixture.createConferenceRoom("name1");

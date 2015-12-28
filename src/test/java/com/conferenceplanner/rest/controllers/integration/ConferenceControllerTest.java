@@ -129,12 +129,6 @@ public class ConferenceControllerTest extends SpringContextTest {
     }
 
     @Test
-    public void test_getParticipants_returns_BAD_REQUEST() {
-        ResponseEntity<ConferenceParticipants> response = controller.getParticipants(null);
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-    }
-
-    @Test
     public void test_getParticipants_returns_NOT_FOUND() {
         com.conferenceplanner.core.domain.Conference coreDomainConference =
                 com.conferenceplanner.core.fixtures.ConferenceFixture.createUpcomingConference();
@@ -161,12 +155,6 @@ public class ConferenceControllerTest extends SpringContextTest {
         ResponseEntity<String> response = controller.cancelConference(coreDomainConference.getId());
         assertEquals("Conference cancelled.", response.getBody());
         assertEquals(HttpStatus.OK, response.getStatusCode());
-    }
-
-    @Test
-    public void test_cancelConference_returns_BAD_REQUEST() {
-        ResponseEntity<String> response = controller.cancelConference(null);
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     @Test

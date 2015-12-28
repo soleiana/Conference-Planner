@@ -18,12 +18,6 @@ public class ConferenceRoomValidator {
         validateNames(conferenceRoom.getLocation(), conferenceRoom.getName());
     }
 
-    public void validateId(Integer conferenceRoomId) {
-        if (conferenceRoomId == null) {
-            throw new ValidationException("Conference room id is null");
-        }
-    }
-
     public void validateIds(List<Integer> conferenceRoomIds) {
         if (conferenceRoomIds == null || conferenceRoomIds.isEmpty()) {
             throw new ValidationException("Conference room id list is null or empty");

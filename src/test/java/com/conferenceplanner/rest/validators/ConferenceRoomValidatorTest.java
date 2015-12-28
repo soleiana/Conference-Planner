@@ -41,13 +41,6 @@ public class ConferenceRoomValidatorTest extends SpringContextTest {
     }
 
     @Test
-    public void test_validator_throws_ValidationException_if_null_conference_room_id() {
-        expectedException.expect(ValidationException.class);
-        expectedException.expectMessage("Conference room id is null");
-        validator.validateId(null);
-    }
-
-    @Test
     public void test_validator_throws_ValidationException_if_null_max_seats() {
         ConferenceRoom conferenceRoom = new ConferenceRoom();
         conferenceRoom.setName("name");
@@ -125,21 +118,5 @@ public class ConferenceRoomValidatorTest extends SpringContextTest {
         }
     }
 
-    @Test
-    public void test_validateId() {
-        try {
-            validator.validateId(1);
-        } catch (Exception ex) {
-            fail();
-        }
-    }
-
-    @Test
-    public void test_validateId_throws_ValidationException() {
-        expectedException.expect(ValidationException.class);
-        expectedException.expectMessage("Conference room id is null");
-        validator.validateId(null);
-
-    }
 }
 

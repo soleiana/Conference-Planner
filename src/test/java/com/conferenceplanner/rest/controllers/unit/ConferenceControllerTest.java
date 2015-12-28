@@ -125,12 +125,6 @@ public class ConferenceControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
-    @Test
-    public void test_getParticipants_returns_BAD_REQUEST() {
-        doThrow(new ValidationException("")).when(conferenceValidator).validateId(anyInt());
-        ResponseEntity<com.conferenceplanner.rest.domain.ConferenceParticipants> response = controller.getParticipants(1);
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-    }
 
     @Test
     public void test_getParticipants_returns_NOT_FOUND() {
@@ -150,13 +144,6 @@ public class ConferenceControllerTest {
     public void test_cancelConference_returns_OK() {
         ResponseEntity<String> response = controller.cancelConference(1);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-    }
-
-    @Test
-    public void test_cancelConference_returns_BAD_REQUEST() {
-        doThrow(new ValidationException("")).when(conferenceValidator).validateId(anyInt());
-        ResponseEntity<String> response = controller.cancelConference(1);
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     @Test

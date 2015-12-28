@@ -101,13 +101,8 @@ public class ConferenceController {
 
         ConferenceParticipants conferenceParticipants = new ConferenceParticipants();
         try {
-            conferenceValidator.validateId(id);
             com.conferenceplanner.core.domain.ConferenceParticipants coreDomainConferenceParticipants = conferenceService.getParticipants(id);
             conferenceParticipants = conferenceParticipantFactory.create(coreDomainConferenceParticipants);
-
-        } catch (ValidationException ex) {
-            conferenceParticipants.setErrorMessage(ex.getMessage());
-            return new ResponseEntity<>(conferenceParticipants, HttpStatus.BAD_REQUEST);
 
         } catch (ApplicationException ex) {
             conferenceParticipants.setErrorMessage(ex.getMessage());
@@ -125,15 +120,11 @@ public class ConferenceController {
     @RequestMapping(method = RequestMethod.PUT, value = "/{id}", produces = "text/plain")
     public ResponseEntity<String> cancelConference(@PathVariable Integer id) {
         try {
-            conferenceValidator.validateId(id);
             conferenceService.cancelConference(id);
 
         } catch (ApplicationException ex) {
             HttpStatus httpStatus = ResourceAccessErrorCode.getHttpStatus(ex.getErrorCode());
             return new ResponseEntity<>(ex.getMessage(), httpStatus);
-        }
-        catch (ValidationException ex) {
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 
         } catch (RuntimeException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

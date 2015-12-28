@@ -121,13 +121,6 @@ public class ConferenceRoomControllerTest {
     }
 
     @Test
-    public void test_getConferenceRoomAvailability_returns_BAD_REQUEST() {
-        doThrow(new ValidationException("")).when(conferenceRoomValidator).validateId(anyInt());
-        ResponseEntity<ConferenceRoomAvailability> response = controller.getConferenceRoomAvailability(1);
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-    }
-
-    @Test
     public void test_getConferenceRoomAvailability_returns_NOT_FOUND() {
         doThrow(new ApplicationException("", ApplicationErrorCode.NOT_FOUND))
                 .when(conferenceRoomService).getConferenceRoomAvailabilityItems(anyInt());

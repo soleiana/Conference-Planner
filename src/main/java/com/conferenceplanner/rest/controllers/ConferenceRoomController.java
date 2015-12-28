@@ -118,18 +118,12 @@ public class ConferenceRoomController {
     public ResponseEntity<ConferenceRoomAvailability> getConferenceRoomAvailability(@PathVariable Integer id) {
         ConferenceRoomAvailability conferenceRoomAvailability = new ConferenceRoomAvailability();
         try {
-            conferenceRoomValidator.validateId(id);
-
             com.conferenceplanner.core.domain.ConferenceRoomAvailability coreDomainConferenceRoomAvailability =
                     conferenceRoomService.getConferenceRoomAvailabilityItems(id);
 
             conferenceRoomAvailability = conferenceRoomAvailabilityFactory.create(coreDomainConferenceRoomAvailability);
 
-        } catch(ValidationException ex) {
-            conferenceRoomAvailability.setErrorMessage(ex.getMessage());
-            return new ResponseEntity<>(conferenceRoomAvailability, HttpStatus.BAD_REQUEST);
-
-        }  catch (ApplicationException ex) {
+        } catch (ApplicationException ex) {
             conferenceRoomAvailability.setErrorMessage(ex.getMessage());
             return new ResponseEntity<>(conferenceRoomAvailability, HttpStatus.NOT_FOUND);
 
