@@ -32,12 +32,6 @@ public class ConferenceFixture {
         return conference;
     }
 
-    public static Conference createAnotherConference(List<Integer> conferenceRoomIds) {
-        Conference conference = new Conference(ANOTHER_NAME, getFormattedDateTime(START_DATE_TIME.plusDays(6)), getFormattedDateTime(END_DATE_TIME.plusDays(7)));
-        conference.setConferenceRoomIds(conferenceRoomIds);
-        return conference;
-    }
-
     public static List<Conference> createConferences(int number) {
         return Stream.iterate(1, i -> i++)
                 .limit(number)

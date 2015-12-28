@@ -1,7 +1,7 @@
 package com.conferenceplanner.rest.validators;
 
 import com.conferenceplanner.SpringContextTest;
-import com.conferenceplanner.rest.TestHelper;
+import com.conferenceplanner.rest.RestTestHelper;
 import com.conferenceplanner.rest.domain.Participant;
 import org.junit.Rule;
 import org.junit.Test;
@@ -26,7 +26,7 @@ public class ParticipantValidatorTest extends SpringContextTest {
     private ParticipantValidator validator;
 
     @Autowired
-    private TestHelper testHelper;
+    private RestTestHelper testHelper;
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();

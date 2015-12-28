@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Component
-public class TestHelper {
+public class RestTestHelper {
 
     public String getTooLongNameString(int maxSymbolsInName) {
         return Stream.iterate(0, i -> i++)

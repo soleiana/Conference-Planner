@@ -1,7 +1,7 @@
 package com.conferenceplanner.rest.validators;
 
 import com.conferenceplanner.SpringContextTest;
-import com.conferenceplanner.rest.TestHelper;
+import com.conferenceplanner.rest.RestTestHelper;
 import com.conferenceplanner.rest.domain.Conference;
 import com.conferenceplanner.rest.domain.ConferenceInterval;
 import org.junit.Rule;
@@ -28,7 +28,7 @@ public class ConferenceValidatorTest extends SpringContextTest {
     private ConferenceValidator validator;
 
     @Autowired
-    private TestHelper testHelper;
+    private RestTestHelper testHelper;
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 

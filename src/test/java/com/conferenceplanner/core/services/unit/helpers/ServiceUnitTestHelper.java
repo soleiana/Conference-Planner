@@ -3,7 +3,7 @@ package com.conferenceplanner.core.services.unit.helpers;
 import com.conferenceplanner.core.domain.Conference;
 import com.conferenceplanner.core.domain.ConferenceRoom;
 import com.conferenceplanner.core.domain.ConferenceRoomAvailabilityItem;
-import com.conferenceplanner.core.services.CommonTestHelper;
+import com.conferenceplanner.CommonTestHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

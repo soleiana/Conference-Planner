@@ -7,7 +7,7 @@ import com.conferenceplanner.core.fixtures.ConferenceRoomFixture;
 import com.conferenceplanner.core.fixtures.ParticipantFixture;
 import com.conferenceplanner.core.repositories.tools.DatabaseCleaner;
 import com.conferenceplanner.core.repositories.tools.DatabaseConfigurator;
-import com.conferenceplanner.core.services.CommonTestHelper;
+import com.conferenceplanner.CommonTestHelper;
 import com.conferenceplanner.rest.controllers.ConferenceController;
 import com.conferenceplanner.rest.domain.Conference;
 import com.conferenceplanner.rest.domain.ConferenceParticipants;

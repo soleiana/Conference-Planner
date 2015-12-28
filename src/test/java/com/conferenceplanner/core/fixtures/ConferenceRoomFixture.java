@@ -14,7 +14,7 @@ public class ConferenceRoomFixture {
     private static final int MAX_SEATS = 2000;
 
     public static ConferenceRoom createConferenceRoom() {
-        return new ConferenceRoom("name3", "location3", MAX_SEATS);
+        return new ConferenceRoom(NAME_1, LOCATION_1, MAX_SEATS);
     }
 
     public static ConferenceRoom createConferenceRoom(int maxSeats) {

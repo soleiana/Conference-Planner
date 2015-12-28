@@ -1,4 +1,4 @@
-package com.conferenceplanner.core.services;
+package com.conferenceplanner;
 
 import com.conferenceplanner.core.domain.ConferenceRoom;
 import org.springframework.stereotype.Component;
