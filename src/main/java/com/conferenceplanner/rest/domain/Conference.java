@@ -10,7 +10,6 @@ public class Conference {
     private String startDateTime;
     private String endDateTime;
     private List<Integer> conferenceRoomIds;
-    private Integer freeSeats;
 
     public Conference() {}
 
@@ -58,14 +57,6 @@ public class Conference {
 
     public void setConferenceRoomIds(List<Integer> conferenceRoomIds) {
         this.conferenceRoomIds = conferenceRoomIds;
-    }
-
-    public Integer getFreeSeats() {
-        return freeSeats;
-    }
-
-    public void setFreeSeats(Integer freeSeats) {
-        this.freeSeats = freeSeats;
     }
 
 }
