@@ -80,7 +80,7 @@ public class ResourceManager {
                 then().
                 contentType("application/json").
                 assertThat().
-                statusCode(500).
+                statusCode(200).
                 assertThat().
                 body(notNullValue()).
                 extract().

@@ -25,7 +25,6 @@ public class CancelConferenceIntegrationTest {
 
     @Test
     public void test_cancelConference() throws Exception {
-        Thread.sleep(10000);
         List<Integer> upcomingConferenceIds = ResourceManager.getUpcomingConferenceIds();
         String url = "/conference-planner/conferences/"
                 .concat(upcomingConferenceIds.get(0).toString());
@@ -35,7 +34,7 @@ public class CancelConferenceIntegrationTest {
                 put(url).
                 then().
                 assertThat().
-                statusCode(201).
+                statusCode(200).
                 assertThat().
                 body(equalTo("Conference cancelled."));
     }
