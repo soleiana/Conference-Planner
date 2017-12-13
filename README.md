@@ -2,15 +2,15 @@ Implement following RESTful web service application according to the following s
 
 Database specification:
 1. Conference
-    Name        | Conference name, max length 150 characters
-    Date time   | Conference date & time
+- Name        | Conference name, max length 150 characters
+- Date time   | Conference date & time
 2. Participant 
-    Full name   | Person full name
-    Birth date  | Date of birth
+- Full name   | Person full name;
+- Birth date  | Date of birth
 3. Conference room
-    Name        | Room name, like “M/S Baltic Queen conference”
-    Location    | M/S Baltic Queen
-    Max seats   | 124
+- Name        | Room name, like “M/S Baltic Queen conference”
+- Location    | M/S Baltic Queen
+- Max seats   | 124
     
 RESTful web service specification:
 1. Conference management
